@@ -11,16 +11,8 @@ import java.util.Set;
 public class Autor extends Korisnik {
 
     private boolean aktivan;
-    @OneToMany(mappedBy = "autor", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Knjiga> spisakKnjiga = new HashSet<>();
-
-    public boolean isAktivan() {
-        return aktivan;
-    }
-
-    public void setAktivan(boolean aktivan) {
-        this.aktivan = aktivan;
-    }
 
     public Set<Knjiga> getSpisakKnjiga() {
         return spisakKnjiga;

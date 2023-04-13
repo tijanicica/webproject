@@ -16,7 +16,7 @@ public class Polica implements Serializable {
     private Long policaId;
     private String naziv;
     private boolean primarna;
-    @OneToMany(mappedBy = "polica", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<StavkaPolice> stavkaPolice = new HashSet<>();
 
     public Long getPolicaId() {

@@ -16,19 +16,13 @@ public class StavkaPolice implements Serializable {
     @Column(name = "stavkaPoliceId")
     private Long stavkaPoliceId;
 
-    @OneToMany(mappedBy = "stavkapolice", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Recenzija> recenzija = new ArrayList<>();
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "knjiga_ISBN", referencedColumnName = "stavkaPoliceId")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "knjiga_ISBN")
     private Knjiga knjiga;
 
-    public Long getStavkaPoliceId() {
-        return stavkaPoliceId;
-    }
 
-    public void setStavkaPoliceId(Long stavkaPoliceId) {
-        this.stavkaPoliceId = stavkaPoliceId;
-    }
 
     public List<Recenzija> getRecenzija() {
         return recenzija;

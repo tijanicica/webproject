@@ -20,6 +20,9 @@ public class Knjiga implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Zanr zanr;
 
+    /*@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Autor autor;*/
+
     public String getNaslov() {
         return naslov;
     }
