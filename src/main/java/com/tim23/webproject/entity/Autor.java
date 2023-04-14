@@ -14,6 +14,14 @@ public class Autor extends Korisnik {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Knjiga> spisakKnjiga = new HashSet<>();
 
+    public boolean isAktivan() {
+        return aktivan;
+    }
+
+    public void setAktivan(boolean aktivan) {
+        this.aktivan = aktivan;
+    }
+
     public Set<Knjiga> getSpisakKnjiga() {
         return spisakKnjiga;
     }

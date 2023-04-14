@@ -7,17 +7,14 @@ import java.io.Serializable;
 public class Zanr implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "zanr_id")
-    private Long zanrId;
+    //@Column(name = "zanr_id")
+    private Long id;
     private String naziv;
 
-    public Long getZanrId() {
-        return zanrId;
+    public Long getId() {
+        return id;
     }
 
-    public void setZanrId(Long zanrId) {
-        this.zanrId = zanrId;
-    }
 
     public String getNaziv() {
         return naziv;
@@ -30,8 +27,7 @@ public class Zanr implements Serializable {
     @Override
     public String toString() {
         return "Zanr{" +
-                "zanrId=" + zanrId +
-                ", naziv='" + naziv + '\'' +
+                "naziv='" + naziv + '\'' +
                 '}';
     }
 }

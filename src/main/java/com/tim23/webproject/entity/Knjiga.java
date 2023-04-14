@@ -8,20 +8,20 @@ import java.util.Date;
 public class Knjiga implements Serializable {
 
     private String naslov;
+    @Column(name = "naslovna_fotografija")
     private String naslovnaFotografija;
     @Id
     @Column(name = "knjiga_ISBN")
     private String ISBN;
-    private Date datumObjavljivanja;
+    @Column(name = "datum_objavljivanja")
+    private String datumObjavljivanja;
+    @Column(name = "broj_strana")
     private int brojStrana;
     private String opis;
     //da li jedna knjiga moze biti i drama i romantika? ili OneToOne ili OneToMany
     private int ocena;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Zanr zanr;
-
-    /*@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Autor autor;*/
 
     public String getNaslov() {
         return naslov;
@@ -47,11 +47,11 @@ public class Knjiga implements Serializable {
         this.ISBN = ISBN;
     }
 
-    public Date getDatumObjavljivanja() {
+    public String getDatumObjavljivanja() {
         return datumObjavljivanja;
     }
 
-    public void setDatumObjavljivanja(Date datumObjavljivanja) {
+    public void setDatumObjavljivanja(String datumObjavljivanja) {
         this.datumObjavljivanja = datumObjavljivanja;
     }
 
@@ -93,7 +93,7 @@ public class Knjiga implements Serializable {
                 "naslov='" + naslov + '\'' +
                 ", naslovnaFotografija='" + naslovnaFotografija + '\'' +
                 ", ISBN='" + ISBN + '\'' +
-                ", datumObjavljivanja=" + datumObjavljivanja +
+                ", datumObjavljivanja='" + datumObjavljivanja + '\'' +
                 ", brojStrana=" + brojStrana +
                 ", opis='" + opis + '\'' +
                 ", ocena=" + ocena +
