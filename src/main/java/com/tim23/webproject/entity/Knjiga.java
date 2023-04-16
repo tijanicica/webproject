@@ -6,6 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 import java.io.Serializable;
 
+/*@Enumerated(EnumType.STRING)
+enum Uloga {CITALAC, AUTOR, ADMINISTRATOR}*/
+
 @Entity
 @Getter
 @Setter
@@ -23,14 +26,10 @@ public class Knjiga implements Serializable {
     @Column(name = "broj_strana")
     private int brojStrana;
     private String opis;
-    //da li jedna knjiga moze biti i drama i romantika? ili OneToOne ili OneToMany
     private int ocena;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Zanr zanr;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "autor_id")
-    private Autor autor;
 
 
 }

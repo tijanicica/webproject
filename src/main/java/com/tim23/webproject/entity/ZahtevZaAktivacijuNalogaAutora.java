@@ -1,14 +1,12 @@
 package com.tim23.webproject.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.io.Serializable;
 
-
-enum Status {NA_CEKANJU, ODOBREN, ODBIJEN};
+enum Status {NA_CEKANJU, ODOBREN, ODBIJEN;}
 @Entity
 @Getter
 @Setter
@@ -19,6 +17,7 @@ public class ZahtevZaAktivacijuNalogaAutora implements Serializable {
     private String telefon;
     private String poruka;
     private String datum;
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }

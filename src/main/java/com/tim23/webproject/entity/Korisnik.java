@@ -25,6 +25,7 @@ public class Korisnik  implements Serializable {
     @Column(name = "profilna_slika")
     private String profilnaSlika;
     private String opis;
+    @Enumerated(EnumType.STRING)
     private Uloga uloga;
 
 

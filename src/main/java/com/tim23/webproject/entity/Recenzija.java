@@ -24,9 +24,7 @@ public class Recenzija implements Serializable {
     @JoinColumn(name = "korisnik_id")
     private Korisnik korisnik;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "stavka_police_id")
-    private StavkaPolice stavkaPolice;
+
 
     
 }
