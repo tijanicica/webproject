@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,7 +22,7 @@ public class Korisnik  implements Serializable {
     private String mejlAdresa;
     private String lozinka;
     @Column(name = "datum_rodjenja")
-    private String datumRodjenja;
+    private LocalDate datumRodjenja;
     @Column(name = "profilna_slika")
     private String profilnaSlika;
     private String opis;

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.io.Serializable;
+import java.util.Date;
 
 enum Status {NA_CEKANJU, ODOBREN, ODBIJEN;}
 @Entity
@@ -16,7 +17,7 @@ public class ZahtevZaAktivacijuNalogaAutora implements Serializable {
     private String email;
     private String telefon;
     private String poruka;
-    private String datum;
+    private Date datum;
     @Enumerated(EnumType.STRING)
     private Status status;
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.io.Serializable;
+import java.util.Date;
 
 /*@Enumerated(EnumType.STRING)
 enum Uloga {CITALAC, AUTOR, ADMINISTRATOR}*/
@@ -22,7 +23,7 @@ public class Knjiga implements Serializable {
     @Column(name = "knjiga_ISBN")
     private String ISBN;
     @Column(name = "datum_objavljivanja")
-    private String datumObjavljivanja;
+    private Date datumObjavljivanja;
     @Column(name = "broj_strana")
     private int brojStrana;
     private String opis;
