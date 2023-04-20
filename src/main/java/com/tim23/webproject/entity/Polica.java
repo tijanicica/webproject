@@ -16,7 +16,8 @@ public class Polica implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long policaId;
+    @Column(name = "polica_id")
+    private Long id;
     private String naziv;
     private boolean primarna;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

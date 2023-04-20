@@ -7,8 +7,8 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.Date;
 
-/*@Enumerated(EnumType.STRING)
-enum Uloga {CITALAC, AUTOR, ADMINISTRATOR}*/
+
+
 
 @Entity
 @Getter

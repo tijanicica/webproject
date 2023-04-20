@@ -5,6 +5,10 @@ import lombok.Setter;
 import lombok.ToString;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+enum Uloga {CITALAC, AUTOR, ADMINISTRATOR;}
 
 @Entity
 @Getter
@@ -13,12 +17,15 @@ import java.time.LocalDate;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Korisnik  implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "korisnik_id")
+    private Long id;
     private String ime;
     private String prezime;
     @Column(name = "korisnicko_ime", unique = true)
     private String korisnickoIme;
-    @Id
-    @Column(name = "korisnik_id", unique = true)
+    @Column(name = "mejl_adresa", unique = true)
     private String mejlAdresa;
     private String lozinka;
     @Column(name = "datum_rodjenja")
@@ -29,6 +36,11 @@ public class Korisnik  implements Serializable {
     @Enumerated(EnumType.STRING)
     private Uloga uloga;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "korisnikove_police",
+    joinColumns = @JoinColumn(name = "korisnik_id"),
+    inverseJoinColumns = @JoinColumn(name = "polica_id"))
+    private Set<Polica> police = new HashSet<>();
 
 
 }

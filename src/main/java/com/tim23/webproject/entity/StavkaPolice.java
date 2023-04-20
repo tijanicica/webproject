@@ -19,10 +19,11 @@ public class StavkaPolice implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "stavka_police_id")
-    private Long stavkaPoliceId;
+    private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Recenzija> recenzija = new ArrayList<>();
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "recenzija_id")
+    private Recenzija recenzija;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "knjiga_ISBN")
     private Knjiga knjiga;

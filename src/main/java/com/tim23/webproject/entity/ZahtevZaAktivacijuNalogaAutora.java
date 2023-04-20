@@ -13,12 +13,20 @@ enum Status {NA_CEKANJU, ODOBREN, ODBIJEN;}
 @Setter
 @ToString
 public class ZahtevZaAktivacijuNalogaAutora implements Serializable {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "zahtev_za_aktivaciju_naloga_autora_id")
+    private Long id;
+
     private String email;
     private String telefon;
     private String poruka;
     private Date datum;
     @Enumerated(EnumType.STRING)
     private Status status;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
 
 }
