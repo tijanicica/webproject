@@ -20,7 +20,7 @@ public class Recenzija implements Serializable {
     private String tekst;
     @Column(name = "datum_recenzije")
     private Date datumRecenzije;
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "korisnik_id")
     private Korisnik korisnik;
 

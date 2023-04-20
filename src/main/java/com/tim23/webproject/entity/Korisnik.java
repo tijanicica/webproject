@@ -5,8 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 enum Uloga {CITALAC, AUTOR, ADMINISTRATOR;}
 
@@ -35,12 +35,9 @@ public class Korisnik  implements Serializable {
     private String opis;
     @Enumerated(EnumType.STRING)
     private Uloga uloga;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "korisnikove_police",
-    joinColumns = @JoinColumn(name = "korisnik_id"),
-    inverseJoinColumns = @JoinColumn(name = "polica_id"))
-    private Set<Polica> police = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "police")
+    private List<Polica> police = new ArrayList<>();
 
 
 }
