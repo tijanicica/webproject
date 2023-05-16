@@ -16,14 +16,14 @@ public class KnjigaRestController {
     @Autowired
     private KnjigaService knjigaService;
 
-    @GetMapping("api/knjige")
+    @GetMapping("api/knjige") //radi
     public ResponseEntity<List<KnjigaDto>> getKnjige() {
         List<KnjigaDto> knjige = knjigaService.getAllKnjige();
         return ResponseEntity.ok(knjige);
     }
 
-    @GetMapping("/pretraga/naslov/{naslov}")
-    public ResponseEntity<List<KnjigaDto>> searchByKnjiga(@PathVariable String naslov) {
+    @GetMapping("api/pretraga/naslov/{naslov}") //radi kada je razmak pise se %20
+    public ResponseEntity<List<KnjigaDto>> searchByKnjiga(@PathVariable(name = "naslov") String naslov) {
 
         List<KnjigaDto> knjige = knjigaService.searchByNaslov(naslov);
 

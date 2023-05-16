@@ -1,5 +1,6 @@
 package com.tim23.webproject.service;
 
+import com.tim23.webproject.repository.ZanrRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,5 +8,5 @@ import org.springframework.stereotype.Service;
 public class ZanrService {
 
     @Autowired
-    private ZanrService zanrService;
+    private ZanrRepository zanrRepository;
 }

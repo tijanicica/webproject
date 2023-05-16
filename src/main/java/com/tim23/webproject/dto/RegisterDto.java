@@ -13,6 +13,14 @@ public class RegisterDto {
     private String lozinka;
     private String ponovljenaLozinka;
 
+    public RegisterDto(String ime, String prezime, String korisnickoIme, String mejlAdresa, String lozinka, String ponovljenaLozinka) {
+        this.ime = ime;
+        this.prezime = prezime;
+        this.korisnickoIme = korisnickoIme;
+        this.mejlAdresa = mejlAdresa;
+        this.lozinka = lozinka;
+        this.ponovljenaLozinka = ponovljenaLozinka;
+    }
 
-
+    public RegisterDto() {}
 }

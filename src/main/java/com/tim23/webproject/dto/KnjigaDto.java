@@ -14,8 +14,12 @@ public class KnjigaDto {
     private String opis;
     private int ocena;
 
-    public KnjigaDto(String naslov) {
+    public KnjigaDto(String naslov, String naslovnaFotografija, int brojStrana, String opis, int ocena) {
         this.naslov = naslov;
+        this.naslovnaFotografija = naslovnaFotografija;
+        this.brojStrana = brojStrana;
+        this.opis = opis;
+        this.ocena = ocena;
     }
 
     public KnjigaDto() {}

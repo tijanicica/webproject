@@ -23,16 +23,6 @@ public class KorisnikRestController {
     @Autowired
     private KorisnikService korisnikService;
 
-    @Autowired
-    private KnjigaService knjigaService;
-
-    @Autowired
-    private RecenzijaService recenzijaService;
-
-    @Autowired
-    private ZanrService zanrService;
-    @Autowired
-    private PolicaService policaService;
 
     @PostMapping("api/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
@@ -63,14 +53,8 @@ public class KorisnikRestController {
 
     /*
 
-    @Autowired
-    private ProfilKorisnikaService profilKorisnikaService;
 
-    @GetMapping("api/knjige")
-    public ResponseEntity<List<KnjigaDTO>> getKnjige() {
-        List<KnjigaDTO> knjige = knjigaService.getAllKnjige();
-        return ResponseEntity.ok(knjige);
-    }
+
 
     @GetMapping("/recenzije")
     public ResponseEntity<List<RecenzijaDTO>> getRecenzije() {
