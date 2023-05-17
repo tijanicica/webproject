@@ -8,7 +8,6 @@ import lombok.Setter;
 public class LoginDto {
 
     private String mejlAdresa;
-
     private String lozinka;
 
     public LoginDto(String mejlAdresa, String lozinka) {

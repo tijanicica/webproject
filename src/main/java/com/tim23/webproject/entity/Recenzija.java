@@ -24,7 +24,20 @@ public class Recenzija implements Serializable {
     @JoinColumn(name = "korisnik_id")
     private Korisnik korisnik;
 
+    public Recenzija(Long id, int ocena, String tekst, Date datumRecenzije, Korisnik korisnik) {
+        this.id = id;
+        this.ocena = ocena;
+        this.tekst = tekst;
+        this.datumRecenzije = datumRecenzije;
+        this.korisnik = korisnik;
+    }
 
+    public Recenzija() {}
 
-    
+    public Recenzija(Recenzija recenzija) {
+        this.ocena = recenzija.getOcena();
+        this.tekst = recenzija.getTekst();
+        this.datumRecenzije = recenzija.getDatumRecenzije();
+        this.korisnik = recenzija.getKorisnik();
+    }
 }

@@ -15,11 +15,11 @@ public class RecenzijaRestController {
     @Autowired
     private RecenzijaService recenzijaService;
 
-//    @GetMapping("/api/recenzije")
-//    public ResponseEntity<List<RecenzijaDto>> getRecenzije() {
-//        List<RecenzijaDto> recenzije = recenzijaService.getAllRecenzije();
-//        return ResponseEntity.ok(recenzije);
-//    }
+    @GetMapping("api/recenzije")
+    public ResponseEntity<List<RecenzijaDto>> getRecenzije() {
+        List<RecenzijaDto> recenzije = recenzijaService.getAllRecenzije();
+        return ResponseEntity.ok(recenzije);
+    }
 
 
 }

@@ -7,7 +7,6 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.util.Date;
 
-enum Status {NA_CEKANJU, ODOBREN, ODBIJEN;}
 @Entity
 @Getter
 @Setter

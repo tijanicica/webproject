@@ -1,6 +1,7 @@
 package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.KnjigaDto;
+import com.tim23.webproject.dto.KorisnikDto;
 import com.tim23.webproject.dto.LoginDto;
 import com.tim23.webproject.dto.RegisterDto;
 import com.tim23.webproject.entity.Korisnik;
@@ -48,44 +49,9 @@ public class KorisnikRestController {
         }
     }
 
-
-
-
-    /*
-
-
-
-
-    @GetMapping("/recenzije")
-    public ResponseEntity<List<RecenzijaDTO>> getRecenzije() {
-        List<RecenzijaDTO> recenzije = recenzijaService.getAllRecenzije();
-        return ResponseEntity.ok(recenzije);
-    }
-
-    @GetMapping("/zanrovi")
-    public ResponseEntity<List<ZanrDTO>> getZanrovi() {
-        List<ZanrDTO> zanrovi = zanrService.getAllZanrovi();
-        return ResponseEntity.ok(zanrovi);
-    }
-
-    @GetMapping("/profili-korisnika")
-    public ResponseEntity<List<ProfilKorisnikaDTO>> getProfiliKorisnika() {
-        List<ProfilKorisnikaDTO> profiliKorisnika = profilKorisnikaService.getAllProfiliKorisnika();
+    @GetMapping("api/profili-korisnika")
+    public ResponseEntity<List<KorisnikDto>> getProfiliKorisnika() {
+        List<KorisnikDto> profiliKorisnika = korisnikService.getAllKorisnik();
         return ResponseEntity.ok(profiliKorisnika);
     }
-
-    @GetMapping("/police")
-    public ResponseEntity<List<PolicaDTO>> getPolice() {
-        List<PolicaDTO> police = policaService.getAllPolice();
-        return ResponseEntity.ok(police);
-    }
-
-    @GetMapping("/knjige/{id}/recenzije")
-    public ResponseEntity<List<RecenzijaDTO>> getRecenzijeKnjige(@PathVariable Long id) {
-        List<RecenzijaDTO> recenzije = recenzijaService.getRecenzijeByKnjigaId(id);
-        return ResponseEntity.ok(recenzije);
-    }*/
-
-
-
 }

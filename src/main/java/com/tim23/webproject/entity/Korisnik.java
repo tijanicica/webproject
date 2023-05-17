@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-enum Uloga {CITALAC, AUTOR, ADMINISTRATOR;}
-
 @Entity
 @Getter
 @Setter
