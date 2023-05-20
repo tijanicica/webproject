@@ -12,6 +12,8 @@ public class ZanrDto {
         this.naziv = naziv;
     }
 
+    public ZanrDto() {}
+
     public ZanrDto(Zanr zanr) {
         this.naziv = zanr.getNaziv();
     }

@@ -1,5 +1,6 @@
 package com.tim23.webproject.entity;
 
+import com.tim23.webproject.dto.AutorDto;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -18,5 +19,8 @@ public class Autor extends Korisnik {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "spisak_knjiga")
     private Set<Knjiga> spisakKnjiga = new HashSet<>();
+
+    public Autor() {}
+
 
 }

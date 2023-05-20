@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class AutorDto {
+public class AutorDto extends KorisnikDto{
 
     private boolean aktivan;
     private Set<KnjigaDto> spisakKnjiga = new HashSet<>();
@@ -28,4 +28,5 @@ public class AutorDto {
             this.spisakKnjiga.add(new KnjigaDto(knjiga));
         }
     }
+
 }

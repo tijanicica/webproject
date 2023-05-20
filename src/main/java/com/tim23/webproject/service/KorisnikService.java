@@ -1,22 +1,27 @@
 package com.tim23.webproject.service;
 
 import com.tim23.webproject.dto.KorisnikDto;
+import com.tim23.webproject.dto.PolicaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.dto.RegisterDto;
 import com.tim23.webproject.entity.Korisnik;
+import com.tim23.webproject.entity.Polica;
 import com.tim23.webproject.entity.Recenzija;
 import com.tim23.webproject.repository.KorisnikRepository;
+import com.tim23.webproject.repository.PolicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+
 
     public Korisnik login(String mejlAdresa, String lozinka) {
         Korisnik korisnik = korisnikRepository.getByMejlAdresa(mejlAdresa);
@@ -58,6 +63,17 @@ public class KorisnikService {
         return dtos;
 
     }
+    public List<Polica> getPolicePrijavljenogKorisnika(Long korisnikId) {
+        Optional<Korisnik> nadjeniKorisnik = korisnikRepository.findById(korisnikId);
+        if (nadjeniKorisnik.isPresent()){
+            return korisnikRepository.findPoliceByKorisnikId(korisnikId);
+        }
+        return null;
+    }
+
+
+
+
 
 
 

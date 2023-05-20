@@ -1,10 +1,7 @@
 package com.tim23.webproject.controller;
 
-import com.tim23.webproject.dto.KnjigaDto;
-import com.tim23.webproject.dto.KorisnikDto;
-import com.tim23.webproject.dto.LoginDto;
-import com.tim23.webproject.dto.RegisterDto;
-import com.tim23.webproject.entity.Korisnik;
+import com.tim23.webproject.dto.*;
+import com.tim23.webproject.entity.*;
 import com.tim23.webproject.repository.KorisnikRepository;
 import com.tim23.webproject.service.*;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -54,4 +52,44 @@ public class KorisnikRestController {
         List<KorisnikDto> profiliKorisnika = korisnikService.getAllKorisnik();
         return ResponseEntity.ok(profiliKorisnika);
     }
+
+    @GetMapping("api/police-prijavljenog-korisnika")
+    public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null) {
+            List<Polica> policePrijavljenogKorisnika = korisnikService.getPolicePrijavljenogKorisnika(prijavljeniKorisnik.getId());
+            //konvertovanje
+            List<PolicaDto> policeDtoList = new ArrayList<>();
+            for(Polica polica : policePrijavljenogKorisnika){
+                List<StavkaPoliceDto> stavkePoliceDTOList = new ArrayList<>();
+
+                for (StavkaPolice stavkaPolice : polica.getStavkaPolice()) {
+                    Knjiga knjiga = stavkaPolice.getKnjiga();
+                    Recenzija recenzija = stavkaPolice.getRecenzija();
+
+                    RecenzijaBezKorisnikaDto recenzijaDTO = null;
+                    if (recenzija != null) {
+                        recenzijaDTO = new RecenzijaBezKorisnikaDto(recenzija.getOcena(), recenzija.getTekst(), recenzija.getDatumRecenzije());
+                    }
+                    KnjigaDto knjigaDto = null;
+                    if(knjiga != null){
+                        Zanr zanr = knjiga.getZanr();
+                        String nazivZanra = zanr.getNaziv();
+                        ZanrDto zanrDTO = new ZanrDto(nazivZanra);
+                        knjigaDto = new KnjigaDto(knjiga.getNaslov(), knjiga.getNaslovnaFotografija(), knjiga.getDatumObjavljivanja(), knjiga.getBrojStrana(), knjiga.getOpis(), knjiga.getOcena(), zanrDTO);
+                    }
+                    stavkePoliceDTOList.add(new StavkaPoliceDto(recenzijaDTO, knjigaDto));
+                }
+
+                PolicaDto policaDTO = new PolicaDto(polica.getNaziv(), polica.isPrimarna(), stavkePoliceDTOList);
+                policeDtoList.add(policaDTO);
+            }
+            return ResponseEntity.ok(policeDtoList);
+        } else {
+            return null;
+        }
+    }
+
+
+
 }

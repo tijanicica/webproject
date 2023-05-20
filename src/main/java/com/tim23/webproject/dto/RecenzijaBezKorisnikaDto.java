@@ -26,5 +26,7 @@ public class RecenzijaBezKorisnikaDto {
         this.datumRecenzije = recenzija.getDatumRecenzije();
     }
 
+    public RecenzijaBezKorisnikaDto() {}
+
 
 }
