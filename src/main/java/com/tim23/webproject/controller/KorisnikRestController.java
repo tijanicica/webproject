@@ -99,6 +99,4 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
         }
     }
-
-
 }

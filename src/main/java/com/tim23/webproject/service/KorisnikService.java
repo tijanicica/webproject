@@ -6,6 +6,8 @@ import com.tim23.webproject.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
 
@@ -274,6 +276,11 @@ public class KorisnikService {
     public Korisnik nadjiKorisnikaPoMejlAdresi(String mejlAdresa) {
         return korisnikRepository.findByMejlAdresa(mejlAdresa);
     }
+
+    //NIKOLA
+    // Metoda za dodavanje nove police korisniku
+    // Metoda za dodavanje nove police trenutno ulogovanom korisniku
+
 
 
 }
