@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface KnjigaRepository extends JpaRepository<Knjiga, String> {
+public interface KnjigaRepository extends JpaRepository<Knjiga, Long> {
 
     List<Knjiga> findByNaslov(String naslov);
 }

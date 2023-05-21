@@ -86,20 +86,14 @@ public class KorisnikRestController {
             return null;
         }
     }
-  /*  @PostMapping("api/kreiraj-autora")
-    public ResponseEntity<AutorDto> kreirajAutora(@RequestBody AutorDto autorDto, @RequestParam String mejlAdresa, @RequestParam String lozinka, HttpSession session) {
+    @PostMapping("api/kreiraj-autora")
+    public ResponseEntity<String> kreirajAutora(@RequestBody AutorDto autorDto, @RequestParam String mejlAdresa, @RequestParam String lozinka, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
-            try {
                 AutorDto kreiraniAutor = korisnikService.kreirajAutora(autorDto, mejlAdresa, lozinka);
-                return ResponseEntity.ok(kreiraniAutor);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body(null);
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-            }
+                return ResponseEntity.ok("Uspesno ste kreirali autora.");
         } else {
-            return null;
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
         }
-    }*/
+    }
 }

@@ -2,8 +2,7 @@ package com.tim23.webproject.service;
 
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
-import com.tim23.webproject.repository.KorisnikRepository;
-import com.tim23.webproject.repository.PolicaRepository;
+import com.tim23.webproject.repository.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,18 @@ public class KorisnikService {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+    @Autowired
+    private StavkaPoliceRepository stavkaPoliceRepository;
+    @Autowired
+    private KnjigaRepository knjigaRepository;
+    @Autowired
+    private ZanrRepository zanrRepository;
+    @Autowired
+    private PolicaRepository policaRepository;
+    @Autowired
+    private RecenzijaRepository recenzijaRepository;
+    @Autowired
+    private AutorRepository autorRepository;
 
 
     public Korisnik login(String mejlAdresa, String lozinka) {
@@ -65,95 +76,6 @@ public class KorisnikService {
         return null;
     }
 
-   /* public AutorDto kreirajAutora(AutorDto autorDto, String mejlAdresa, String lozinka) {
-
-        if (!autorDto.getUloga().equals(Uloga.CITALAC)) {
-            throw new IllegalStateException("Citalac ne moze da postane autor.");
-        }
-        if (!autorDto.getUloga().equals(Uloga.ADMINISTRATOR)) {
-            throw new IllegalStateException("Nije moguce kreirati administratora. Oni se ucitavaju iskljucivo iz baze.");
-        }
-
-        Autor autor = new Autor();
-        autor.setIme(autorDto.getIme());
-        autor.setPrezime(autorDto.getPrezime());
-        autor.setKorisnickoIme(autorDto.getKorisnickoIme());
-        autor.setMejlAdresa(mejlAdresa);
-        autor.setLozinka(lozinka);
-        autor.setDatumRodjenja(autorDto.getDatumRodjenja());
-        autor.setUloga(autorDto.getUloga());
-        autor.setProfilnaSlika(autorDto.getProfilnaSlika());
-        autor.setAktivan(autorDto.isAktivan());
-        //convert
-        List<PolicaDto> policaDtoList = autorDto.getPolice();
-        List<Polica> policaList = new ArrayList<>();
-
-        for (PolicaDto policaDto : policaDtoList) {
-            Polica polica = new Polica();
-            polica.setPrimarna(policaDto.isPrimarna());
-            polica.setNaziv(policaDto.getNaziv());
-
-            //convert StvakaPolice
-            List<StavkaPoliceDto> stavkaPolicedtoList = policaDto.getStavkaPolice();
-            List<StavkaPolice> stavkaPoliceList = new ArrayList<>();
-
-            for (StavkaPoliceDto stavkaPolicedto : stavkaPolicedtoList) {
-                StavkaPolice stavkaPolice = new StavkaPolice();
-
-                // convert Recenzije
-                RecenzijaBezKorisnikaDto recenzijedto = stavkaPolicedto.getRecenzija();
-                Recenzija recenzija = new Recenzija();
-                recenzija.setOcena(recenzijedto.getOcena());
-                recenzija.setTekst(recenzijedto.getTekst());
-                recenzija.setDatumRecenzije(recenzijedto.getDatumRecenzije());
-
-                // convert Knjige
-                KnjigaDto knjigaDto = stavkaPolicedto.getKnjiga();
-                Knjiga knjiga = new Knjiga();
-                knjiga.setNaslov(knjigaDto.getNaslov());
-                knjiga.setNaslovnaFotografija(knjigaDto.getNaslovnaFotografija());
-                knjiga.setDatumObjavljivanja(knjigaDto.getDatumObjavljivanja());
-                knjiga.setBrojStrana(knjigaDto.getBrojStrana());
-                knjiga.setOpis(knjigaDto.getOpis());
-                knjiga.setOcena(knjigaDto.getOcena());
-
-                // convert Zanr
-                ZanrDto zanrdto = knjigaDto.getZanr();
-                Zanr zanr = new Zanr();
-                zanr.setNaziv(zanrdto.getNaziv());
-                knjiga.setZanr(zanr);
-
-                // Setovanje konvertovanih objekata
-                stavkaPolice.setRecenzija(recenzija);
-                stavkaPolice.setKnjiga(knjiga);
-                stavkaPoliceList.add(stavkaPolice);
-            }
-
-            // Setovanje konvertovane liste StavkaPolice
-            polica.setStavkaPolice(stavkaPoliceList);
-
-            policaList.add(polica);
-        }
-
-        // Setovanje konvertovane liste Polica
-        autor.setPolice(policaList);
-
-        // convert spisak knjiga
-        //autor.setSpisakKnjiga(autorDto.getSpisakKnjiga());
-        Set<KnjigaDto> knjigeDtoSet = autorDto.getSpisakKnjiga();
-        Set<Knjiga> knjigeSet = new HashSet<>();
-        for (KnjigaDto knjigaDto : knjigeDtoSet) {
-            ZanrDto zanrDto = knjigaDto.getZanr();
-            Zanr zanr = new Zanr(zanrDto.getNaziv());
-            Knjiga knjiga = new Knjiga(knjigaDto.getNaslov(), knjigaDto.getNaslovnaFotografija(), knjigaDto.getDatumObjavljivanja(), knjigaDto.getBrojStrana(), knjigaDto.getOpis(), knjigaDto.getOcena(), zanr);
-            knjigeSet.add(knjiga);
-        }
-        autor.setSpisakKnjiga(knjigeSet);
-
-        korisnikRepository.save(autor);
-
-        return convertToDto(autor);
-    }
 
     private AutorDto convertToDto(Autor autor) {
         AutorDto autorDto = new AutorDto();
@@ -234,6 +156,105 @@ public class KorisnikService {
 
         return autorDto;
     }
-*/
+
+    public AutorDto kreirajAutora(AutorDto autorDto, String mejlAdresa, String lozinka) {
+
+        if (autorDto.getUloga().equals(Uloga.CITALAC)) {
+            throw new IllegalStateException("Citalac ne moze da postane autor.");
+        }
+        if (autorDto.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            throw new IllegalStateException("Nije moguce kreirati administratora. Oni se ucitavaju iskljucivo iz baze.");
+        }
+
+        Autor autor = new Autor();
+        autor.setIme(autorDto.getIme());
+        autor.setPrezime(autorDto.getPrezime());
+        autor.setKorisnickoIme(autorDto.getKorisnickoIme());
+        autor.setMejlAdresa(mejlAdresa);
+        autor.setLozinka(lozinka);
+        autor.setDatumRodjenja(autorDto.getDatumRodjenja());
+        autor.setUloga(autorDto.getUloga());
+        autor.setProfilnaSlika(autorDto.getProfilnaSlika());
+        autor.setAktivan(autorDto.isAktivan());
+        //convert
+        List<PolicaDto> policaDtoList = autorDto.getPolice();
+        List<Polica> policaList = new ArrayList<>();
+
+        for (PolicaDto policaDto : policaDtoList) {
+            Polica polica = new Polica();
+            polica.setPrimarna(policaDto.isPrimarna());
+            polica.setNaziv(policaDto.getNaziv());
+
+            //convert StvakaPolice
+            List<StavkaPoliceDto> stavkaPolicedtoList = policaDto.getStavkaPolice();
+            List<StavkaPolice> stavkaPoliceList = new ArrayList<>();
+
+            for (StavkaPoliceDto stavkaPolicedto : stavkaPolicedtoList) {
+                StavkaPolice stavkaPolice = new StavkaPolice();
+
+                // convert Recenzije
+                RecenzijaBezKorisnikaDto recenzijedto = stavkaPolicedto.getRecenzija();
+                Recenzija recenzija = new Recenzija();
+                recenzija.setOcena(recenzijedto.getOcena());
+                recenzija.setTekst(recenzijedto.getTekst());
+                recenzija.setDatumRecenzije(recenzijedto.getDatumRecenzije());
+                recenzijaRepository.save(recenzija);
+
+                // convert Knjige
+                KnjigaDto knjigaDto = stavkaPolicedto.getKnjiga();
+                Knjiga knjiga = new Knjiga();
+                knjiga.setNaslov(knjigaDto.getNaslov());
+                knjiga.setNaslovnaFotografija(knjigaDto.getNaslovnaFotografija());
+                knjiga.setDatumObjavljivanja(knjigaDto.getDatumObjavljivanja());
+                knjiga.setBrojStrana(knjigaDto.getBrojStrana());
+                knjiga.setOpis(knjigaDto.getOpis());
+                knjiga.setOcena(knjigaDto.getOcena());
+
+                // convert Zanr
+                ZanrDto zanrdto = knjigaDto.getZanr();
+                Zanr zanr = new Zanr();
+                zanr.setNaziv(zanrdto.getNaziv());
+                knjiga.setZanr(zanr);
+                zanrRepository.save(zanr);
+                knjigaRepository.save(knjiga);
+
+                // Setovanje konvertovanih objekata
+                stavkaPolice.setRecenzija(recenzija);
+                stavkaPolice.setKnjiga(knjiga);
+                stavkaPoliceList.add(stavkaPolice);
+                stavkaPoliceRepository.save(stavkaPolice);
+            }
+
+            // Setovanje konvertovane liste StavkaPolice
+            polica.setStavkaPolice(stavkaPoliceList);
+
+            policaList.add(polica);
+            policaRepository.save(polica);
+        }
+
+        // Setovanje konvertovane liste Polica
+        autor.setPolice(policaList);
+
+        // convert spisak knjiga
+        //autor.setSpisakKnjiga(autorDto.getSpisakKnjiga());
+        Set<KnjigaDto> knjigeDtoSet = autorDto.getSpisakKnjiga();
+        Set<Knjiga> knjigeSet = new HashSet<>();
+        for (KnjigaDto knjigaDto : knjigeDtoSet) {
+            ZanrDto zanrDto = knjigaDto.getZanr();
+            Zanr zanr = new Zanr(zanrDto.getNaziv());
+            zanrRepository.save(zanr);
+            Knjiga knjiga = new Knjiga(knjigaDto.getNaslov(), knjigaDto.getNaslovnaFotografija(), knjigaDto.getDatumObjavljivanja(), knjigaDto.getBrojStrana(), knjigaDto.getOpis(), knjigaDto.getOcena(), zanr);
+            knjigeSet.add(knjiga);
+            knjigaRepository.save(knjiga);
+        }
+
+        autor.setSpisakKnjiga(knjigeSet);
+
+        korisnikRepository.save(autor);
+
+        return convertToDto(autor);
+    }
+
+
 
 }

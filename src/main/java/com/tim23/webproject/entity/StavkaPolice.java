@@ -25,7 +25,7 @@ public class StavkaPolice implements Serializable {
     @JoinColumn(name = "recenzija_id")
     private Recenzija recenzija;
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "knjiga_ISBN")
+    @JoinColumn(name = "knjiga_id")
     private Knjiga knjiga;
 
 }

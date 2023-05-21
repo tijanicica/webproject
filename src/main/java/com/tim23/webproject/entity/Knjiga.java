@@ -13,11 +13,14 @@ import java.util.Date;
 @ToString
 public class Knjiga implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "knjiga_id")
+    private Long id;
 
     private String naslov;
     @Column(name = "naslovna_fotografija")
     private String naslovnaFotografija;
-    @Id
     @Column(name = "knjiga_isbn")
     private String ISBN;
     @Column(name = "datum_objavljivanja")

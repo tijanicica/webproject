@@ -19,20 +19,4 @@ public class AutorRestController {
     @Autowired
     private AutorService autorService;
 
-    @PostMapping("api/kreiraj-autora")
-    public ResponseEntity<AutorDto> kreirajAutora(@RequestBody AutorDto autorDto, @RequestParam String mejlAdresa, @RequestParam String lozinka, HttpSession session) {
-        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
-            try {
-                AutorDto kreiraniAutor = autorService.kreirajAutora(autorDto, mejlAdresa, lozinka);
-                return ResponseEntity.ok(kreiraniAutor);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body(null);
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-            }
-        } else {
-            return null;
-        }
-    }
 }

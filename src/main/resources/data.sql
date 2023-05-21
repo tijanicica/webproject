@@ -21,14 +21,14 @@ INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljiva
 
 INSERT INTO AUTOR (aktivan, autor_id) VALUES (true, 3);
 
-INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_isbn) VALUES (3, 'isbn2');
-INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_isbn) VALUES (3, 'isbn3');
+INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_id) VALUES (3, 1);
+INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_id) VALUES (3, 2);
 
 INSERT INTO RECENZIJA (ocena, tekst, datum_recenzije, korisnik_id) VALUES (8, 'Sve preporuke.','2023-03-03', 2);
 INSERT INTO RECENZIJA (ocena, tekst, datum_recenzije, korisnik_id) VALUES (9, 'Odlicna knjiga.','2023-03-04', 1);
 
-INSERT INTO STAVKAPOLICE (recenzija_id, knjiga_isbn) VALUES (1, 'isbn2');
-INSERT INTO STAVKAPOLICE (recenzija_id, knjiga_isbn) VALUES (2, 'isbn3');
+INSERT INTO STAVKAPOLICE (knjiga_id, recenzija_id ) VALUES (1, 1);
+INSERT INTO STAVKAPOLICE (knjiga_id, recenzija_id) VALUES (2, 2);
 
 INSERT INTO POLICA_STAVKA_POLICE (polica_polica_id, stavka_police_stavka_police_id) VALUES (1, 1);
 INSERT INTO POLICA_STAVKA_POLICE (polica_polica_id, stavka_police_stavka_police_id) VALUES (2, 2);
