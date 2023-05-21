@@ -20,5 +20,6 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 
     @Query("SELECT p FROM Korisnik k JOIN k.police p WHERE k.id = :korisnikId")
     List<Polica> findPoliceByKorisnikId(@Param("korisnikId") Long korisnikId);
-
+    //NIKOLA
+    Korisnik findByMejlAdresa(String mejlAdresa);
 }

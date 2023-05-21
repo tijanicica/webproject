@@ -25,4 +25,11 @@ public class Polica implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaPolice> stavkaPolice = new ArrayList<>();
 
+    public Polica(){}
+    public Polica(String naziv, boolean primarna, List<StavkaPolice> stavkePolice) {
+        this.naziv = naziv;
+        this.primarna = primarna;
+        this.stavkaPolice = stavkePolice;
+    }
+
 }

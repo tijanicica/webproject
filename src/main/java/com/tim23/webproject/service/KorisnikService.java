@@ -27,11 +27,26 @@ public class KorisnikService {
     @Autowired
     private AutorRepository autorRepository;
 
+    //NIKOLA
+    public void dodajPrimarnePoliceKorisniku(Korisnik korisnik) {
+        // Dodajte primarne police samo ako korisnik nema prethodno definisanu ulogu
+        if (korisnik.getUloga() == Uloga.CITALAC) {
+            Polica wantToRead = new Polica("Want to Read", true, new ArrayList<>());
+            Polica currentlyReading = new Polica("Currently Reading", true, new ArrayList<>());
+            Polica read = new Polica("Read", true, new ArrayList<>());
 
+            korisnik.getPolice().add(wantToRead);
+            korisnik.getPolice().add(currentlyReading);
+            korisnik.getPolice().add(read);
+        }
+    }
     public Korisnik login(String mejlAdresa, String lozinka) {
         Korisnik korisnik = korisnikRepository.getByMejlAdresa(mejlAdresa);
         if(korisnik == null || !korisnik.getLozinka().equals(lozinka))
             return null;
+        dodajPrimarnePoliceKorisniku(korisnik);
+        korisnikRepository.save(korisnik);
+
         return  korisnik;
     }
 
@@ -54,6 +69,7 @@ public class KorisnikService {
         korisnik.setKorisnickoIme(registerDto.getKorisnickoIme());
         korisnik.setMejlAdresa(registerDto.getMejlAdresa());
         korisnik.setLozinka(registerDto.getLozinka());
+        korisnik.setUloga(Uloga.CITALAC);
 
         korisnikRepository.save(korisnik);
     }
@@ -254,7 +270,10 @@ public class KorisnikService {
 
         return convertToDto(autor);
     }
-
+    //NIKOLA
+    public Korisnik nadjiKorisnikaPoMejlAdresi(String mejlAdresa) {
+        return korisnikRepository.findByMejlAdresa(mejlAdresa);
+    }
 
 
 }

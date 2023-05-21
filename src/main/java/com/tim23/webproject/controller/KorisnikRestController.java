@@ -20,6 +20,8 @@ public class KorisnikRestController {
     private KorisnikService korisnikService;
 
 
+
+
     @PostMapping("api/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
         // proverimo da li su podaci validni
@@ -29,6 +31,7 @@ public class KorisnikRestController {
         Korisnik prijavljeniKorisnik = korisnikService.login(loginDto.getMejlAdresa(), loginDto.getLozinka());
         if (prijavljeniKorisnik == null)
             return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
+
 
         session.setAttribute("korisnik", prijavljeniKorisnik);
         return ResponseEntity.ok("Uspesna prijava!");
@@ -96,4 +99,6 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
         }
     }
+
+
 }

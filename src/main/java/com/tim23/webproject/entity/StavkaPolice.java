@@ -28,4 +28,9 @@ public class StavkaPolice implements Serializable {
     @JoinColumn(name = "knjiga_id")
     private Knjiga knjiga;
 
+    public StavkaPolice(Recenzija recenzija, Knjiga knjiga) {
+        this.recenzija = recenzija;
+        this.knjiga = knjiga;
+    }
+    public StavkaPolice(){}
 }
