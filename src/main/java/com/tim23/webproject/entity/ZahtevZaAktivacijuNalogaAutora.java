@@ -1,5 +1,6 @@
 package com.tim23.webproject.entity;
 
+import com.tim23.webproject.dto.ZahtevZaAktivacijuNalogaAutoraDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,5 +28,13 @@ public class ZahtevZaAktivacijuNalogaAutora implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "autor_id")
     private Autor autor;
+
+    public ZahtevZaAktivacijuNalogaAutora(ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {
+        this.email = zahtevZaAktivacijuNalogaAutoraDto.getEmail();
+        this.telefon = zahtevZaAktivacijuNalogaAutoraDto.getTelefon();
+        this.poruka = zahtevZaAktivacijuNalogaAutoraDto.getPoruka();
+
+    }
+
 
 }

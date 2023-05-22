@@ -16,19 +16,11 @@ public class ZahtevZaAktivacijuNalogaAutoraDto {
     private String email;
     private String telefon;
     private String poruka;
-    private Date datum;
-    public enum StatusDto {NA_CEKANJU, ODOBREN, ODBIJEN;}
-    @Enumerated(EnumType.STRING)
-    private StatusDto status;
-    private AutorDto autor;
 
-    public ZahtevZaAktivacijuNalogaAutoraDto(String email, String telefon, String poruka, Date datum, StatusDto status, AutorDto autor) {
+    public ZahtevZaAktivacijuNalogaAutoraDto(String email, String telefon, String poruka) {
         this.email = email;
         this.telefon = telefon;
         this.poruka = poruka;
-        this.datum = datum;
-        this.status = status;
-        this.autor = autor;
     }
 
     public ZahtevZaAktivacijuNalogaAutoraDto() {}
@@ -37,23 +29,6 @@ public class ZahtevZaAktivacijuNalogaAutoraDto {
         this.email = zahtevZaAktivacijuNalogaAutora.getEmail();
         this.telefon = zahtevZaAktivacijuNalogaAutora.getTelefon();
         this.poruka = zahtevZaAktivacijuNalogaAutora.getPoruka();
-        this.datum = zahtevZaAktivacijuNalogaAutora.getDatum();
-        if (zahtevZaAktivacijuNalogaAutora.getStatus() == Status.NA_CEKANJU) {
-            this.status = StatusDto.NA_CEKANJU;
-        } else if (zahtevZaAktivacijuNalogaAutora.getStatus() == Status.ODOBREN) {
-            this.status = StatusDto.ODOBREN;
-        } else if (zahtevZaAktivacijuNalogaAutora.getStatus() == Status.ODBIJEN) {
-            this.status = StatusDto.ODBIJEN;
-        }
 
-        /* Knjiga knjigaStavke = stavkaPolice.getKnjiga();
-        if (knjigaStavke != null) {
-            this.knjiga = new KnjigaDto(knjigaStavke);
-        }*/
-
-        Autor autorZahtevaZaAktivaciju = zahtevZaAktivacijuNalogaAutora.getAutor();
-        if (autorZahtevaZaAktivaciju != null) {
-            this.autor = new AutorDto(autorZahtevaZaAktivaciju);
-        }
     }
 }

@@ -175,7 +175,7 @@ public class KorisnikService {
         autor.setDatumRodjenja(autorDto.getDatumRodjenja());
         autor.setUloga(autorDto.getUloga());
         autor.setProfilnaSlika(autorDto.getProfilnaSlika());
-        autor.setAktivan(autorDto.isAktivan());
+        autor.setAktivan(false);
         //convert
         List<PolicaDto> policaDtoList = autorDto.getPolice();
         List<Polica> policaList = new ArrayList<>();
@@ -253,6 +253,11 @@ public class KorisnikService {
         korisnikRepository.save(autor);
 
         return convertToDto(autor);
+    }
+
+    public boolean imaUloguAutora(String mejlAdresa) {
+        Korisnik korisnik = korisnikRepository.findByMejlAdresa(mejlAdresa);
+        return korisnik != null && korisnik.getUloga() == Uloga.AUTOR;
     }
 
 
