@@ -27,4 +27,8 @@ public class ZanrService {
         return dtos;
 
     }
+    public void dodajZanr(ZanrDto zanrDto) {
+        Zanr zanr = new Zanr(zanrDto.getNaziv());
+        zanrRepository.save(zanr);
+    }
 }
