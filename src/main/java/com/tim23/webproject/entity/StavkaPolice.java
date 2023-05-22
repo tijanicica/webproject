@@ -21,10 +21,10 @@ public class StavkaPolice implements Serializable {
     @Column(name = "stavka_police_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recenzija_id")
     private Recenzija recenzija;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "knjiga_id")
     private Knjiga knjiga;
 

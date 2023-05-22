@@ -34,11 +34,12 @@ public class ZanrRestController {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)){
             zanrService.dodajZanr(zanrDto);
-            return ResponseEntity.ok("Uspešno dodat žanr.");
+            return ResponseEntity.ok("Uspesno dodat zanr.");
         } else {
-            return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
         }
     }
+
 
 }
 
