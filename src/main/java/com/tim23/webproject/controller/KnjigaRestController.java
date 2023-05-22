@@ -1,12 +1,17 @@
 package com.tim23.webproject.controller;
 
+import com.tim23.webproject.dto.AutorDto;
 import com.tim23.webproject.dto.KnjigaDto;
+import com.tim23.webproject.entity.Knjiga;
+import com.tim23.webproject.entity.Korisnik;
+import com.tim23.webproject.entity.Uloga;
 import com.tim23.webproject.service.KnjigaService;
+import com.tim23.webproject.service.PolicaService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,6 +20,9 @@ public class KnjigaRestController {
 
     @Autowired
     private KnjigaService knjigaService;
+
+    @Autowired
+    private PolicaService policaService;
 
     @GetMapping("api/knjige") //radi
     public ResponseEntity<List<KnjigaDto>> getKnjige() {
@@ -29,4 +37,19 @@ public class KnjigaRestController {
 
         return ResponseEntity.ok(knjige);
     }
+
+    @DeleteMapping("api/{nazivKnjige}/ukloni-sa/{nazivPolice}")
+    public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable String nazivKnjige, @PathVariable String nazivPolice, HttpSession session) throws Exception {
+            Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+            if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
+                knjigaService.ukloniKnjiguSaPolice(nazivKnjige, nazivPolice, prijavljeniKorisnik);
+                return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
+            } else {
+                return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
+            }
+    }
+
+
+
+
 }

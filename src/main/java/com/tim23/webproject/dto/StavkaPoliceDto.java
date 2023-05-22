@@ -39,4 +39,12 @@ public class StavkaPoliceDto {
             this.knjiga = new KnjigaDto(knjigaStavke);
         }
     }
+
+    public void setKnjigaDto(KnjigaDto knjigaDto) {
+        this.knjiga = knjigaDto;
+    }
+
+    public void setRecenzijaDto(RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto) {
+        this.recenzija = recenzijaBezKorisnikaDto;
+    }
 }

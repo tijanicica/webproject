@@ -53,7 +53,7 @@ public class KorisnikRestController {
         return ResponseEntity.ok(profiliKorisnika);
     }
 
-    @GetMapping("api/police-prijavljenog-korisnika")
+   /* @GetMapping("api/police-prijavljenog-korisnika")
     public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null) {
@@ -89,6 +89,8 @@ public class KorisnikRestController {
             return null;
         }
     }
+    */
+
     @PostMapping("api/kreiraj-autora")
     public ResponseEntity<String> kreirajAutora(@RequestBody AutorDto autorDto, @RequestParam String mejlAdresa, @RequestParam String lozinka, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");

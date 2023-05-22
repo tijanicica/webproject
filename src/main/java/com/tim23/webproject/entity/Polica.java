@@ -22,7 +22,7 @@ public class Polica implements Serializable {
     private Long id;
     private String naziv;
     private boolean primarna;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaPolice> stavkaPolice = new ArrayList<>();
 
     public Polica(){}

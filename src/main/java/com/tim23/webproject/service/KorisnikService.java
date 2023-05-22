@@ -193,7 +193,7 @@ public class KorisnikService {
         autor.setDatumRodjenja(autorDto.getDatumRodjenja());
         autor.setUloga(autorDto.getUloga());
         autor.setProfilnaSlika(autorDto.getProfilnaSlika());
-        autor.setAktivan(autorDto.isAktivan());
+        autor.setAktivan(false);
         //convert
         List<PolicaDto> policaDtoList = autorDto.getPolice();
         List<Polica> policaList = new ArrayList<>();
