@@ -1,4 +1,6 @@
 package com.tim23.webproject.entity;
+import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
+import com.tim23.webproject.dto.RecenzijaDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,5 +41,11 @@ public class Recenzija implements Serializable {
         this.tekst = recenzija.getTekst();
         this.datumRecenzije = recenzija.getDatumRecenzije();
         this.korisnik = recenzija.getKorisnik();
+    }
+
+    public Recenzija(RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto) {
+        this.ocena = recenzijaBezKorisnikaDto.getOcena();
+        this.tekst = recenzijaBezKorisnikaDto.getTekst();
+        this.datumRecenzije = recenzijaBezKorisnikaDto.getDatumRecenzije();
     }
 }

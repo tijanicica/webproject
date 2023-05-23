@@ -17,7 +17,7 @@ public class AutorRestController {
     @Autowired
     private AutorService autorService;
 
-  /*  @PutMapping("/api/azuriraj-nalog-autora/{id}")
+    /*@PutMapping("/api/azuriraj-nalog-autora/{id}")
     public ResponseEntity<String> azurirajNalogAutora(@PathVariable Long id, @RequestBody AutorDto autorDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {

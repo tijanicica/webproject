@@ -1,5 +1,6 @@
 package com.tim23.webproject.entity;
 
+import com.tim23.webproject.dto.KnjigaDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,4 +44,13 @@ public class Knjiga implements Serializable {
     }
 
     public Knjiga(){}
+
+    public Knjiga(KnjigaDto knjigaDto) {
+        this.naslov = knjigaDto.getNaslov();
+        this.naslovnaFotografija = knjigaDto.getNaslovnaFotografija();
+        this.datumObjavljivanja = knjigaDto.getDatumObjavljivanja();
+        this.brojStrana = knjigaDto.getBrojStrana();
+        this.opis = knjigaDto.getOpis();
+        this.ocena = knjigaDto.getOcena();
+    }
 }

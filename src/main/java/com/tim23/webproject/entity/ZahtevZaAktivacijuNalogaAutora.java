@@ -36,5 +36,7 @@ public class ZahtevZaAktivacijuNalogaAutora implements Serializable {
 
     }
 
+    public ZahtevZaAktivacijuNalogaAutora() {}
+
 
 }

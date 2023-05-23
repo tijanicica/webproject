@@ -1,6 +1,7 @@
 package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.AutorDto;
+import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.ZahtevZaAktivacijuNalogaAutoraDto;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
@@ -10,10 +11,9 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ZahtevZaAktivacijuNalogaRestController {
@@ -33,9 +33,21 @@ public class ZahtevZaAktivacijuNalogaRestController {
             zahtevZaAktivacijuNalogaService.podnesiZahtevZaAktivacijuAutora(zahtevZaAktivacijuNalogaAutoraDto);
             return ResponseEntity.ok("Uspesno ste podneli zahtev.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); //sta je ovo?
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("api/zahtevi")
+    public ResponseEntity<List<ZahtevZaAktivacijuNalogaAutoraDto>> getAllZahtevi(HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            List<ZahtevZaAktivacijuNalogaAutoraDto> zahtevi = zahtevZaAktivacijuNalogaService.getAllZahtevi();
+            return ResponseEntity.ok(zahtevi);
+        } else {
+            return null;
+        }
+    }
+
 }
 
 

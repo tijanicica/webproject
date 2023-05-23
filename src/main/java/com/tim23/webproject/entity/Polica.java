@@ -1,5 +1,6 @@
 package com.tim23.webproject.entity;
 
+import com.tim23.webproject.dto.PolicaDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,4 +26,10 @@ public class Polica implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaPolice> stavkaPolice = new ArrayList<>();
 
+    public Polica(PolicaDto policaDto) {
+        this.naziv = policaDto.getNaziv();
+        this.primarna = policaDto.isPrimarna();
+    }
+
+    public Polica() {}
 }

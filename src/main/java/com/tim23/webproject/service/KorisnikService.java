@@ -260,6 +260,78 @@ public class KorisnikService {
         return korisnik != null && korisnik.getUloga() == Uloga.AUTOR;
     }
 
+    public void azurirajProfilAutora(Long autorId, AutorDto autorDto) {
+        Optional<Korisnik> optionalKorisnik = korisnikRepository.findById(autorId);
+        if (optionalKorisnik.isPresent()) {
+            Korisnik korisnik = optionalKorisnik.get();
+            if (korisnik.getUloga().equals(Uloga.AUTOR)) {
+                Autor autor = (Autor) korisnik;
+                if (!autor.isAktivan()) {
+
+                    autor.setIme(autorDto.getIme());
+                    autor.setPrezime(autorDto.getPrezime());
+                    autor.setKorisnickoIme(autorDto.getKorisnickoIme());
+                    autor.setDatumRodjenja(autorDto.getDatumRodjenja());
+                    autor.setProfilnaSlika(autorDto.getProfilnaSlika());
+                    autor.setOpis(autorDto.getOpis());
+                    autor.setUloga(autorDto.getUloga());
+
+
+                    //azuriranje police
+                    autor.getPolice().clear();
+                    List<PolicaDto> policaDtoList = autorDto.getPolice();
+                    List<Polica> policaList = new ArrayList<>();
+                    for (PolicaDto policaDto : policaDtoList) {
+                        Polica polica = new Polica(policaDto);
+
+                        //azuriranje stavka police u polici
+                        List<StavkaPoliceDto> stavkaPoliceDtoList = policaDto.getStavkaPolice();
+                        List<StavkaPolice> stavkaPoliceList = new ArrayList<>();
+                        for (StavkaPoliceDto stavkaPoliceDto : stavkaPoliceDtoList) {
+                            StavkaPolice stavka = new StavkaPolice();
+
+                            if (stavkaPoliceDto.getRecenzija() != null) {
+                                RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto = stavkaPoliceDto.getRecenzija();
+                                Recenzija recenzija = new Recenzija(recenzijaBezKorisnikaDto);
+                                stavka.setRecenzija(recenzija);
+                                recenzijaRepository.save(recenzija);
+                            }
+                            if (stavkaPoliceDto.getKnjiga() != null) {
+                                KnjigaDto knjigaDto = stavkaPoliceDto.getKnjiga();
+                                Knjiga knjiga = new Knjiga(knjigaDto);
+                                ZanrDto zanrDto = knjigaDto.getZanr();
+                                if (zanrDto != null) {
+                                    Zanr zanr = new Zanr(zanrDto.getNaziv());
+                                    knjiga.setZanr(zanr);
+                                    zanrRepository.save(zanr);
+                                } else {
+                                    knjiga.setZanr(null);
+                                }
+                                stavka.setKnjiga(knjiga);
+                                knjigaRepository.save(knjiga);
+                            }
+                            stavkaPoliceList.add(stavka);
+                            stavkaPoliceRepository.save(stavka);
+                        }
+                        polica.setStavkaPolice(stavkaPoliceList);
+                        policaList.add(polica);
+                        policaRepository.save(polica);
+
+                    }
+                    autor.setPolice(policaList);
+                    korisnikRepository.save(autor);
+                } else {
+                    throw new IllegalArgumentException("Nalog autora je aktivan. Samo neaktivirani nalozi mogu biti azurirani.");
+                }
+            } else {
+                throw new IllegalArgumentException("Korisnik sa zadatim ID-jem nije autor.");
+            }
+        } else {
+            throw new NoSuchElementException("Korisnik sa zadatim ID-jem nije pronađen.");
+        }
+    }
+
+
 
 
 

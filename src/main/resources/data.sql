@@ -33,7 +33,7 @@ INSERT INTO STAVKAPOLICE (knjiga_id, recenzija_id) VALUES (2, 2);
 INSERT INTO POLICA_STAVKA_POLICE (polica_polica_id, stavka_police_stavka_police_id) VALUES (1, 1);
 INSERT INTO POLICA_STAVKA_POLICE (polica_polica_id, stavka_police_stavka_police_id) VALUES (2, 2);
 
-INSERT INTO ZAHTEV_ZA_AKTIVACIJU_NALOGA_AUTORA (email, telefon, poruka, datum, status, autor_id) VALUES ('antoane@gmail.com', '061111111', 'Nalog za aktivaciju', '2023-04-03', 'AKTIVAN', 3);
+INSERT INTO ZAHTEV_ZA_AKTIVACIJU_NALOGA_AUTORA (email, telefon, poruka, datum, status, autor_id) VALUES ('antoane@gmail.com', '061111111', 'Nalog za aktivaciju', '2023-04-03', 'NA_CEKANJU', 3);
 
 
 
