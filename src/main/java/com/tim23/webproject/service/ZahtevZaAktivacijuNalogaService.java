@@ -47,6 +47,7 @@ public class ZahtevZaAktivacijuNalogaService {
         ZahtevZaAktivacijuNalogaAutora zahtev = zahtevZaAktivacijuNalogaAutoraRepository.findById(zahtevId).orElseThrow(() -> new EntityNotFoundException("Zahtev sa datim ID-om nije pronadjen."));
 
         zahtev.setStatus(Status.ODBIJEN);
+        zahtevZaAktivacijuNalogaAutoraRepository.save(zahtev);
         String emailBody = "Vas zahtev za aktivaciju naloga autora je odbijen.";
         String emailSubject = "Obavestenje o odbijanju zahteva";
 
@@ -61,6 +62,8 @@ public class ZahtevZaAktivacijuNalogaService {
         Autor autor = zahtev.getAutor();
         autor.setAktivan(true);
         String novaLozinka = autor.getLozinka();
+        autorRepository.save(autor);
+        zahtevZaAktivacijuNalogaAutoraRepository.save(zahtev);
         //kreiraj primarne police, uradio nikola, dodati
         String emailBody = "Vas zahtev za aktivaciju naloga autora je prihvacen." +
                            "Lozinka vaseg naloga je : " + novaLozinka;
