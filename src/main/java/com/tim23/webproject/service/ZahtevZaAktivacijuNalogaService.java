@@ -4,6 +4,7 @@ import com.tim23.webproject.dto.ZahtevZaAktivacijuNalogaAutoraDto;
 import com.tim23.webproject.entity.Autor;
 import com.tim23.webproject.entity.Status;
 import com.tim23.webproject.entity.ZahtevZaAktivacijuNalogaAutora;
+import com.tim23.webproject.repository.AutorRepository;
 import com.tim23.webproject.repository.ZahtevZaAktivacijuNalogaAutoraRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,14 @@ public class ZahtevZaAktivacijuNalogaService {
     private ZahtevZaAktivacijuNalogaAutoraRepository zahtevZaAktivacijuNalogaAutoraRepository;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private AutorRepository autorRepository;
 
-    public void podnesiZahtevZaAktivacijuAutora(ZahtevZaAktivacijuNalogaAutoraDto zahtevDto) {
+    public void podnesiZahtevZaAktivacijuAutora(Long autorId, ZahtevZaAktivacijuNalogaAutoraDto zahtevDto) {
+        Autor autor = autorRepository.findById(autorId).orElseThrow(() -> new EntityNotFoundException("Zahtev sa datim ID-om nije pronadjen."));
+
         ZahtevZaAktivacijuNalogaAutora zahtev = new ZahtevZaAktivacijuNalogaAutora(zahtevDto);
+        zahtev.setAutor(autor);
          zahtevZaAktivacijuNalogaAutoraRepository.save(zahtev);
     }
 
@@ -48,7 +54,7 @@ public class ZahtevZaAktivacijuNalogaService {
 
     }
 
-    /*public void prihvatiZahtev(Long zahtevId) {
+    public void prihvatiZahtev(Long zahtevId) {
         ZahtevZaAktivacijuNalogaAutora zahtev = zahtevZaAktivacijuNalogaAutoraRepository.findById(zahtevId).orElseThrow(() -> new EntityNotFoundException("Zahtev sa datim ID-om nije pronadjen."));
 
         zahtev.setStatus(Status.ODOBREN);
@@ -62,5 +68,5 @@ public class ZahtevZaAktivacijuNalogaService {
 
         emailService.sendEmail(zahtev.getEmail(), emailSubject, emailBody);
 
-    }*/
+    }
 }

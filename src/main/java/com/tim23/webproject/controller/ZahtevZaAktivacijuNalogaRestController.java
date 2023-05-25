@@ -27,14 +27,14 @@ public class ZahtevZaAktivacijuNalogaRestController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("api/zahtev-za-autora")
-    public ResponseEntity<String> podnesiZahtevZaAktivacijuAutoraAutora(@RequestBody ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {
+    @PostMapping("api/zahtev-za-autora/{id}")
+    public ResponseEntity<String> podnesiZahtevZaAktivacijuAutoraAutora(@PathVariable("id") Long autorId,@RequestBody ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {
         String mejlAdresa = zahtevZaAktivacijuNalogaAutoraDto.getEmail();
         if (!korisnikService.imaUloguAutora(mejlAdresa)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nemate pristup zahtevu za aktivaciju autora.");
         }
         try {
-            zahtevZaAktivacijuNalogaService.podnesiZahtevZaAktivacijuAutora(zahtevZaAktivacijuNalogaAutoraDto);
+            zahtevZaAktivacijuNalogaService.podnesiZahtevZaAktivacijuAutora(autorId,zahtevZaAktivacijuNalogaAutoraDto);
             return ResponseEntity.ok("Uspesno ste podneli zahtev.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -63,7 +63,7 @@ public class ZahtevZaAktivacijuNalogaRestController {
         }
     }
 
-  /*  @PostMapping("api/prihvati-zahtev/{id}")
+    @PostMapping("api/prihvati-zahtev/{id}")
     public ResponseEntity<String> prihvatiZahtev(@PathVariable("id") Long zahtevId, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
@@ -73,7 +73,7 @@ public class ZahtevZaAktivacijuNalogaRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
         }
     }
-*/
+
 
 
 
