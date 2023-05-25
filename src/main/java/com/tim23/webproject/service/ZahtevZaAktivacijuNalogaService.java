@@ -1,8 +1,11 @@
 package com.tim23.webproject.service;
 
 import com.tim23.webproject.dto.ZahtevZaAktivacijuNalogaAutoraDto;
+import com.tim23.webproject.entity.Autor;
+import com.tim23.webproject.entity.Status;
 import com.tim23.webproject.entity.ZahtevZaAktivacijuNalogaAutora;
 import com.tim23.webproject.repository.ZahtevZaAktivacijuNalogaAutoraRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,8 @@ public class ZahtevZaAktivacijuNalogaService {
 
     @Autowired
     private ZahtevZaAktivacijuNalogaAutoraRepository zahtevZaAktivacijuNalogaAutoraRepository;
+    @Autowired
+    private EmailService emailService;
 
     public void podnesiZahtevZaAktivacijuAutora(ZahtevZaAktivacijuNalogaAutoraDto zahtevDto) {
         ZahtevZaAktivacijuNalogaAutora zahtev = new ZahtevZaAktivacijuNalogaAutora(zahtevDto);
@@ -31,4 +36,31 @@ public class ZahtevZaAktivacijuNalogaService {
             }
             return dtos;
     }
+
+    public void odbijZahtev(Long zahtevId) {
+        ZahtevZaAktivacijuNalogaAutora zahtev = zahtevZaAktivacijuNalogaAutoraRepository.findById(zahtevId).orElseThrow(() -> new EntityNotFoundException("Zahtev sa datim ID-om nije pronadjen."));
+
+        zahtev.setStatus(Status.ODBIJEN);
+        String emailBody = "Vas zahtev za aktivaciju naloga autora je odbijen.";
+        String emailSubject = "Obavestenje o odbijanju zahteva";
+
+        emailService.sendEmail(zahtev.getEmail(), emailSubject, emailBody);
+
+    }
+
+    /*public void prihvatiZahtev(Long zahtevId) {
+        ZahtevZaAktivacijuNalogaAutora zahtev = zahtevZaAktivacijuNalogaAutoraRepository.findById(zahtevId).orElseThrow(() -> new EntityNotFoundException("Zahtev sa datim ID-om nije pronadjen."));
+
+        zahtev.setStatus(Status.ODOBREN);
+        Autor autor = zahtev.getAutor();
+        autor.setAktivan(true);
+        String novaLozinka = autor.getLozinka();
+        //kreiraj primarne police, uradio nikola, dodati
+        String emailBody = "Vas zahtev za aktivaciju naloga autora je prihvacen." +
+                           "Lozinka vaseg naloga je : " + novaLozinka;
+        String emailSubject = "Obavestenje o prihvatanju zahteva";
+
+        emailService.sendEmail(zahtev.getEmail(), emailSubject, emailBody);
+
+    }*/
 }

@@ -5,6 +5,8 @@ import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.ZahtevZaAktivacijuNalogaAutoraDto;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
+import com.tim23.webproject.entity.ZahtevZaAktivacijuNalogaAutora;
+import com.tim23.webproject.service.EmailService;
 import com.tim23.webproject.service.KorisnikService;
 import com.tim23.webproject.service.ZahtevZaAktivacijuNalogaService;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +24,8 @@ public class ZahtevZaAktivacijuNalogaRestController {
     private ZahtevZaAktivacijuNalogaService zahtevZaAktivacijuNalogaService;
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("api/zahtev-za-autora")
     public ResponseEntity<String> podnesiZahtevZaAktivacijuAutoraAutora(@RequestBody ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {
@@ -47,6 +51,32 @@ public class ZahtevZaAktivacijuNalogaRestController {
             return null;
         }
     }
+
+    @PostMapping("api/odbij-zahtev/{id}")
+    public ResponseEntity<String> odbijZahtev(@PathVariable("id") Long zahtevId, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            zahtevZaAktivacijuNalogaService.odbijZahtev(zahtevId);
+            return ResponseEntity.ok("Zahtev je uspesno odbijen.");
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+  /*  @PostMapping("api/prihvati-zahtev/{id}")
+    public ResponseEntity<String> prihvatiZahtev(@PathVariable("id") Long zahtevId, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            zahtevZaAktivacijuNalogaService.prihvatiZahtev(zahtevId);
+            return ResponseEntity.ok("Zahtev je uspesno prihvacen.");
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
+        }
+    }
+*/
+
+
+
 
 }
 
