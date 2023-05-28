@@ -38,18 +38,5 @@ public class KnjigaRestController {
         return ResponseEntity.ok(knjige);
     }
 
-    @DeleteMapping("api/{nazivKnjige}/ukloni-sa/{nazivPolice}")
-    public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable String nazivKnjige, @PathVariable String nazivPolice, HttpSession session) throws Exception {
-            Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-            if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
-                knjigaService.ukloniKnjiguSaPolice(nazivKnjige, nazivPolice, prijavljeniKorisnik);
-                return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
-            } else {
-                return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
-            }
-    }
-
-
-
 
 }

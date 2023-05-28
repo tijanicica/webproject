@@ -2,7 +2,9 @@ package com.tim23.webproject.repository;
 
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Polica;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +24,5 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
     List<Polica> findPoliceByKorisnikId(@Param("korisnikId") Long korisnikId);
     //NIKOLA
     Korisnik findByMejlAdresa(String mejlAdresa);
+
 }

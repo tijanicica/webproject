@@ -3,15 +3,14 @@ package com.tim23.webproject.service;
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
 import com.tim23.webproject.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PolicaService {
@@ -28,6 +27,8 @@ public class PolicaService {
     private ZanrRepository zanrRepository;
     @Autowired
     private StavkaPoliceRepository stavkaPoliceRepository;
+    @Autowired
+    private RecenzijaRepository recenzijaRepository;
 
     public List<PolicaDto> getPolicePrijavljenogKorisnika(Long korisnikId) {
         // Preuzimanje korisnika iz baze podataka
@@ -89,90 +90,30 @@ public class PolicaService {
         return false;
     }
 
-    public void dodajNovuPolicu(String imePolice) throws Exception {
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession();
-        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
-            if (!imaPolicuSaImenom(prijavljeniKorisnik, imePolice)) {
+    public void dodajNovuPolicu(String imePolice, Korisnik korisnik) throws Exception {
+            if (!imaPolicuSaImenom(korisnik, imePolice)) {
                 Polica novaPolica = new Polica(imePolice, false, new ArrayList<>());
-                prijavljeniKorisnik.getPolice().add(novaPolica);
-                korisnikRepository.save(prijavljeniKorisnik);
+                policaRepository.save(novaPolica);
+                korisnik.getPolice().add(novaPolica);
+                korisnikRepository.save(korisnik);
             } else {
                 throw new Exception("Polica sa datim imenom već postoji.");
             }
-        } else {
-            throw new Exception("Niste prijavljeni kao čitalac.");
-        }
     }
     // Pomoćna metoda za proveru da li korisnik već ima policu sa datim imenom
 
-    public void obrisiPolicu(Korisnik korisnik, String nazivPolice) throws Exception {
-        Polica polica = null;
-        for (Polica p : korisnik.getPolice()) {
-            if (p.getNaziv().equals(nazivPolice)) {
-                polica = p;
-                break;
-            }
-        }
-
-        if (polica != null) {
+    public void obrisiPolicu(Korisnik korisnik, Long policaId) throws Exception {
+        Polica polica = policaRepository.findById(policaId).orElseThrow(() -> new EntityNotFoundException("Polica sa datim ID-om nije pronadjena."));
             if (polica.isPrimarna()) {
                 throw new Exception("Nije moguće obrisati primarnu policu.");
             }
-            korisnik.getPolice().remove(polica);
-            policaRepository.delete(polica);
-            korisnikRepository.save(korisnik); // Sačuvaj promene u korisniku
-        } else {
-            throw new Exception("Polica sa datim nazivom ne postoji.");
-        }
+        korisnik.getPolice().remove(polica);
+        korisnikRepository.save(korisnik); // Sačuvaj promene u korisniku
+
+        policaRepository.delete(polica);
     }
 
-    //DODAJ KNJIGE
-  /*  public void dodajKnjiguNaPolicu(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga) throws Exception {
-        // Pronalaženje primarne police
-        Polica primarnaPolica = null;
-        for (Polica polica : korisnik.getPolice()) {
-            if (polica.getNaziv().equals(nazivPrimarnePolice) && polica.isPrimarna()) {
-                primarnaPolica = polica;
-                break;
-            }
-        }
-
-        if (primarnaPolica == null) {
-            throw new Exception("Nije pronađena primarna polica sa datim nazivom.");
-        }
-
-        // Dodavanje knjige na primarnu policu
-        StavkaPolice novaStavka = new StavkaPolice(knjiga);
-        primarnaPolica.getStavkaPolice().add(novaStavka);
-
-        knjigaRepository.save(knjiga);
-        stavkaPoliceRepository.save(novaStavka);
-        policaRepository.save(primarnaPolica);
-
-        // Provera i dodavanje knjige na kreiranu policu (ako je naziv prosleđen)
-        if (nazivKreiranePolice != null && !nazivKreiranePolice.isEmpty()) {
-            boolean dodatoNaKreiranuPolicu = false;
-            for (Polica polica : korisnik.getPolice()) {
-                if (polica.getNaziv().equals(nazivKreiranePolice) && !polica.isPrimarna()) {
-                    StavkaPolice novaStavkaKreirane = new StavkaPolice(knjiga);
-                    polica.getStavkaPolice().add(novaStavkaKreirane);
-                    dodatoNaKreiranuPolicu = true;
-                    knjigaRepository.save(knjiga);
-                    stavkaPoliceRepository.save(novaStavka);
-                    policaRepository.save(polica); // Sačuvajte kreiranu policu unutar petlje
-                    break;
-                }
-            }
-            if (!dodatoNaKreiranuPolicu) {
-                throw new Exception("Nije pronađena kreirana polica sa datim nazivom.");
-            }
-        }
-        korisnikRepository.save(korisnik);
-    }
-*/
-    public void dodajKnjiguNaPolicu(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga) throws Exception {
+    public void dodajKnjiguNaPolicuSaRecenzijom(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga, Recenzija recenzija) throws Exception {
         // Pronalaženje primarne police
         Polica primarnaPolica = null;
         for (Polica polica : korisnik.getPolice()) {
@@ -189,14 +130,22 @@ public class PolicaService {
         // Čuvanje knjige u bazi podataka
         knjigaRepository.save(knjiga);
 
-        // Dodavanje knjige na primarnu policu
         StavkaPolice novaStavka = new StavkaPolice(knjiga);
+        // Provera i dodavanje recenzije samo ako je polica primarna
+        if (primarnaPolica.getNaziv().equals("Read")) {
+            novaStavka.setRecenzija(recenzija);
+            recenzijaRepository.save(recenzija);
+        }
         primarnaPolica.getStavkaPolice().add(novaStavka);
 
         // Čuvanje promena u bazi podataka
         korisnikRepository.save(korisnik);
         policaRepository.save(primarnaPolica);
         stavkaPoliceRepository.save(novaStavka);
+
+
+
+
 
         // Provera i dodavanje knjige na kreiranu policu (ako je naziv prosleđen)
         if (nazivKreiranePolice != null && !nazivKreiranePolice.isEmpty()) {
@@ -208,8 +157,10 @@ public class PolicaService {
                     dodatoNaKreiranuPolicu = true;
 
                     // Čuvanje promena u bazi podataka za kreiranu policu
+                    korisnikRepository.save(korisnik);
                     policaRepository.save(polica);
                     stavkaPoliceRepository.save(novaStavkaKreirane);
+                    knjigaRepository.save(knjiga);
                     break;
                 }
             }
@@ -219,6 +170,99 @@ public class PolicaService {
         }
     }
 
+    public void dodajKnjiguNaPolicuBezRecenzije(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga) throws Exception {
+        // Pronalaženje primarne police
+        Polica primarnaPolica = null;
+        for (Polica polica : korisnik.getPolice()) {
+            if (polica.getNaziv().equals(nazivPrimarnePolice) && polica.isPrimarna()) {
+                primarnaPolica = polica;
+                break;
+            }
+        }
 
+        if (primarnaPolica == null) {
+            throw new Exception("Nije pronađena primarna polica sa datim nazivom.");
+        }
+        knjigaRepository.save(knjiga);
+        StavkaPolice novaStavka = new StavkaPolice(knjiga);
+        primarnaPolica.getStavkaPolice().add(novaStavka);
+
+        // Čuvanje promena u bazi podataka
+        korisnikRepository.save(korisnik);
+        policaRepository.save(primarnaPolica);
+        stavkaPoliceRepository.save(novaStavka);
+
+
+
+
+        // Provera i dodavanje knjige na kreiranu policu (ako je naziv prosleđen)
+        if (nazivKreiranePolice != null && !nazivKreiranePolice.isEmpty()) {
+            boolean dodatoNaKreiranuPolicu = false;
+            for (Polica polica : korisnik.getPolice()) {
+                if (polica.getNaziv().equals(nazivKreiranePolice) && !polica.isPrimarna()) {
+                    StavkaPolice novaStavkaKreirane = new StavkaPolice(knjiga);
+                    polica.getStavkaPolice().add(novaStavkaKreirane);
+                    dodatoNaKreiranuPolicu = true;
+
+                    // Čuvanje promena u bazi podataka za kreiranu policu
+                    korisnikRepository.save(korisnik);
+                    policaRepository.save(polica);
+                    stavkaPoliceRepository.save(novaStavkaKreirane);
+                    knjigaRepository.save(knjiga);
+                    break;
+                }
+            }
+            if (!dodatoNaKreiranuPolicu) {
+                throw new Exception("Nije pronađena kreirana polica sa datim nazivom.");
+            }
+        }
+    }
+    public void obrisiKnjigu(String nazivKnjige, Korisnik korisnik) throws Exception {
+        boolean knjigaNaPrimarnoj = false;
+        boolean knjigaNaDodatnim = false;
+
+        // Provera i uklanjanje knjige sa primarne police
+        for (Polica polica : korisnik.getPolice()) {
+            if (polica.isPrimarna()) {
+                List<StavkaPolice> stavke = polica.getStavkaPolice();
+                for (Iterator<StavkaPolice> iterator = stavke.iterator(); iterator.hasNext();) {
+                    StavkaPolice stavka = iterator.next();
+                    if (stavka.getKnjiga().getNaslov().equals(nazivKnjige)) {
+                        iterator.remove();
+                        knjigaNaPrimarnoj = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Provera i uklanjanje knjige sa dodatnih polica
+        for (Polica polica : korisnik.getPolice()) {
+            if (!polica.isPrimarna()) {
+                List<StavkaPolice> stavke = polica.getStavkaPolice();
+                for (Iterator<StavkaPolice> iterator = stavke.iterator(); iterator.hasNext();) {
+                    StavkaPolice stavka = iterator.next();
+                    if (stavka.getKnjiga().getNaslov().equals(nazivKnjige)) {
+                        iterator.remove();
+                        knjigaNaDodatnim = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!knjigaNaPrimarnoj && !knjigaNaDodatnim) {
+            throw new Exception("Knjiga sa nazivom '" + nazivKnjige + "' se ne nalazi na policama.");
+        }
+        Knjiga knjiga = knjigaRepository.findByNaslovKnjige(nazivKnjige); // Pronalaženje knjige po nazivu
+       /* StavkaPolice stavkaPolice = stavkaPoliceRepository.findByKnjiga(knjiga);
+        Polica policaBrisanje = policaRepository.findByStavkaPolice(stavkaPolice);*/
+        if (knjiga != null) {/*
+            policaRepository.delete(policaBrisanje);
+            stavkaPoliceRepository.delete(stavkaPolice);*/
+            knjigaRepository.delete(knjiga); // Brisanje knjige iz baze
+        }
+        korisnikRepository.save(korisnik); // Sačuvaj promene u korisniku
+    }
 
 }

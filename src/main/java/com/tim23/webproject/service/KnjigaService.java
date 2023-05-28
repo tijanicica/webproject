@@ -8,10 +8,13 @@ import com.tim23.webproject.entity.StavkaPolice;
 import com.tim23.webproject.repository.KnjigaRepository;
 import com.tim23.webproject.repository.KorisnikRepository;
 import com.tim23.webproject.repository.PolicaRepository;
+import com.tim23.webproject.repository.StavkaPoliceRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -25,6 +28,9 @@ public class KnjigaService {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+
+    @Autowired
+    private StavkaPoliceRepository stavkaPoliceRepository;
 
     public List<KnjigaDto> getAllKnjige() {
         List<Knjiga> knjige = knjigaRepository.findAll();
@@ -48,38 +54,8 @@ public class KnjigaService {
         return dtos;
     }
 
-    public void ukloniKnjiguSaPolice(String nazivKnjige, String nazivPolice, Korisnik korisnik) throws Exception {
-        // Pronalaženje knjige po nazivu
-        Knjiga knjiga = knjigaRepository.findByNaslovKnjige(nazivKnjige);
-        if (knjiga == null) {
-            throw new Exception("Knjiga sa nazivom '" + nazivKnjige + "' nije pronađena.");
-        }
 
-        // Pronalaženje police po nazivu
-        Polica polica = korisnik.getPolice().stream()
-                .filter(p -> p.getNaziv().equals(nazivPolice))
-                .findFirst()
-                .orElseThrow(() -> new Exception("Policu sa nazivom '" + nazivPolice + "' nije pronađena."));
 
-        // Provera da li je polica primarna
-        if (polica.isPrimarna()) {
-            // Uklanjanje knjige sa primarne police
-            polica.getStavkaPolice().removeIf(stavka -> stavka.getKnjiga().equals(knjiga));
-
-            // Uklanjanje knjige sa svih dodatnih polica korisnika
-            korisnik.getPolice().stream()
-                    .filter(p -> !p.isPrimarna())
-                    .forEach(p -> p.getStavkaPolice().removeIf(stavka -> stavka.getKnjiga().equals(knjiga)));
-        } else {
-            // Uklanjanje knjige sa dodatne police
-            polica.getStavkaPolice().removeIf(stavka -> stavka.getKnjiga().equals(knjiga));
-        }
-
-        // Čuvanje promena u repozitorijumima
-        knjigaRepository.save(knjiga);
-        policaRepository.save(polica);
-        korisnikRepository.save(korisnik);
-    }
 /*
     public void ukloniKnjiguSaPolice(String nazivKnjige, String nazivPolice, Korisnik korisnik) throws Exception {
         // Pronalaženje knjige po nazivu

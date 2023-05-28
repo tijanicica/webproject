@@ -32,14 +32,17 @@ public class KorisnikService {
     //NIKOLA
     public void dodajPrimarnePoliceKorisniku(Korisnik korisnik) {
         // Dodajte primarne police samo ako korisnik nema prethodno definisanu ulogu
-        if (korisnik.getUloga() == Uloga.CITALAC) {
+        if (korisnik.getUloga() == Uloga.CITALAC || korisnik.getUloga() == Uloga.AUTOR) {
             Polica wantToRead = new Polica("Want to Read", true, new ArrayList<>());
             Polica currentlyReading = new Polica("Currently Reading", true, new ArrayList<>());
             Polica read = new Polica("Read", true, new ArrayList<>());
 
             korisnik.getPolice().add(wantToRead);
+            policaRepository.save(wantToRead);
             korisnik.getPolice().add(currentlyReading);
+            policaRepository.save(currentlyReading);
             korisnik.getPolice().add(read);
+            policaRepository.save(read);
         }
     }
     public Korisnik login(String mejlAdresa, String lozinka) {
