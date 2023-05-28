@@ -22,4 +22,8 @@ public class Zanr implements Serializable {
         this.naziv = naziv;
     }
     public Zanr(){}
+
+    public Zanr(ZanrDto zanrDto) {
+       this.naziv = zanrDto.getNaziv();
+    }
 }

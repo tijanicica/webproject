@@ -26,6 +26,8 @@ public class KnjigaService {
     private ZanrRepository zanrRepository;
     @Autowired
     private StavkaPoliceRepository stavkaPoliceRepository;
+    @Autowired
+    private ZanrService zanrService;
 
     public List<KnjigaDto> getAllKnjige() {
         List<Knjiga> knjige = knjigaRepository.findAll();
@@ -47,6 +49,31 @@ public class KnjigaService {
             dtos.add(dto);
         }
         return dtos;
+    }
+
+
+    public List<KnjigaDto> searchByZanr(String nazivZanra) {
+        List<Knjiga> knjige = knjigaRepository.findByZanr(nazivZanra);
+
+        List<KnjigaDto> dtos = new ArrayList<>();
+        for (Knjiga knjiga : knjige) {
+            KnjigaDto dto = new KnjigaDto(knjiga);
+            dtos.add(dto);
+        }
+        return dtos;
+
+    }
+
+    public List<KnjigaDto> searchByOcena(int ocena) {
+        List<Knjiga> knjige = knjigaRepository.findByOcena(ocena);
+
+        List<KnjigaDto> dtos = new ArrayList<>();
+        for (Knjiga knjiga : knjige) {
+            KnjigaDto dto = new KnjigaDto(knjiga);
+            dtos.add(dto);
+        }
+        return dtos;
+
     }
 
     public void dodajKnjigu(KnjigaDto knjigaDto) {

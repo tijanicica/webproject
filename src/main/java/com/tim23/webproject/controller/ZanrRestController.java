@@ -1,5 +1,6 @@
 package com.tim23.webproject.controller;
 
+import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.ZanrDto;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
@@ -9,10 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +26,14 @@ public class ZanrRestController {
         return ResponseEntity.ok(zanrovi);
     }
 
+    @GetMapping("api/pretraga/naziv/{naziv}")
+    public ResponseEntity<ZanrDto> searchByNaziv(@PathVariable(name = "naziv") String naziv) {
+
+        ZanrDto zanrDto = zanrService.searchByNaziv(naziv);
+
+        return ResponseEntity.ok(zanrDto);
+    }
+
     @PostMapping("/api/dodaj-znar")
     public ResponseEntity<String> dodajZanr(@RequestBody ZanrDto zanrDto, HttpSession session) {
 
@@ -39,6 +45,8 @@ public class ZanrRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
         }
     }
+
+
 
 
 }

@@ -4,6 +4,7 @@ import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.ZanrDto;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
+import com.tim23.webproject.entity.Zanr;
 import com.tim23.webproject.service.KnjigaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,32 @@ public class KnjigaRestController {
         return ResponseEntity.ok(knjige);
     }
 
-    @GetMapping("api/pretraga/naslov/{naslov}") //radi kada je razmak pise se %20
+    @GetMapping("api/pretraga/knjiga/naslov/{naslov}") //radi kada je razmak pise se %20
     public ResponseEntity<List<KnjigaDto>> searchByKnjiga(@PathVariable(name = "naslov") String naslov) {
 
         List<KnjigaDto> knjige = knjigaService.searchByNaslov(naslov);
 
         return ResponseEntity.ok(knjige);
     }
+
+
+    @GetMapping("api/pretraga/knjiga/zanr/{naziv}")
+    public ResponseEntity<List<KnjigaDto>> searchByZanr(@PathVariable(name = "naziv") String naziv) {
+
+        List<KnjigaDto> knjige = knjigaService.searchByZanr(naziv);
+
+        return ResponseEntity.ok(knjige);
+    }
+
+    @GetMapping("api/pretraga/knjiga/ocena/{ocena}")
+    public ResponseEntity<List<KnjigaDto>> searchByZanr(@PathVariable(name = "ocena") int ocena) {
+
+        List<KnjigaDto> knjige = knjigaService.searchByOcena(ocena);
+
+        return ResponseEntity.ok(knjige);
+    }
+
+
 
     @PostMapping("/api/dodaj-knjigu")
     public ResponseEntity<String> dodajKnjigu(@RequestBody KnjigaDto knjigaDto, HttpSession session) {

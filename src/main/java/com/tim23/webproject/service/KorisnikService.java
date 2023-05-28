@@ -68,6 +68,51 @@ public class KorisnikService {
         return dtos;
 
     }
+
+    public List<KorisnikDto> searchByIme(String ime) {
+        List<Korisnik> korisnici= korisnikRepository.findByIme(ime);
+
+        List<KorisnikDto> dtos = new ArrayList<>();
+        for (Korisnik korisnik : korisnici) {
+            KorisnikDto dto = new KorisnikDto(korisnik);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    public List<KorisnikDto> searchByPrezime(String prezime) {
+        List<Korisnik> korisnici= korisnikRepository.findByPrezime(prezime);
+
+        List<KorisnikDto> dtos = new ArrayList<>();
+        for (Korisnik korisnik : korisnici) {
+            KorisnikDto dto = new KorisnikDto(korisnik);
+            dtos.add(dto);
+        }
+        return dtos;
+    }
+
+    public KorisnikDto searchByKorisnickoIme(String korisnickoIme) {
+        Korisnik korisnik = korisnikRepository.findByKorisnickoIme(korisnickoIme);
+
+        KorisnikDto korisnikDto = new KorisnikDto(korisnik);
+
+        return korisnikDto;
+
+    }
+
+    public List<KorisnikDto> searchByUloga(String uloga) {
+        Uloga ulogaEnum = Uloga.valueOf(uloga);
+        List<Korisnik> korisnici = korisnikRepository.findByUloga(ulogaEnum);
+        List<KorisnikDto> dtos = new ArrayList<>();
+        for (Korisnik korisnik : korisnici) {
+            KorisnikDto dto = new KorisnikDto(korisnik);
+            dtos.add(dto);
+        }
+        return dtos;
+
+    }
+
+
     public List<Polica> getPolicePrijavljenogKorisnika(Long korisnikId) {
         Optional<Korisnik> nadjeniKorisnik = korisnikRepository.findById(korisnikId);
         if (nadjeniKorisnik.isPresent()){

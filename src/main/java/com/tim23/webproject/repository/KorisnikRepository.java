@@ -2,6 +2,7 @@ package com.tim23.webproject.repository;
 
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Polica;
+import com.tim23.webproject.entity.Uloga;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +23,11 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
     List<Polica> findPoliceByKorisnikId(@Param("korisnikId") Long korisnikId);
 
     Korisnik findByMejlAdresa(String mejlAdresa);
+
+    List<Korisnik> findByIme(String ime);
+    List<Korisnik> findByPrezime(String prezime);
+
+
+    List<Korisnik> findByUloga(Uloga uloga);
 
 }

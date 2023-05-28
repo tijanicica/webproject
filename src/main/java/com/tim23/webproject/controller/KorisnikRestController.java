@@ -51,6 +51,40 @@ public class KorisnikRestController {
         return ResponseEntity.ok(profiliKorisnika);
     }
 
+    @GetMapping("api/pretraga/korisnik/ime/{ime}") //radi kada je razmak pise se %20
+    public ResponseEntity<List<KorisnikDto>> searchByIme(@PathVariable(name = "ime") String ime) {
+
+        List<KorisnikDto> korisnici = korisnikService.searchByIme(ime);
+
+        return ResponseEntity.ok(korisnici);
+    }
+
+    @GetMapping("api/pretraga/korisnik/prezime/{prezime}") //radi kada je razmak pise se %20
+    public ResponseEntity<List<KorisnikDto>> searchByPrezime(@PathVariable(name = "prezime") String prezime) {
+
+        List<KorisnikDto> korisnici = korisnikService.searchByPrezime(prezime);
+
+        return ResponseEntity.ok(korisnici);
+    }
+
+    @GetMapping("api/pretraga/korisnik/korisnickoIme/{korisnickoIme}") //radi kada je razmak pise se %20
+    public ResponseEntity<KorisnikDto> searchByKorisnickoIme(@PathVariable(name = "korisnickoIme") String korisnickoIme) {
+
+        KorisnikDto korisnikDto = korisnikService.searchByKorisnickoIme(korisnickoIme);
+
+        return ResponseEntity.ok(korisnikDto);
+    }
+
+    @GetMapping("api/pretraga/korisnik/uloga/{uloga}") //radi kada je razmak pise se %20
+    public ResponseEntity<List<KorisnikDto>> searchByUloga(@PathVariable(name = "uloga") String uloga) {
+
+        List<KorisnikDto> korisnici = korisnikService.searchByUloga(uloga);
+
+        return ResponseEntity.ok(korisnici);
+    }
+
+
+
     @GetMapping("api/police-prijavljenog-korisnika")
     public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");

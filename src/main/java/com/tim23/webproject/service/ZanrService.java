@@ -1,7 +1,9 @@
 package com.tim23.webproject.service;
 
+import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.dto.ZanrDto;
+import com.tim23.webproject.entity.Knjiga;
 import com.tim23.webproject.entity.Recenzija;
 import com.tim23.webproject.entity.Zanr;
 import com.tim23.webproject.repository.ZanrRepository;
@@ -25,7 +27,14 @@ public class ZanrService {
             dtos.add(dto);
         }
         return dtos;
+    }
 
+    public ZanrDto searchByNaziv(String naziv) {
+        Zanr zanr = zanrRepository.findByNaziv(naziv);
+
+        ZanrDto zanrDto = new ZanrDto(zanr);
+
+        return zanrDto;
     }
     public void dodajZanr(ZanrDto zanrDto) {
         Zanr zanr = new Zanr(zanrDto.getNaziv());
