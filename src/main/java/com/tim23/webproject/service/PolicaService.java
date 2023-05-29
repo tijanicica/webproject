@@ -123,60 +123,6 @@ public class PolicaService {
       policaRepository.delete(polica);
   }
 
-    public void dodajKnjiguNaPolicuSaRecenzijom(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga, Recenzija recenzija) throws Exception {
-        // Pronalaženje primarne police
-        Polica primarnaPolica = null;
-        for (Polica polica : korisnik.getPolice()) {
-            if (polica.getNaziv().equals(nazivPrimarnePolice) && polica.isPrimarna()) {
-                primarnaPolica = polica;
-                break;
-            }
-        }
-
-        if (primarnaPolica == null) {
-            throw new Exception("Nije pronađena primarna polica sa datim nazivom.");
-        }
-
-        // Čuvanje knjige u bazi podataka
-        knjigaRepository.save(knjiga);
-
-        StavkaPolice novaStavka = new StavkaPolice(knjiga);
-        // Provera i dodavanje recenzije samo ako je polica primarna
-        if (primarnaPolica.getNaziv().equals("Read")) {
-            novaStavka.setRecenzija(recenzija);
-            recenzijaRepository.save(recenzija);
-        }
-        primarnaPolica.getStavkaPolice().add(novaStavka);
-
-        // Čuvanje promena u bazi podataka
-        korisnikRepository.save(korisnik);
-        policaRepository.save(primarnaPolica);
-        stavkaPoliceRepository.save(novaStavka);
-
-        // Provera i dodavanje knjige na kreiranu policu (ako je naziv prosleđen)
-        if (nazivKreiranePolice != null && !nazivKreiranePolice.isEmpty()) {
-            boolean dodatoNaKreiranuPolicu = false;
-            for (Polica polica : korisnik.getPolice()) {
-                if (polica.getNaziv().equals(nazivKreiranePolice) && !polica.isPrimarna()) {
-                    StavkaPolice novaStavkaKreirane = new StavkaPolice(knjiga);
-                    polica.getStavkaPolice().add(novaStavkaKreirane);
-                    dodatoNaKreiranuPolicu = true;
-
-                    // Čuvanje promena u bazi podataka za kreiranu policu
-                    korisnikRepository.save(korisnik);
-                    policaRepository.save(polica);
-                    stavkaPoliceRepository.save(novaStavkaKreirane);
-                    knjigaRepository.save(knjiga);
-                    break;
-                }
-            }
-            if (!dodatoNaKreiranuPolicu) {
-                throw new Exception("Nije pronađena kreirana polica sa datim nazivom.");
-            }
-        }
-    }
-
-
     public void dodajKnjiguNaPolicuBezRecenzije(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga) throws Exception {
         // Pronalaženje primarne police
         Polica primarnaPolica = null;

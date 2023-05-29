@@ -24,8 +24,6 @@ public class KorisnikRestController {
     private KorisnikService korisnikService;
 
 
-
-
     @PostMapping("api/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
         // proverimo da li su podaci validni
@@ -89,44 +87,6 @@ public class KorisnikRestController {
         return ResponseEntity.ok(korisnici);
     }
 
-
-/*
-    @GetMapping("api/police-prijavljenog-korisnika")
-    public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
-        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null) {
-            List<Polica> policePrijavljenogKorisnika = korisnikService.getPolicePrijavljenogKorisnika(prijavljeniKorisnik.getId());
-            //konvertovanje
-            List<PolicaDto> policeDtoList = new ArrayList<>();
-            for(Polica polica : policePrijavljenogKorisnika){
-                List<StavkaPoliceDto> stavkePoliceDTOList = new ArrayList<>();
-
-                for (StavkaPolice stavkaPolice : polica.getStavkaPolice()) {
-                    Knjiga knjiga = stavkaPolice.getKnjiga();
-                    Recenzija recenzija = stavkaPolice.getRecenzija();
-
-                    RecenzijaBezKorisnikaDto recenzijaDTO = null;
-                    if (recenzija != null) {
-                        recenzijaDTO = new RecenzijaBezKorisnikaDto(recenzija.getOcena(), recenzija.getTekst(), recenzija.getDatumRecenzije());
-                    }
-                    KnjigaDto knjigaDto = null;
-                    if(knjiga != null){
-                        Zanr zanr = knjiga.getZanr();
-                        String nazivZanra = zanr.getNaziv();
-                        ZanrDto zanrDTO = new ZanrDto(nazivZanra);
-                        knjigaDto = new KnjigaDto(knjiga.getNaslov(), knjiga.getNaslovnaFotografija(), knjiga.getDatumObjavljivanja(), knjiga.getBrojStrana(), knjiga.getOpis(), knjiga.getOcena(), zanrDTO);
-                    }
-                    stavkePoliceDTOList.add(new StavkaPoliceDto(recenzijaDTO, knjigaDto));
-                }
-
-                PolicaDto policaDTO = new PolicaDto(polica.getNaziv(), polica.isPrimarna(), stavkePoliceDTOList);
-                policeDtoList.add(policaDTO);
-            }
-            return ResponseEntity.ok(policeDtoList);
-        } else {
-            return null;
-        }
-    }*/
     @PostMapping("api/kreiraj-autora")
     public ResponseEntity<String> kreirajAutora(@RequestBody AutorDto autorDto, @RequestParam String mejlAdresa, @RequestParam String lozinka, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");

@@ -1,6 +1,7 @@
 package com.tim23.webproject.service;
 
 import com.tim23.webproject.dto.KnjigaDto;
+import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.entity.Knjiga;
 import com.tim23.webproject.entity.Korisnik;
@@ -23,11 +24,22 @@ public class RecenzijaService {
     @Autowired
     private StavkaPoliceRepository stavkaPoliceRepository;
 
-    public List<RecenzijaDto> getAllRecenzije() {
+    /*public List<RecenzijaDto> getAllRecenzije() {
         List<Recenzija> recenzije = recenzijaRepository.findAll();
         List<RecenzijaDto> dtos = new ArrayList<>();
         for (Recenzija recenzija : recenzije) {
             RecenzijaDto dto = new RecenzijaDto(recenzija);
+            dtos.add(dto);
+        }
+        return dtos;
+
+    }*/
+
+    public List<RecenzijaBezKorisnikaDto> getAllRecenzije() {
+        List<Recenzija> recenzije = recenzijaRepository.findAll();
+        List<RecenzijaBezKorisnikaDto> dtos = new ArrayList<>();
+        for (Recenzija recenzija : recenzije) {
+            RecenzijaBezKorisnikaDto dto = new RecenzijaBezKorisnikaDto(recenzija);
             dtos.add(dto);
         }
         return dtos;

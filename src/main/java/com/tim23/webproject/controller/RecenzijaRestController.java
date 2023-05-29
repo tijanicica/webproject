@@ -1,5 +1,6 @@
 package com.tim23.webproject.controller;
 
+import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
@@ -20,12 +21,12 @@ public class RecenzijaRestController {
     private RecenzijaService recenzijaService;
 
     @GetMapping("api/recenzije")
-    public ResponseEntity<List<RecenzijaDto>> getRecenzije() {
-        List<RecenzijaDto> recenzije = recenzijaService.getAllRecenzije();
+    public ResponseEntity<List<RecenzijaBezKorisnikaDto>> getRecenzije() {
+        List<RecenzijaBezKorisnikaDto> recenzije = recenzijaService.getAllRecenzije();
         return ResponseEntity.ok(recenzije);
     }
 
-    @PutMapping("api/azuriraj/{id}")
+    @PutMapping("api/azuriraj-recenziju/{id}")
     public ResponseEntity<String> azurirajRecenziju(@PathVariable Long id, @RequestBody RecenzijaDto recenzijaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {

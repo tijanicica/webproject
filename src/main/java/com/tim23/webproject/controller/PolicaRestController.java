@@ -64,26 +64,12 @@ public class PolicaRestController {
     public ResponseEntity<String> dodajKnjiguNaPolicu(@RequestParam String nazivPrimarnePolice,
                                                       @RequestParam(required = false) String nazivKreiranePolice,
                                                       @RequestBody Knjiga knjiga,
-                                                      @RequestParam(required = false) String tekst,
-                                                      @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date datumRecenzije,
-                                                      @RequestParam(required = false) Integer ocena,
                                                       HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             try {
-                if (nazivPrimarnePolice.equals("Read")) {
-                    Recenzija recenzija = null;
-                    if (ocena != null) {
-                        recenzija = new Recenzija(tekst, datumRecenzije, ocena.intValue());
-                    } else {
-                        recenzija = new Recenzija(tekst, datumRecenzije, 0); // Postavite podrazumevanu vrednost ili rukujte slučajem kada ocena nije dostupna
-                    }
-                    policaService.dodajKnjiguNaPolicuSaRecenzijom(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, knjiga, recenzija);
-                    return ResponseEntity.ok("Knjiga uspešno dodata na policu.");
-                } else {
                     policaService.dodajKnjiguNaPolicuBezRecenzije(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, knjiga);
                     return ResponseEntity.ok("Knjiga uspešno dodata na policu (bez recenzije).");
-                }
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
@@ -92,14 +78,14 @@ public class PolicaRestController {
         }
     }
 
-    @DeleteMapping("api/obrisi-knjigu/{nazivKnjige}")
+    @DeleteMapping("api/obrisi-knjigu-sa-police/{nazivKnjige}")
     public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable String nazivKnjige, HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             policaService.obrisiKnjiguSaPolice(nazivKnjige, prijavljeniKorisnik);
             return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
         } else {
-            return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Niste citalac ili autor!", HttpStatus.BAD_REQUEST);
         }
     }
 }
