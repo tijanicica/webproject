@@ -19,5 +19,8 @@ public class AutorService {
     @Autowired
     private AutorRepository autorRepository;
 
-
+    public void dodajKnjiguAutora(Autor autor, Knjiga knjiga) {
+        autor.getSpisakKnjiga().add(knjiga);
+        autorRepository.save(autor);
+    }
 }

@@ -1,11 +1,11 @@
 package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.AutorDto;
-import com.tim23.webproject.entity.Korisnik;
-import com.tim23.webproject.entity.Uloga;
+import com.tim23.webproject.entity.*;
 import com.tim23.webproject.service.AutorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,11 +13,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 public class AutorRestController {
 
     @Autowired
     private AutorService autorService;
 //dodaj knjigu i njen zanr, spoji autora i njegov spisak knjiga preko id
-    //azuriraj knjiug
+    //azuriraj knjigu
+
+    @PostMapping("api/dodaj-knjigu-u-spisak-knjiga")
+    public ResponseEntity<String> dodajKnjiguNaPolicu(@RequestBody Knjiga knjiga, HttpSession session) {
+        Autor prijavljeniAutor = (Autor) session.getAttribute("korisnik");
+        if (prijavljeniAutor != null &&  prijavljeniAutor.getUloga().equals(Uloga.AUTOR)) {
+            try {
+                    autorService.dodajKnjiguAutora(prijavljeniAutor, knjiga);
+                    return ResponseEntity.ok("Knjiga uspešno dodata u spisak knjiga.");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Korisnik nije prijavljen.", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
