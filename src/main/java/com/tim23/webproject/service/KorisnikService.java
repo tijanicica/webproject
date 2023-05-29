@@ -54,6 +54,7 @@ public class KorisnikService {
         korisnik.setKorisnickoIme(registerDto.getKorisnickoIme());
         korisnik.setMejlAdresa(registerDto.getMejlAdresa());
         korisnik.setLozinka(registerDto.getLozinka());
+        korisnik.setUloga(Uloga.CITALAC);
 
         korisnikRepository.save(korisnik);
     }
@@ -315,15 +316,15 @@ public class KorisnikService {
 
                     autor.setIme(autorDto.getIme());
                     autor.setPrezime(autorDto.getPrezime());
-                    autor.setKorisnickoIme(autorDto.getKorisnickoIme());
+                    //autor.setKorisnickoIme(autorDto.getKorisnickoIme());
                     autor.setDatumRodjenja(autorDto.getDatumRodjenja());
                     autor.setProfilnaSlika(autorDto.getProfilnaSlika());
                     autor.setOpis(autorDto.getOpis());
-                    autor.setUloga(autorDto.getUloga());
+                    //autor.setUloga(autorDto.getUloga());
 
 
                     //azuriranje police
-                    autor.getPolice().clear();
+                    /*autor.getPolice().clear();
                     List<PolicaDto> policaDtoList = autorDto.getPolice();
                     List<Polica> policaList = new ArrayList<>();
                     for (PolicaDto policaDto : policaDtoList) {
@@ -363,7 +364,8 @@ public class KorisnikService {
                         policaRepository.save(polica);
 
                     }
-                    autor.setPolice(policaList);
+                    autor.setPolice(policaList);*/
+                    autorRepository.save(autor);
                     korisnikRepository.save(autor);
                 } else {
                     throw new IllegalArgumentException("Nalog autora je aktivan. Samo neaktivirani nalozi mogu biti azurirani.");

@@ -34,7 +34,7 @@ public class ZanrRestController {
         return ResponseEntity.ok(zanrDto);
     }
 
-    @PostMapping("/api/dodaj-znar")
+    @PostMapping("/api/dodaj-zanr")
     public ResponseEntity<String> dodajZanr(@RequestBody ZanrDto zanrDto, HttpSession session) {
 
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
