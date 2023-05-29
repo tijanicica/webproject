@@ -3,12 +3,14 @@ package com.tim23.webproject.service;
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
 import com.tim23.webproject.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -284,6 +286,26 @@ public class KorisnikService {
     // Metoda za dodavanje nove police korisniku
     // Metoda za dodavanje nove police trenutno ulogovanom korisniku
 
+    public void azurirajProfil(Long korisnikId, String ime, String prezime, LocalDate datumRodjenja, String profilnaSlika,
+                               String opis, String mejlAdresa, String novaLozinka, String trenutnaLozinka) {
+        Korisnik korisnik = korisnikRepository.findById(korisnikId)
+                .orElseThrow(() -> new EntityNotFoundException("Korisnik sa ID-jem " + korisnikId + " nije pronađen."));
 
+        if (trenutnaLozinka != null && novaLozinka != null) {
+            if (!trenutnaLozinka.equals(korisnik.getLozinka())) {
+                throw new IllegalArgumentException("Pogrešna stara lozinka");
+            }
+            korisnik.setLozinka(novaLozinka);
+        }
+
+        korisnik.setIme(ime != null ? ime : korisnik.getIme());
+        korisnik.setPrezime(prezime != null ? prezime : korisnik.getPrezime());
+        korisnik.setDatumRodjenja(datumRodjenja != null ? datumRodjenja : korisnik.getDatumRodjenja());
+        korisnik.setProfilnaSlika(profilnaSlika != null ? profilnaSlika : korisnik.getProfilnaSlika());
+        korisnik.setOpis(opis != null ? opis : korisnik.getOpis());
+        korisnik.setMejlAdresa(mejlAdresa != null ? mejlAdresa : korisnik.getMejlAdresa());
+
+        korisnikRepository.save(korisnik);
+    }
 
 }

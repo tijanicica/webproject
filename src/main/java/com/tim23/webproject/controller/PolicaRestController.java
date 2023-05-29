@@ -48,7 +48,7 @@ public class PolicaRestController {
     @DeleteMapping("/api/obrisi-policu/{id}")
     public ResponseEntity<String> obrisiPolicu(@PathVariable(name = "id") Long policaId, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null) {
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
             try {
                 policaService.obrisiPolicu(prijavljeniKorisnik, policaId);
                 return ResponseEntity.ok("Polica uspešno obrisana.");
@@ -66,13 +66,18 @@ public class PolicaRestController {
                                                       @RequestBody Knjiga knjiga,
                                                       @RequestParam(required = false) String tekst,
                                                       @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date datumRecenzije,
-                                                      @RequestParam(required = false) int ocena,
+                                                      @RequestParam(required = false) Integer ocena,
                                                       HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null) {
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
             try {
                 if (nazivPrimarnePolice.equals("Read")) {
-                    Recenzija recenzija = new Recenzija(tekst, datumRecenzije, ocena);
+                    Recenzija recenzija = null;
+                    if (ocena != null) {
+                        recenzija = new Recenzija(tekst, datumRecenzije, ocena.intValue());
+                    } else {
+                        recenzija = new Recenzija(tekst, datumRecenzije, 0); // Postavite podrazumevanu vrednost ili rukujte slučajem kada ocena nije dostupna
+                    }
                     policaService.dodajKnjiguNaPolicuSaRecenzijom(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, knjiga, recenzija);
                     return ResponseEntity.ok("Knjiga uspešno dodata na policu.");
                 } else {
@@ -87,11 +92,11 @@ public class PolicaRestController {
         }
     }
 
-    @DeleteMapping("api/{nazivKnjige}/obrisi-knjigu")
+    @DeleteMapping("api/obrisi-knjigu/{nazivKnjige}")
     public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable String nazivKnjige, HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
-            policaService.obrisiKnjigu(nazivKnjige, prijavljeniKorisnik);
+            policaService.obrisiKnjiguSaPolice(nazivKnjige, prijavljeniKorisnik);
             return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
         } else {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);

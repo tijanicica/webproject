@@ -4,13 +4,17 @@ import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
 import com.tim23.webproject.repository.KorisnikRepository;
 import com.tim23.webproject.service.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -53,44 +57,6 @@ public class KorisnikRestController {
         return ResponseEntity.ok(profiliKorisnika);
     }
 
-   /* @GetMapping("api/police-prijavljenog-korisnika")
-    public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
-        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null) {
-            List<Polica> policePrijavljenogKorisnika = korisnikService.getPolicePrijavljenogKorisnika(prijavljeniKorisnik.getId());
-            //konvertovanje
-            List<PolicaDto> policeDtoList = new ArrayList<>();
-            for(Polica polica : policePrijavljenogKorisnika){
-                List<StavkaPoliceDto> stavkePoliceDTOList = new ArrayList<>();
-
-                for (StavkaPolice stavkaPolice : polica.getStavkaPolice()) {
-                    Knjiga knjiga = stavkaPolice.getKnjiga();
-                    Recenzija recenzija = stavkaPolice.getRecenzija();
-
-                    RecenzijaBezKorisnikaDto recenzijaDTO = null;
-                    if (recenzija != null) {
-                        recenzijaDTO = new RecenzijaBezKorisnikaDto(recenzija.getOcena(), recenzija.getTekst(), recenzija.getDatumRecenzije());
-                    }
-                    KnjigaDto knjigaDto = null;
-                    if(knjiga != null){
-                        Zanr zanr = knjiga.getZanr();
-                        String nazivZanra = zanr.getNaziv();
-                        ZanrDto zanrDTO = new ZanrDto(nazivZanra);
-                        knjigaDto = new KnjigaDto(knjiga.getNaslov(), knjiga.getNaslovnaFotografija(), knjiga.getDatumObjavljivanja(), knjiga.getBrojStrana(), knjiga.getOpis(), knjiga.getOcena(), zanrDTO);
-                    }
-                    stavkePoliceDTOList.add(new StavkaPoliceDto(recenzijaDTO, knjigaDto));
-                }
-
-                PolicaDto policaDTO = new PolicaDto(polica.getNaziv(), polica.isPrimarna(), stavkePoliceDTOList);
-                policeDtoList.add(policaDTO);
-            }
-            return ResponseEntity.ok(policeDtoList);
-        } else {
-            return null;
-        }
-    }
-    */
-
     @PostMapping("api/kreiraj-autora")
     public ResponseEntity<String> kreirajAutora(@RequestBody AutorDto autorDto, @RequestParam String mejlAdresa, @RequestParam String lozinka, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -101,4 +67,32 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("api/azuriraj-profil/{korisnikId}")
+    public ResponseEntity<String> azurirajProfil(
+            @PathVariable("korisnikId") Long korisnikId,
+            @RequestParam(required = false) String ime,
+            @RequestParam(required = false) String prezime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate datumRodjenja,
+            @RequestParam(required = false) String profilnaSlika,
+            @RequestParam(required = false) String opis,
+            @RequestParam(required = false) String mejlAdresa,
+            @RequestParam(required = false) String novaLozinka,
+            @RequestParam(required = false) String trenutnaLozinka,
+            HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
+            try {
+                korisnikService.azurirajProfil(korisnikId, ime, prezime, datumRodjenja, profilnaSlika, opis, mejlAdresa, novaLozinka, trenutnaLozinka);
+                return ResponseEntity.ok("Uspesno ste azurirali vas profil.");
+            } catch (EntityNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Niste citalac!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

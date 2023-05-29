@@ -25,4 +25,5 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
     //NIKOLA
     Korisnik findByMejlAdresa(String mejlAdresa);
 
+
 }

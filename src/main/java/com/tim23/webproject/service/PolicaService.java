@@ -11,6 +11,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PolicaService {
@@ -19,6 +20,8 @@ public class PolicaService {
     private PolicaRepository policaRepository;
     @Autowired
     private KorisnikRepository korisnikRepository;
+    @Autowired
+    private AutorRepository autorRepository;
 
     @Autowired
     private KnjigaRepository knjigaRepository;
@@ -100,18 +103,24 @@ public class PolicaService {
                 throw new Exception("Polica sa datim imenom već postoji.");
             }
     }
-    // Pomoćna metoda za proveru da li korisnik već ima policu sa datim imenom
+ 
+  public void obrisiPolicu(Korisnik korisnik, Long policaId) throws Exception {
+      Polica polica = policaRepository.findById(policaId).orElseThrow(() -> new EntityNotFoundException("Polica sa datim ID-om nije pronadjena."));
+      if (polica.isPrimarna()) {
+          throw new Exception("Nije moguće obrisati primarnu policu.");
+      }
 
-    public void obrisiPolicu(Korisnik korisnik, Long policaId) throws Exception {
-        Polica polica = policaRepository.findById(policaId).orElseThrow(() -> new EntityNotFoundException("Polica sa datim ID-om nije pronadjena."));
-            if (polica.isPrimarna()) {
-                throw new Exception("Nije moguće obrisati primarnu policu.");
-            }
-        korisnik.getPolice().remove(polica);
-        korisnikRepository.save(korisnik); // Sačuvaj promene u korisniku
+      // Ukloni vezu između korisnika i police
+      korisnik.getPolice().remove(polica);
+      korisnikRepository.save(korisnik);
 
-        policaRepository.delete(polica);
-    }
+      for (StavkaPolice stavkaPolice : polica.getStavkaPolice()) {
+          stavkaPoliceRepository.delete(stavkaPolice);
+      }
+      polica.getStavkaPolice().clear();
+
+      policaRepository.delete(polica);
+  }
 
     public void dodajKnjiguNaPolicuSaRecenzijom(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga, Recenzija recenzija) throws Exception {
         // Pronalaženje primarne police
@@ -143,10 +152,6 @@ public class PolicaService {
         policaRepository.save(primarnaPolica);
         stavkaPoliceRepository.save(novaStavka);
 
-
-
-
-
         // Provera i dodavanje knjige na kreiranu policu (ako je naziv prosleđen)
         if (nazivKreiranePolice != null && !nazivKreiranePolice.isEmpty()) {
             boolean dodatoNaKreiranuPolicu = false;
@@ -169,6 +174,7 @@ public class PolicaService {
             }
         }
     }
+
 
     public void dodajKnjiguNaPolicuBezRecenzije(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga) throws Exception {
         // Pronalaženje primarne police
@@ -217,52 +223,53 @@ public class PolicaService {
             }
         }
     }
-    public void obrisiKnjigu(String nazivKnjige, Korisnik korisnik) throws Exception {
-        boolean knjigaNaPrimarnoj = false;
-        boolean knjigaNaDodatnim = false;
 
-        // Provera i uklanjanje knjige sa primarne police
-        for (Polica polica : korisnik.getPolice()) {
-            if (polica.isPrimarna()) {
-                List<StavkaPolice> stavke = polica.getStavkaPolice();
-                for (Iterator<StavkaPolice> iterator = stavke.iterator(); iterator.hasNext();) {
-                    StavkaPolice stavka = iterator.next();
-                    if (stavka.getKnjiga().getNaslov().equals(nazivKnjige)) {
-                        iterator.remove();
-                        knjigaNaPrimarnoj = true;
-                        break;
-                    }
-                }
-            }
-        }
+  public void obrisiKnjiguSaPolice(String nazivKnjige, Korisnik korisnik) {
+      List<Polica> police = korisnik.getPolice();
 
-        // Provera i uklanjanje knjige sa dodatnih polica
-        for (Polica polica : korisnik.getPolice()) {
-            if (!polica.isPrimarna()) {
-                List<StavkaPolice> stavke = polica.getStavkaPolice();
-                for (Iterator<StavkaPolice> iterator = stavke.iterator(); iterator.hasNext();) {
-                    StavkaPolice stavka = iterator.next();
-                    if (stavka.getKnjiga().getNaslov().equals(nazivKnjige)) {
-                        iterator.remove();
-                        knjigaNaDodatnim = true;
-                        break;
-                    }
-                }
-            }
-        }
+      for (Polica polica : police) {
+          List<StavkaPolice> stavkeZaBrisanje = new ArrayList<>();
 
-        if (!knjigaNaPrimarnoj && !knjigaNaDodatnim) {
-            throw new Exception("Knjiga sa nazivom '" + nazivKnjige + "' se ne nalazi na policama.");
-        }
-        Knjiga knjiga = knjigaRepository.findByNaslovKnjige(nazivKnjige); // Pronalaženje knjige po nazivu
-       /* StavkaPolice stavkaPolice = stavkaPoliceRepository.findByKnjiga(knjiga);
-        Polica policaBrisanje = policaRepository.findByStavkaPolice(stavkaPolice);*/
-        if (knjiga != null) {/*
-            policaRepository.delete(policaBrisanje);
-            stavkaPoliceRepository.delete(stavkaPolice);*/
-            knjigaRepository.delete(knjiga); // Brisanje knjige iz baze
-        }
-        korisnikRepository.save(korisnik); // Sačuvaj promene u korisniku
-    }
+          for (StavkaPolice stavkaPolice : polica.getStavkaPolice()) {
+              if (stavkaPolice.getKnjiga().getNaslov().equals(nazivKnjige)) {
+                  stavkeZaBrisanje.add(stavkaPolice);
+
+                  if (polica.isPrimarna() && polica.getNaziv().equals("Read")) {
+                      Recenzija recenzija = stavkaPolice.getRecenzija();
+                      if (recenzija != null) {
+                          recenzijaRepository.delete(recenzija);
+                      }
+                  }
+              }
+          }
+
+          for (StavkaPolice stavkaPolice : stavkeZaBrisanje) {
+              Knjiga knjiga = stavkaPolice.getKnjiga();
+              Zanr zanr = knjiga.getZanr();
+
+              // Provera da li je korisnik instanca Autora
+              if (korisnik instanceof Autor) {
+                  Autor autor = (Autor) korisnik;
+
+                  // Uklanjanje knjige sa spiska knjiga autora
+                  autor.getSpisakKnjiga().remove(knjiga);
+                  autorRepository.save(autor); // Sačuvaj promene u bazi podataka
+              }
+
+              polica.getStavkaPolice().remove(stavkaPolice);
+              knjiga.setZanr(null); // Ukloni referencu na zanr
+              knjigaRepository.save(knjiga); // Sačuvaj promene u bazi podataka
+              policaRepository.save(polica); // Sačuvaj promene u bazi podataka
+              stavkaPoliceRepository.delete(stavkaPolice);
+          }
+      }
+  }
+
+
+
+
+
+
+
 
 }
