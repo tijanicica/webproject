@@ -1,17 +1,16 @@
 package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.AutorDto;
+import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.entity.*;
 import com.tim23.webproject.service.AutorService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -35,6 +34,23 @@ public class AutorRestController {
             }
         } else {
             return new ResponseEntity<>("Korisnik nije prijavljen.", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PutMapping("api/azuriraj-knjigu")
+    public ResponseEntity<String> azurirajRecenziju(@RequestParam String nazivKnjige, @RequestBody Knjiga knjiga, HttpSession session) {
+        Autor prijavljeniAutor = (Autor) session.getAttribute("korisnik");
+        if (prijavljeniAutor != null && prijavljeniAutor.getUloga().equals(Uloga.AUTOR)) {
+            try {
+                autorService.azurirajKnjigu(nazivKnjige, knjiga, prijavljeniAutor);
+                return ResponseEntity.ok("Uspesno ste azurirali knjigu.");
+            } catch (EntityNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Niste autor!", HttpStatus.BAD_REQUEST);
         }
     }
 
