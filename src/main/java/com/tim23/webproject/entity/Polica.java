@@ -23,7 +23,7 @@ public class Polica implements Serializable {
     private Long id;
     private String naziv;
     private boolean primarna;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaPolice> stavkaPolice = new ArrayList<>();
 
     public Polica(PolicaDto policaDto) {
@@ -32,4 +32,11 @@ public class Polica implements Serializable {
     }
 
     public Polica() {}
+
+    public Polica(String naziv, boolean primarna, List<StavkaPolice> stavkePolice) {
+        this.naziv = naziv;
+        this.primarna = primarna;
+        this.stavkaPolice = stavkePolice;
+    }
+
 }

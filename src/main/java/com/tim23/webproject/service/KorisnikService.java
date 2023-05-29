@@ -3,10 +3,14 @@ package com.tim23.webproject.service;
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
 import com.tim23.webproject.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -27,11 +31,29 @@ public class KorisnikService {
     @Autowired
     private AutorRepository autorRepository;
 
+    //NIKOLA
+    public void dodajPrimarnePoliceKorisniku(Korisnik korisnik) {
+        // Dodajte primarne police samo ako korisnik nema prethodno definisanu ulogu
+        if (korisnik.getUloga() == Uloga.CITALAC || korisnik.getUloga() == Uloga.AUTOR) {
+            Polica wantToRead = new Polica("Want to Read", true, new ArrayList<>());
+            Polica currentlyReading = new Polica("Currently Reading", true, new ArrayList<>());
+            Polica read = new Polica("Read", true, new ArrayList<>());
 
+            korisnik.getPolice().add(wantToRead);
+            policaRepository.save(wantToRead);
+            korisnik.getPolice().add(currentlyReading);
+            policaRepository.save(currentlyReading);
+            korisnik.getPolice().add(read);
+            policaRepository.save(read);
+        }
+    }
     public Korisnik login(String mejlAdresa, String lozinka) {
         Korisnik korisnik = korisnikRepository.getByMejlAdresa(mejlAdresa);
         if(korisnik == null || !korisnik.getLozinka().equals(lozinka))
             return null;
+        dodajPrimarnePoliceKorisniku(korisnik);
+        korisnikRepository.save(korisnik);
+
         return  korisnik;
     }
 
@@ -300,6 +322,14 @@ public class KorisnikService {
 
         return convertToDto(autor);
     }
+    //NIKOLA
+    public Korisnik nadjiKorisnikaPoMejlAdresi(String mejlAdresa) {
+        return korisnikRepository.findByMejlAdresa(mejlAdresa);
+    }
+
+    //NIKOLA
+    // Metoda za dodavanje nove police korisniku
+    // Metoda za dodavanje nove police trenutno ulogovanom korisniku
 
     public boolean imaUloguAutora(String mejlAdresa) {
         Korisnik korisnik = korisnikRepository.findByMejlAdresa(mejlAdresa);
@@ -381,6 +411,26 @@ public class KorisnikService {
 
 
 
+    public void azurirajProfil(Long korisnikId, String ime, String prezime, LocalDate datumRodjenja, String profilnaSlika,
+                               String opis, String mejlAdresa, String novaLozinka, String trenutnaLozinka) {
+        Korisnik korisnik = korisnikRepository.findById(korisnikId)
+                .orElseThrow(() -> new EntityNotFoundException("Korisnik sa ID-jem " + korisnikId + " nije pronađen."));
 
+        if (trenutnaLozinka != null && novaLozinka != null) {
+            if (!trenutnaLozinka.equals(korisnik.getLozinka())) {
+                throw new IllegalArgumentException("Pogrešna stara lozinka");
+            }
+            korisnik.setLozinka(novaLozinka);
+        }
+
+        korisnik.setIme(ime != null ? ime : korisnik.getIme());
+        korisnik.setPrezime(prezime != null ? prezime : korisnik.getPrezime());
+        korisnik.setDatumRodjenja(datumRodjenja != null ? datumRodjenja : korisnik.getDatumRodjenja());
+        korisnik.setProfilnaSlika(profilnaSlika != null ? profilnaSlika : korisnik.getProfilnaSlika());
+        korisnik.setOpis(opis != null ? opis : korisnik.getOpis());
+        korisnik.setMejlAdresa(mejlAdresa != null ? mejlAdresa : korisnik.getMejlAdresa());
+
+        korisnikRepository.save(korisnik);
+    }
 
 }

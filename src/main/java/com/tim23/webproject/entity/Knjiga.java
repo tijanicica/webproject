@@ -30,7 +30,7 @@ public class Knjiga implements Serializable {
     private int brojStrana;
     private String opis;
     private int ocena;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Zanr zanr;
 
     public Knjiga(String naslov, String naslovnaFotografija, Date datumObjavljivanja, int brojStrana, String opis, int ocena, Zanr zanr) {

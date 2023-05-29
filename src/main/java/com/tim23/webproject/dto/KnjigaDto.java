@@ -43,4 +43,8 @@ public class KnjigaDto {
         }
 
     }
+
+    public KnjigaDto(String naslov, String naslovnaFotografija, Date datumObjavljivanja, int brojStrana, String opis, int ocena) {
+
+    }
 }

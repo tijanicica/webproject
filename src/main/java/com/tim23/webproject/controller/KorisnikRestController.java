@@ -7,11 +7,14 @@ import com.tim23.webproject.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,6 +22,8 @@ public class KorisnikRestController {
 
     @Autowired
     private KorisnikService korisnikService;
+
+
 
 
     @PostMapping("api/login")
@@ -30,6 +35,7 @@ public class KorisnikRestController {
         Korisnik prijavljeniKorisnik = korisnikService.login(loginDto.getMejlAdresa(), loginDto.getLozinka());
         if (prijavljeniKorisnik == null)
             return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
+
 
         session.setAttribute("korisnik", prijavljeniKorisnik);
         return ResponseEntity.ok("Uspesna prijava!");
@@ -84,7 +90,7 @@ public class KorisnikRestController {
     }
 
 
-
+/*
     @GetMapping("api/police-prijavljenog-korisnika")
     public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -120,7 +126,7 @@ public class KorisnikRestController {
         } else {
             return null;
         }
-    }
+    }*/
     @PostMapping("api/kreiraj-autora")
     public ResponseEntity<String> kreirajAutora(@RequestBody AutorDto autorDto, @RequestParam String mejlAdresa, @RequestParam String lozinka, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -131,6 +137,34 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("api/azuriraj-profil/{korisnikId}")
+    public ResponseEntity<String> azurirajProfil(
+            @PathVariable("korisnikId") Long korisnikId,
+            @RequestParam(required = false) String ime,
+            @RequestParam(required = false) String prezime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate datumRodjenja,
+            @RequestParam(required = false) String profilnaSlika,
+            @RequestParam(required = false) String opis,
+            @RequestParam(required = false) String mejlAdresa,
+            @RequestParam(required = false) String novaLozinka,
+            @RequestParam(required = false) String trenutnaLozinka,
+            HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            try {
+                korisnikService.azurirajProfil(korisnikId, ime, prezime, datumRodjenja, profilnaSlika, opis, mejlAdresa, novaLozinka, trenutnaLozinka);
+                return ResponseEntity.ok("Uspesno ste azurirali vas profil.");
+            } catch (EntityNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Niste citalac!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
      @PutMapping("/api/azuriraj-nalog-autora/{id}")
     public ResponseEntity<String> azurirajNalogAutora(@PathVariable("id") Long autorId, @RequestBody AutorDto autorDto, HttpSession session) {

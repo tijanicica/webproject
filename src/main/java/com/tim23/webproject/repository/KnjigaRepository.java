@@ -23,4 +23,7 @@ public interface KnjigaRepository extends JpaRepository<Knjiga, Long> {
 
 
 
+
+    @Query("SELECT k FROM Knjiga k WHERE k.naslov = :nazivKnjige")
+    Knjiga findByNaslovKnjige(@Param("nazivKnjige") String nazivKnjige);
 }

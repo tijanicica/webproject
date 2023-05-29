@@ -16,11 +16,9 @@ import lombok.*;
 public class Autor extends Korisnik {
 
     private boolean aktivan;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "spisak_knjiga")
     private Set<Knjiga> spisakKnjiga = new HashSet<>();
 
     public Autor() {}
-
-
 }
