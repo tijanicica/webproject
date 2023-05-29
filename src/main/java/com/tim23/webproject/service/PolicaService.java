@@ -110,10 +110,11 @@ public class PolicaService {
           throw new Exception("Nije moguće obrisati primarnu policu.");
       }
 
-      // Ukloni vezu između korisnika i police
-      korisnik.getPolice().remove(polica);
-      korisnikRepository.save(korisnik);
+      List<Polica> listaKorisnikovihPolica = korisnik.getPolice();
+      listaKorisnikovihPolica.remove(polica);
 
+      korisnik.setPolice(listaKorisnikovihPolica);
+      korisnikRepository.save(korisnik);
       for (StavkaPolice stavkaPolice : polica.getStavkaPolice()) {
           stavkaPoliceRepository.delete(stavkaPolice);
       }
