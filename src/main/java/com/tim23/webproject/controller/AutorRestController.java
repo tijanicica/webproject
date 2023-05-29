@@ -18,5 +18,6 @@ public class AutorRestController {
 
     @Autowired
     private AutorService autorService;
-
+//dodaj knjigu i njen zanr, spoji autora i njegov spisak knjiga preko id
+    //azuriraj knjiug
 }

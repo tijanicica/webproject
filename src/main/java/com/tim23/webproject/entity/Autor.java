@@ -21,6 +21,4 @@ public class Autor extends Korisnik {
     private Set<Knjiga> spisakKnjiga = new HashSet<>();
 
     public Autor() {}
-
-
 }

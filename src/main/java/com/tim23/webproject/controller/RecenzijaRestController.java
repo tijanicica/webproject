@@ -28,7 +28,7 @@ public class RecenzijaRestController {
     @PutMapping("api/azuriraj/{id}")
     public ResponseEntity<String> azurirajRecenziju(@PathVariable Long id, @RequestBody RecenzijaDto recenzijaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             try {
                 recenzijaService.azurirajRecenziju(id, recenzijaDto, prijavljeniKorisnik);
                 return ResponseEntity.ok("Uspesno ste azurirali recenziju.");

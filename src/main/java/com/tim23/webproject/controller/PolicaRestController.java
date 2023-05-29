@@ -38,7 +38,7 @@ public class PolicaRestController {
     @PostMapping("/api/dodaj-novu-policu")
     public ResponseEntity<String> dodajNovuPolicu(@RequestParam String imePolice,  HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             policaService.dodajNovuPolicu(imePolice, prijavljeniKorisnik);
             return ResponseEntity.ok("Uspesno ste dodali novu policu.");
         } else {
@@ -48,7 +48,7 @@ public class PolicaRestController {
     @DeleteMapping("/api/obrisi-policu/{id}")
     public ResponseEntity<String> obrisiPolicu(@PathVariable(name = "id") Long policaId, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             try {
                 policaService.obrisiPolicu(prijavljeniKorisnik, policaId);
                 return ResponseEntity.ok("Polica uspešno obrisana.");
@@ -69,7 +69,7 @@ public class PolicaRestController {
                                                       @RequestParam(required = false) Integer ocena,
                                                       HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             try {
                 if (nazivPrimarnePolice.equals("Read")) {
                     Recenzija recenzija = null;
@@ -95,7 +95,7 @@ public class PolicaRestController {
     @DeleteMapping("api/obrisi-knjigu/{nazivKnjige}")
     public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable String nazivKnjige, HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC)) {
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             policaService.obrisiKnjiguSaPolice(nazivKnjige, prijavljeniKorisnik);
             return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
         } else {
