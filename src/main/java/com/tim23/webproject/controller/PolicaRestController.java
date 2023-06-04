@@ -60,6 +60,7 @@ public class PolicaRestController {
         }
     }
 
+    //
     @PostMapping("api/dodaj-knjigu-na-policu")
     public ResponseEntity<String> dodajKnjiguNaPolicu(@RequestParam String nazivPrimarnePolice,
                                                       @RequestParam(required = false) String nazivKreiranePolice,
@@ -78,11 +79,11 @@ public class PolicaRestController {
         }
     }
 
-    @DeleteMapping("api/obrisi-knjigu-sa-police/{nazivKnjige}")
-    public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable String nazivKnjige, HttpSession session) throws Exception {
+    @DeleteMapping("api/obrisi-knjigu-sa-police/{knjigaId}/{policaId}")//id police preko id brisanje
+    public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable(name = "knjigaId") Long knjigaId, @PathVariable(name = "policaId") Long policaId,  HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
-            policaService.obrisiKnjiguSaPolice(nazivKnjige, prijavljeniKorisnik);
+            policaService.obrisiKnjiguSaPolice(knjigaId, policaId, prijavljeniKorisnik);
             return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
         } else {
             return new ResponseEntity<>("Niste citalac ili autor!", HttpStatus.BAD_REQUEST);

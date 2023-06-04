@@ -17,4 +17,6 @@ public interface StavkaPoliceRepository extends JpaRepository<StavkaPolice, Long
 
     @Query("SELECT sp FROM StavkaPolice sp WHERE sp.recenzija = :recenzija")
     StavkaPolice findByRecenzija(@Param("recenzija") Recenzija recenzija);
+
+    StavkaPolice findByKnjigaId(Long knjigaId);
 }

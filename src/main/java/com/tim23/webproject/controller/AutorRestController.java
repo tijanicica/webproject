@@ -38,7 +38,19 @@ public class AutorRestController {
         }
     }
 
-    @PutMapping("api/azuriraj-knjigu")
+    //ne radi
+    @DeleteMapping("/api/obrisi-knjigu-iz-spiska-knjiga/{id}")
+    public ResponseEntity<String> obrisiKnjigu(@PathVariable("id") Long knjigaId, HttpSession session) {
+        Autor prijavljeniAutor = (Autor) session.getAttribute("korisnik");
+        if (prijavljeniAutor != null && prijavljeniAutor.getUloga().equals(Uloga.AUTOR)) {
+            autorService.obrisiKnjiguIzSpiskaKnjiga(knjigaId, prijavljeniAutor);
+            return ResponseEntity.ok("Knjiga je uspesno obrisana iz autorovog spiska knjiga");
+        } else {
+            return new ResponseEntity<>("Niste autor!", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @PutMapping("api/azuriraj-knjigu")//jedinstveno ili id
     public ResponseEntity<String> azurirajRecenziju(@RequestParam String nazivKnjige, @RequestBody Knjiga knjiga, HttpSession session) {
         Autor prijavljeniAutor = (Autor) session.getAttribute("korisnik");
         if (prijavljeniAutor != null && prijavljeniAutor.getUloga().equals(Uloga.AUTOR)) {

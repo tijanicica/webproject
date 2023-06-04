@@ -7,6 +7,8 @@ import com.tim23.webproject.entity.Knjiga;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Recenzija;
 import com.tim23.webproject.entity.StavkaPolice;
+import com.tim23.webproject.repository.KnjigaRepository;
+import com.tim23.webproject.repository.KorisnikRepository;
 import com.tim23.webproject.repository.RecenzijaRepository;
 import com.tim23.webproject.repository.StavkaPoliceRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,6 +26,10 @@ public class RecenzijaService {
     private RecenzijaRepository recenzijaRepository;
     @Autowired
     private StavkaPoliceRepository stavkaPoliceRepository;
+    @Autowired
+    private KnjigaRepository knjigaRepository;
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
     /*public List<RecenzijaDto> getAllRecenzije() {
         List<Recenzija> recenzije = recenzijaRepository.findAll();
@@ -66,4 +73,26 @@ public class RecenzijaService {
             stavkaPoliceRepository.save(stavkaPolice);
         }
     }
+
+    //za korisnika
+    public void dodajNovuRecenziju(Long knjigaId, RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto, Korisnik korisnik) {
+        Knjiga knjiga = knjigaRepository.findById(knjigaId)
+                .orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-em nije pronađena."));
+
+        Recenzija recenzija = new Recenzija();
+        recenzija.setOcena(recenzijaBezKorisnikaDto.getOcena());
+        recenzija.setTekst(recenzijaBezKorisnikaDto.getTekst());
+        recenzija.setDatumRecenzije(new Date());
+       // recenzija.setKorisnik(korisnik);
+
+        recenzijaRepository.save(recenzija);
+
+        StavkaPolice stavkaPolice = stavkaPoliceRepository.findByKnjigaId(knjigaId);
+        if (stavkaPolice != null) {
+            stavkaPolice.setRecenzija(recenzija);
+            stavkaPoliceRepository.save(stavkaPolice);
+        }
+        korisnikRepository.save(korisnik);
+    }
+
 }

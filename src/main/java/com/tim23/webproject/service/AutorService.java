@@ -5,13 +5,11 @@ import com.tim23.webproject.entity.*;
 import com.tim23.webproject.repository.AutorRepository;
 import com.tim23.webproject.repository.KnjigaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 //import static jdk.internal.org.jline.reader.impl.LineReaderImpl.CompletionType.List;
 
@@ -47,4 +45,17 @@ public class AutorService {
 
         knjigaRepository.save(staraKnjiga);
     }
+
+    //PITATI
+    @Transactional
+    public void obrisiKnjiguIzSpiskaKnjiga(Long knjigaId, Autor autor) {
+        Knjiga knjiga = knjigaRepository.findById(knjigaId).orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-om nije pronadjena."));
+
+        Set<Knjiga> spisakKnjiga = autor.getSpisakKnjiga();
+        spisakKnjiga.remove(knjiga);
+        autor.setSpisakKnjiga(spisakKnjiga);
+       // autorRepository.deleteFromAutorSpisakKnjiga(autor.getId(), knjigaId);
+        autorRepository.save(autor);
+    }
+
 }
