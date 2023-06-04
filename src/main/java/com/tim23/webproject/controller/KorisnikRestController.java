@@ -23,6 +23,10 @@ public class KorisnikRestController {
     @Autowired
     private KorisnikService korisnikService;
 
+    @GetMapping("/api/")
+    public String welcome(){
+        return "Dobrodosli u bukovacku biblioteku. Bilbiotekarka Ljilja vas pozdravlja :)!";
+    }
 
     @PostMapping("api/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
@@ -37,6 +41,17 @@ public class KorisnikRestController {
 
         session.setAttribute("korisnik", prijavljeniKorisnik);
         return ResponseEntity.ok("Uspesna prijava!");
+    }
+
+    @PostMapping("api/logout")
+    public ResponseEntity Logout(HttpSession session){
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (prijavljeniKorisnik == null)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        session.invalidate();
+        return new ResponseEntity("Uspesna odjava", HttpStatus.OK);
     }
 
     @PostMapping("api/register")
