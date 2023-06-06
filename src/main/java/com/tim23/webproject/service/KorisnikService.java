@@ -32,7 +32,7 @@ public class KorisnikService {
     private AutorRepository autorRepository;
 
     //NIKOLA
-    public void dodajPrimarnePoliceKorisniku(Korisnik korisnik) {
+    public void  dodajPrimarnePoliceKorisniku(Korisnik korisnik) {
         // Dodajte primarne police samo ako korisnik nema prethodno definisanu ulogu
         if (korisnik.getUloga() == Uloga.CITALAC || korisnik.getUloga() == Uloga.AUTOR) {
             Polica wantToRead = new Polica("Want to Read", true, new ArrayList<>());

@@ -109,18 +109,10 @@ public class PolicaService {
       if (polica.isPrimarna()) {
           throw new Exception("Nije moguće obrisati primarnu policu.");
       }
-
-     // List<Polica> listaKorisnikovihPolica = korisnik.getPolice();
-      //listaKorisnikovihPolica.remove(polica);
-      korisnik.getPolice().remove(polica);
-     // korisnik.setPolice(listaKorisnikovihPolica);
-      korisnikRepository.save(korisnik);
-      for (StavkaPolice stavkaPolice : polica.getStavkaPolice()) {
-          stavkaPoliceRepository.delete(stavkaPolice);
-      }
-      polica.getStavkaPolice().clear();
-
-      //policaRepository.delete(polica);
+      Korisnik korisnikBaza = korisnikRepository.getById(korisnik.getId());
+      korisnikBaza.getPolice().remove(polica);
+      korisnikRepository.save(korisnikBaza);
+      policaRepository.delete(polica);
   }
 
     public void dodajKnjiguNaPolicuBezRecenzije(Korisnik korisnik, String nazivPrimarnePolice, String nazivKreiranePolice, Knjiga knjiga) throws Exception {

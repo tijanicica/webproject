@@ -50,12 +50,13 @@ public class AutorService {
     @Transactional
     public void obrisiKnjiguIzSpiskaKnjiga(Long knjigaId, Autor autor) {
         Knjiga knjiga = knjigaRepository.findById(knjigaId).orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-om nije pronadjena."));
-
-        Set<Knjiga> spisakKnjiga = autor.getSpisakKnjiga();
-        spisakKnjiga.remove(knjiga);
-        autor.setSpisakKnjiga(spisakKnjiga);
-       // autorRepository.deleteFromAutorSpisakKnjiga(autor.getId(), knjigaId);
-        autorRepository.save(autor);
+        Autor autorBaza = autorRepository.getById(autor.getId());
+        Set<Knjiga> spisakKnjiga = autorBaza.getSpisakKnjiga();
+        if (spisakKnjiga != null) {
+            spisakKnjiga.remove(knjiga);
+            autorRepository.updateSpisakKnjiga(autor.getId(), spisakKnjiga);
+            autorRepository.save(autorBaza);
+        }
     }
 
 }

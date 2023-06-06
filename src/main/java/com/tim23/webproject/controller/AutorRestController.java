@@ -67,20 +67,4 @@ public class AutorRestController {
         }
     }
 
-    /*@PutMapping("/api/azuriraj-nalog-autora/{id}")
-    public ResponseEntity<String> azurirajNalogAutora(@PathVariable Long id, @RequestBody AutorDto autorDto, HttpSession session) {
-        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
-        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
-            try {
-                autorService.azurirajNalogAutora(id, autorDto);
-                return ResponseEntity.ok("Nalog autora je uspešno azuriran.");
-            } catch (EntityNotFoundException e) {
-                return new ResponseEntity<>("Nalog autora sa datim ID-om nije pronadjen.", HttpStatus.NOT_FOUND);
-            } catch (IllegalArgumentException e) {
-                return new ResponseEntity<>("Nalog autora je aktivan.Ne moze se azurirati.", HttpStatus.BAD_REQUEST);
-            }
-        } else {
-            return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
-        }
-    }*/
 }
