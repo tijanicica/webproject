@@ -31,16 +31,6 @@ public class RecenzijaService {
     @Autowired
     private KorisnikRepository korisnikRepository;
 
-    /*public List<RecenzijaDto> getAllRecenzije() {
-        List<Recenzija> recenzije = recenzijaRepository.findAll();
-        List<RecenzijaDto> dtos = new ArrayList<>();
-        for (Recenzija recenzija : recenzije) {
-            RecenzijaDto dto = new RecenzijaDto(recenzija);
-            dtos.add(dto);
-        }
-        return dtos;
-
-    }*/
 
     public List<RecenzijaBezKorisnikaDto> getAllRecenzije() {
         List<Recenzija> recenzije = recenzijaRepository.findAll();
@@ -57,18 +47,16 @@ public class RecenzijaService {
         Recenzija recenzija = recenzijaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Recenzija sa datim ID-om nije pronađena."));
 
-        // Ažuriranje recenzije sa novim vrednostima
         recenzija.setOcena(recenzijaDto.getOcena());
         recenzija.setTekst(recenzijaDto.getTekst());
         recenzija.setDatumRecenzije(recenzijaDto.getDatumRecenzije());
 
-        // Čuvanje ažurirane recenzije
         recenzijaRepository.save(recenzija);
 
-        // Pronalaženje odgovarajuće stavke police koja sadrži recenziju
+
         StavkaPolice stavkaPolice = stavkaPoliceRepository.findByRecenzija(recenzija);
         if (stavkaPolice != null) {
-            // Ažuriranje recenzije u okviru stavke police
+
             stavkaPolice.setRecenzija(recenzija);
             stavkaPoliceRepository.save(stavkaPolice);
         }

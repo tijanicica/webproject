@@ -1,19 +1,14 @@
 package com.tim23.webproject.controller;
 
-import com.tim23.webproject.dto.AutorDto;
-import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.entity.*;
 import com.tim23.webproject.service.AutorService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AutorRestController {
@@ -38,7 +33,7 @@ public class AutorRestController {
         }
     }
 
-    //ne radi
+
     @DeleteMapping("/api/obrisi-knjigu-iz-spiska-knjiga/{id}")
     public ResponseEntity<String> obrisiKnjigu(@PathVariable("id") Long knjigaId, HttpSession session) {
         Autor prijavljeniAutor = (Autor) session.getAttribute("korisnik");

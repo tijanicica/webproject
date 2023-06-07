@@ -46,15 +46,18 @@ public class AutorService {
         knjigaRepository.save(staraKnjiga);
     }
 
-    //PITATI
-    @Transactional
+
     public void obrisiKnjiguIzSpiskaKnjiga(Long knjigaId, Autor autor) {
         Knjiga knjiga = knjigaRepository.findById(knjigaId).orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-om nije pronadjena."));
         Autor autorBaza = autorRepository.getById(autor.getId());
         Set<Knjiga> spisakKnjiga = autorBaza.getSpisakKnjiga();
         if (spisakKnjiga != null) {
             spisakKnjiga.remove(knjiga);
-            autorRepository.updateSpisakKnjiga(autor.getId(), spisakKnjiga);
+            Set<Knjiga> noviSpisakKnjiga = new HashSet<>();
+            for (Knjiga knjigaNova : spisakKnjiga) {
+                noviSpisakKnjiga.add(knjigaNova);
+            }
+            autorBaza.setSpisakKnjiga(noviSpisakKnjiga);
             autorRepository.save(autorBaza);
         }
     }

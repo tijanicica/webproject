@@ -162,7 +162,7 @@ public class PolicaService {
             }
         }
     }
-    //**********RADI
+
   public void obrisiKnjiguSaPolice(Long knjigaId, Long policaId, Korisnik korisnik) {
       Knjiga knjiga = knjigaRepository.findById(knjigaId).orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-om nije pronadjena."));
       Polica polica = policaRepository.findById(policaId).orElseThrow(() -> new EntityNotFoundException("Polica sa datim ID-om nije pronadjena."));
