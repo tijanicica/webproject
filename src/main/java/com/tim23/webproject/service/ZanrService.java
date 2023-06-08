@@ -1,10 +1,6 @@
 package com.tim23.webproject.service;
 
-import com.tim23.webproject.dto.KnjigaDto;
-import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.dto.ZanrDto;
-import com.tim23.webproject.entity.Knjiga;
-import com.tim23.webproject.entity.Recenzija;
 import com.tim23.webproject.entity.Zanr;
 import com.tim23.webproject.repository.ZanrRepository;
 import org.springframework.beans.factory.annotation.Autowired;

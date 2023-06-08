@@ -1,6 +1,5 @@
 package com.tim23.webproject.service;
 
-import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.entity.Knjiga;
@@ -62,7 +61,7 @@ public class RecenzijaService {
         }
     }
 
-    //za korisnika
+
     public void dodajNovuRecenziju(Long knjigaId, RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto, Korisnik korisnik) {
         Knjiga knjiga = knjigaRepository.findById(knjigaId)
                 .orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-em nije pronađena."));
@@ -71,7 +70,6 @@ public class RecenzijaService {
         recenzija.setOcena(recenzijaBezKorisnikaDto.getOcena());
         recenzija.setTekst(recenzijaBezKorisnikaDto.getTekst());
         recenzija.setDatumRecenzije(new Date());
-       // recenzija.setKorisnik(korisnik);
 
         recenzijaRepository.save(recenzija);
 

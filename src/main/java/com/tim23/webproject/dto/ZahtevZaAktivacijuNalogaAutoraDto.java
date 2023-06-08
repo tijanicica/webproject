@@ -1,12 +1,7 @@
 package com.tim23.webproject.dto;
-import com.tim23.webproject.entity.Autor;
-import com.tim23.webproject.entity.Status;
 import com.tim23.webproject.entity.ZahtevZaAktivacijuNalogaAutora;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 
 @Getter

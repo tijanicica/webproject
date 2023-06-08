@@ -1,6 +1,5 @@
 package com.tim23.webproject.controller;
 
-import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.entity.Korisnik;
@@ -45,7 +44,6 @@ public class RecenzijaRestController {
         }
     }
 
-    //ne radi ne znam zasto
     @PostMapping("/api/dodaj-recenziju/{knjigaId}")
     public ResponseEntity<String> dodajRecenziju(@PathVariable(name = "knjigaId") Long knjigaId,  @RequestBody RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");

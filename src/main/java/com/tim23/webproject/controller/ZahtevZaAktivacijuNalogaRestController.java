@@ -24,8 +24,6 @@ public class ZahtevZaAktivacijuNalogaRestController {
     private ZahtevZaAktivacijuNalogaService zahtevZaAktivacijuNalogaService;
     @Autowired
     private KorisnikService korisnikService;
-    @Autowired
-    private EmailService emailService;
 
     @PostMapping("api/zahtev-za-autora/{id}")
     public ResponseEntity<String> podnesiZahtevZaAktivacijuAutoraAutora(@PathVariable("id") Long autorId,@RequestBody ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {

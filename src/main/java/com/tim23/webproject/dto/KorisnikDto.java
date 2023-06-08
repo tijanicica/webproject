@@ -1,7 +1,6 @@
 package com.tim23.webproject.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Polica;
 import com.tim23.webproject.entity.Uloga;
@@ -27,7 +26,6 @@ public class KorisnikDto {
     private String profilnaSlika;
     private String opis;
 
-   // public enum UlogaDto {CITALAC, AUTOR, ADMINISTRATOR;}
    @Enumerated(EnumType.STRING)
     private Uloga uloga;
 
@@ -54,13 +52,7 @@ public class KorisnikDto {
         this.profilnaSlika = korisnik.getProfilnaSlika();
         this.opis = korisnik.getOpis();
         this.uloga = korisnik.getUloga();
-        /*if (korisnik.getUloga() == Uloga.AUTOR) {
-            this.uloga = UlogaDto.AUTOR;
-        } else if (korisnik.getUloga() == Uloga.CITALAC) {
-            this.uloga = UlogaDto.CITALAC;
-        } else if (korisnik.getUloga() == Uloga.ADMINISTRATOR) {
-            this.uloga = UlogaDto.ADMINISTRATOR;
-        }*/
+
 
         this.police = new ArrayList<>();
         for (Polica polica : korisnik.getPolice()) {

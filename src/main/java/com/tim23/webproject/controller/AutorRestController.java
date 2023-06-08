@@ -15,8 +15,6 @@ public class AutorRestController {
 
     @Autowired
     private AutorService autorService;
-//dodaj knjigu i njen zanr, spoji autora i njegov spisak knjiga preko id
-    //azuriraj knjigu
 
     @PostMapping("api/dodaj-knjigu-u-spisak-knjiga")
     public ResponseEntity<String> dodajKnjiguNaPolicu(@RequestBody Knjiga knjiga, HttpSession session) {
@@ -32,7 +30,6 @@ public class AutorRestController {
             return new ResponseEntity<>("Korisnik nije prijavljen.", HttpStatus.UNAUTHORIZED);
         }
     }
-
 
     @DeleteMapping("/api/obrisi-knjigu-iz-spiska-knjiga/{id}")
     public ResponseEntity<String> obrisiKnjigu(@PathVariable("id") Long knjigaId, HttpSession session) {

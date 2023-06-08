@@ -3,14 +3,12 @@ package com.tim23.webproject.service;
 import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.ZanrDto;
 import com.tim23.webproject.entity.Knjiga;
+import com.tim23.webproject.entity.Recenzija;
 import com.tim23.webproject.entity.StavkaPolice;
 import com.tim23.webproject.entity.Zanr;
-import com.tim23.webproject.repository.KnjigaRepository;
-import com.tim23.webproject.repository.StavkaPoliceRepository;
-import com.tim23.webproject.repository.ZanrRepository;
+import com.tim23.webproject.repository.*;
 import jakarta.persistence.EntityNotFoundException;
-import com.tim23.webproject.repository.KorisnikRepository;
-import com.tim23.webproject.repository.PolicaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -33,6 +31,9 @@ public class KnjigaService {
 
     @Autowired
     private KorisnikRepository korisnikRepository;
+
+    @Autowired
+    private RecenzijaRepository recenzijaRepository;
 
 
     public List<KnjigaDto> getAllKnjige() {
@@ -130,6 +131,22 @@ public class KnjigaService {
             throw new RuntimeException("Knjiga ima recenziju i ne može biti obrisana.");
         }
     }
+
+    @Transactional
+    public void obrisiRecenzijuKnjige(Long knjigaId) {
+        Knjiga knjiga = knjigaRepository.findById(knjigaId).orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-om nije pronadjena."));
+
+        StavkaPolice stavkaPolice = stavkaPoliceRepository.findByKnjiga(knjiga);
+        Recenzija recenzija = stavkaPolice.getRecenzija();
+
+        stavkaPoliceRepository.removeRecenzijaFromStavkaPolice(recenzija);
+
+        if (recenzija != null)
+            recenzijaRepository.delete(recenzija);
+    }
+
+
+
 
 }
 

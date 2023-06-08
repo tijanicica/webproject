@@ -2,7 +2,6 @@ package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
-import com.tim23.webproject.repository.KorisnikRepository;
 import com.tim23.webproject.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -13,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController

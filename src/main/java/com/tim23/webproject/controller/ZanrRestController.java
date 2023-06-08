@@ -1,10 +1,8 @@
 package com.tim23.webproject.controller;
 
-import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.ZanrDto;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
-import com.tim23.webproject.repository.ZanrRepository;
 import com.tim23.webproject.service.ZanrService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

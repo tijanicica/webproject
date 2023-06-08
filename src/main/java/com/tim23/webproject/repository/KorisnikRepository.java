@@ -23,16 +23,11 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 
     @Query("SELECT p FROM Korisnik k JOIN k.police p WHERE k.id = :korisnikId")
     List<Polica> findPoliceByKorisnikId(@Param("korisnikId") Long korisnikId);
-    //NIKOLA
+
     Korisnik findByMejlAdresa(String mejlAdresa);
-   /* @Modifying
-    @Query("DELETE FROM KORISNIK_POLICE WHERE KORISNIK_KORISNIK_ID = :korisnikId AND POLICE_POLICA_ID = :policaId")
-    void deletePolica(Long korinikId, Long policaId);
-*/
 
     List<Korisnik> findByIme(String ime);
     List<Korisnik> findByPrezime(String prezime);
-
 
     List<Korisnik> findByUloga(Uloga uloga);
 

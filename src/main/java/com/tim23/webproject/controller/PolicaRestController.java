@@ -5,13 +5,9 @@ import com.tim23.webproject.entity.*;
 import com.tim23.webproject.service.PolicaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -22,16 +18,13 @@ public class PolicaRestController {
 
     @GetMapping("api/police-prijavljenog-korisnika")
     public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
-        // Preuzimanje prijavljenog korisnika iz sesije
+
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (prijavljeniKorisnik != null) {
-            // Poziv metode u PoliceService sloju
             List<PolicaDto> policeDtoList = policaService.getPolicePrijavljenogKorisnika(prijavljeniKorisnik.getId());
-
             return ResponseEntity.ok(policeDtoList);
         } else {
-            // Vraćanje odgovarajućeg odgovora ako korisnik nije prijavljen
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
@@ -79,7 +72,7 @@ public class PolicaRestController {
         }
     }
 
-    @DeleteMapping("api/obrisi-knjigu-sa-police/{knjigaId}/{policaId}")//id police preko id brisanje
+    @DeleteMapping("api/obrisi-knjigu-sa-police/{knjigaId}/{policaId}")
     public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable(name = "knjigaId") Long knjigaId, @PathVariable(name = "policaId") Long policaId,  HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {

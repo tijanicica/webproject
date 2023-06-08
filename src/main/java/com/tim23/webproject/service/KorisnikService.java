@@ -33,7 +33,6 @@ public class KorisnikService {
 
     //NIKOLA
     public void  dodajPrimarnePoliceKorisniku(Korisnik korisnik) {
-        // Dodajte primarne police samo ako korisnik nema prethodno definisanu ulogu
         if (korisnik.getUloga() == Uloga.CITALAC || korisnik.getUloga() == Uloga.AUTOR) {
             Polica wantToRead = new Polica("Want to Read", true, new ArrayList<>());
             Polica currentlyReading = new Polica("Currently Reading", true, new ArrayList<>());
@@ -322,14 +321,10 @@ public class KorisnikService {
 
         return convertToDto(autor);
     }
-    //NIKOLA
     public Korisnik nadjiKorisnikaPoMejlAdresi(String mejlAdresa) {
         return korisnikRepository.findByMejlAdresa(mejlAdresa);
     }
 
-    //NIKOLA
-    // Metoda za dodavanje nove police korisniku
-    // Metoda za dodavanje nove police trenutno ulogovanom korisniku
 
     public boolean imaUloguAutora(String mejlAdresa) {
         Korisnik korisnik = korisnikRepository.findByMejlAdresa(mejlAdresa);
@@ -346,55 +341,10 @@ public class KorisnikService {
 
                     autor.setIme(autorDto.getIme());
                     autor.setPrezime(autorDto.getPrezime());
-                    //autor.setKorisnickoIme(autorDto.getKorisnickoIme());
                     autor.setDatumRodjenja(autorDto.getDatumRodjenja());
                     autor.setProfilnaSlika(autorDto.getProfilnaSlika());
                     autor.setOpis(autorDto.getOpis());
-                    //autor.setUloga(autorDto.getUloga());
 
-
-                    //azuriranje police
-                    /*autor.getPolice().clear();
-                    List<PolicaDto> policaDtoList = autorDto.getPolice();
-                    List<Polica> policaList = new ArrayList<>();
-                    for (PolicaDto policaDto : policaDtoList) {
-                        Polica polica = new Polica(policaDto);
-
-                        //azuriranje stavka police u polici
-                        List<StavkaPoliceDto> stavkaPoliceDtoList = policaDto.getStavkaPolice();
-                        List<StavkaPolice> stavkaPoliceList = new ArrayList<>();
-                        for (StavkaPoliceDto stavkaPoliceDto : stavkaPoliceDtoList) {
-                            StavkaPolice stavka = new StavkaPolice();
-
-                            if (stavkaPoliceDto.getRecenzija() != null) {
-                                RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto = stavkaPoliceDto.getRecenzija();
-                                Recenzija recenzija = new Recenzija(recenzijaBezKorisnikaDto);
-                                stavka.setRecenzija(recenzija);
-                                recenzijaRepository.save(recenzija);
-                            }
-                            if (stavkaPoliceDto.getKnjiga() != null) {
-                                KnjigaDto knjigaDto = stavkaPoliceDto.getKnjiga();
-                                Knjiga knjiga = new Knjiga(knjigaDto);
-                                ZanrDto zanrDto = knjigaDto.getZanr();
-                                if (zanrDto != null) {
-                                    Zanr zanr = new Zanr(zanrDto.getNaziv());
-                                    knjiga.setZanr(zanr);
-                                    zanrRepository.save(zanr);
-                                } else {
-                                    knjiga.setZanr(null);
-                                }
-                                stavka.setKnjiga(knjiga);
-                                knjigaRepository.save(knjiga);
-                            }
-                            stavkaPoliceList.add(stavka);
-                            stavkaPoliceRepository.save(stavka);
-                        }
-                        polica.setStavkaPolice(stavkaPoliceList);
-                        policaList.add(polica);
-                        policaRepository.save(polica);
-
-                    }
-                    autor.setPolice(policaList);*/
                     autorRepository.save(autor);
                     korisnikRepository.save(autor);
                 } else {

@@ -1,17 +1,13 @@
 package com.tim23.webproject.service;
 
-import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
 import com.tim23.webproject.repository.AutorRepository;
 import com.tim23.webproject.repository.KnjigaRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
-//import static jdk.internal.org.jline.reader.impl.LineReaderImpl.CompletionType.List;
 
 @Service
 public class AutorService {
