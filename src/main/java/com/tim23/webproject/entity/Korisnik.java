@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-enum Uloga {CITALAC, AUTOR, ADMINISTRATOR;}
-
 @Entity
 @Getter
 @Setter
@@ -35,7 +33,7 @@ public class Korisnik  implements Serializable {
     private String opis;
     @Enumerated(EnumType.STRING)
     private Uloga uloga;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY)
     @Column(name = "police")
     private List<Polica> police = new ArrayList<>();
 

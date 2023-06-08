@@ -1,4 +1,7 @@
 package com.tim23.webproject.entity;
+import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
+import com.tim23.webproject.dto.RecenzijaDto;
+import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +27,32 @@ public class Recenzija implements Serializable {
     @JoinColumn(name = "korisnik_id")
     private Korisnik korisnik;
 
+    public Recenzija(Long id, int ocena, String tekst, Date datumRecenzije, Korisnik korisnik) {
+        this.id = id;
+        this.ocena = ocena;
+        this.tekst = tekst;
+        this.datumRecenzije = datumRecenzije;
+        this.korisnik = korisnik;
+    }
 
+    public Recenzija() {}
 
-    
+    public Recenzija(Recenzija recenzija) {
+        this.ocena = recenzija.getOcena();
+        this.tekst = recenzija.getTekst();
+        this.datumRecenzije = recenzija.getDatumRecenzije();
+        this.korisnik = recenzija.getKorisnik();
+    }
+
+    public Recenzija(RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto) {
+        this.ocena = recenzijaBezKorisnikaDto.getOcena();
+        this.tekst = recenzijaBezKorisnikaDto.getTekst();
+        this.datumRecenzije = recenzijaBezKorisnikaDto.getDatumRecenzije();
+    }
+
+    public Recenzija(String tekst, Date datumRecenzije, int ocena) {
+        this.tekst = tekst;
+        this.datumRecenzije = datumRecenzije;
+        this.ocena = ocena;
+    }
 }

@@ -1,5 +1,6 @@
 package com.tim23.webproject.entity;
 
+import com.tim23.webproject.dto.ZanrDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +18,12 @@ public class Zanr implements Serializable {
     private Long id;
     private String naziv;
 
+    public Zanr(String naziv) {
+        this.naziv = naziv;
+    }
+    public Zanr(){}
 
+    public Zanr(ZanrDto zanrDto) {
+       this.naziv = zanrDto.getNaziv();
+    }
 }
