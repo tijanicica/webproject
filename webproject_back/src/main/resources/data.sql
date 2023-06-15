@@ -16,7 +16,7 @@ INSERT INTO KORISNIK_POLICE (korisnik_korisnik_id, police_polica_id) VALUES (2, 
 INSERT INTO ZANR (naziv) VALUES ('poezija');
 INSERT INTO ZANR (naziv) VALUES ('decija');
 
-INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljivanja, broj_strana, opis, ocena, zanr_id) VALUES ('Mali Princ', 'naslovnafoto2', 'isbn2', '1960-01-01', 90, 'Svi odrasli su nekada bili deca', 10, 2);
+INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljivanja, broj_strana, opis, ocena, zanr_id) VALUES ('Mali Princ', 'mali-princ.jpg', 'isbn2', '1960-01-01', 90, 'Svi odrasli su nekada bili deca', 10, 2);
 INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljivanja, broj_strana, opis, ocena, zanr_id) VALUES ('Gradinar', 'naslovnafoto3', 'isbn3', '1850-01-01', 100, 'Ptica u kavezu', 10, 1);
 
 INSERT INTO AUTOR (aktivan, autor_id) VALUES (true, 3);

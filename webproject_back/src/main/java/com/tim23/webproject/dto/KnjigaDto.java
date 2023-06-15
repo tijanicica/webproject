@@ -10,13 +10,13 @@ import java.util.Date;
 @Setter
 public class KnjigaDto {
 
-    private String naslov;
-    private String naslovnaFotografija;
-    private Date datumObjavljivanja;
-    private int brojStrana;
-    private String opis;
-    private int ocena;
-    private ZanrDto zanr;
+        private String naslov;
+        private String naslovnaFotografija;
+        private Date datumObjavljivanja;
+        private int brojStrana;
+        private String opis;
+        private int ocena;
+        private ZanrDto zanr;
 
     public KnjigaDto(String naslov, String naslovnaFotografija, Date datumObjavljivanja, int brojStrana, String opis, int ocena, ZanrDto zanr) {
         this.naslov = naslov;
