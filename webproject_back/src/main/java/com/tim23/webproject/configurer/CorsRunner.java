@@ -15,7 +15,7 @@ public class CorsRunner implements WebMvcConfigurer {
                 .allowCredentials(true);*/
 
          registry.addMapping("/api/**") // Specify the endpoint(s) you want to apply CORS configuration to
-            .allowedOrigins("http://localhost:8080", "http://localhost:9090") // Add your allowed origins here
+            .allowedOrigins("http://localhost:8081", "http://localhost:9090") // Add your allowed origins here
             .allowedMethods("GET", "POST", "PUT", "DELETE")
             .allowedHeaders("*")
             .allowCredentials(true);

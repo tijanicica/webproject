@@ -64,9 +64,20 @@ export default {
   name: 'HomeView',
   methods: {
     pregledajSveKnjige() {
-    // Redirekcija ka "/api/knjige"
     window.location.href = "/api/knjige";
-  }
+  },
+  pregledajSveZanrove() {
+    window.location.href = "/api/zanrovi";
+  },
+  pregledajSveRecenzije() {
+    window.location.href = "/api/recenzije";
+  },
+  pregledajProfileKorisnika() {
+    window.location.href = "/api/profili-korisnika";
+  },
+  pretraziKnjigu() {
+    window.location.href = "/api/pretraga/knjiga/naslov/{naslov}";
+  },
   }
 };
 </script>

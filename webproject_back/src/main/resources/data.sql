@@ -3,7 +3,7 @@ INSERT INTO POLICA (naziv, primarna) VALUES ('Tijanina polica', false);
 INSERT INTO POLICA (naziv, primarna) VALUES ('Read', true);
 INSERT INTO POLICA (naziv, primarna) VALUES ('Currently Reading', true);
 
-INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Nikola', 'Stojicic', 'nikolas', 'nikolas@gmail.com', 'nikola123', '2002-03-27','profilnaSlika1', 'student', 'CITALAC');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Nikola', 'Stojicic', 'nikolas', 'nikolas@gmail.com', 'nikola123', '2002-03-27','profilnaSlika2', 'student', 'CITALAC');
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Tijana', 'Petrovic', 'tictic', 'tijanap@gmail.com', 'tic123', '2003-01-27', 'profilnaSlika', 'student', 'CITALAC' );
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Antoan', 'Egziperi', 'antoane', 'antoane@gmail.com', 'maliprinc123', '1930-01-01', 'profilnaSlika2', 'pisac', 'AUTOR');
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Iva', 'Jovanovic', 'ivaj', 'ivaj@gmail.com', 'ivica123', '2002-12-28', 'profilnaSlika3', 'student', 'ADMINISTRATOR');
