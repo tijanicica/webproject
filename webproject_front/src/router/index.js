@@ -6,6 +6,8 @@ import GetAllZanroviView from '../views/GetAllZanroviView.vue'
 import GetAllRecenzijeView from '../views/GetAllRecenzijeView.vue'
 import GetAllProfiliKorisnikaView from '../views/GetAllProfiliKorisnikaView.vue'
 import GetKnjigaByNaslovView from '../views/GetKnjigaByNaslovView.vue'
+import GetPolicePrijavljenogKorisnikaView from '../views/GetPolicePrijavljenogKorisnikaView.vue'
+import RegisterView from '../views/RegisterView.vue'
 
 
 const routes = [
@@ -22,7 +24,7 @@ const routes = [
   {
     path: '/api/register',
     name: 'register',
-    component: HomeView
+    component: RegisterView
   },
   {
     path: '/api/knjige',
@@ -49,6 +51,12 @@ const routes = [
     name: 'GetKnjigaByNaslov',
     component: GetKnjigaByNaslovView,
   },
+  {
+    path: '/api/police-prijavljenog-korisnika',
+    name: 'police-prijavljenog-korisnika',
+    component: GetPolicePrijavljenogKorisnikaView,
+  },
+  
 
   
 ]

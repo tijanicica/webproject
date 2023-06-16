@@ -25,10 +25,10 @@ public class KorisnikRestController {
         return "Dobrodosli u bukovacku biblioteku. Bilbiotekarka Ljilja vas pozdravlja :)!";
     }
 
-    @PostMapping("api/login")
+    @PostMapping("/api/login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpSession session){
         // proverimo da li su podaci validni
-        if(loginDto.getMejlAdresa().isEmpty() || loginDto.getLozinka().isEmpty())
+        if((loginDto.getMejlAdresa() != null && loginDto.getMejlAdresa().isEmpty()) || loginDto.getLozinka().isEmpty())
             return new ResponseEntity("Neispravni podaci za prijavu", HttpStatus.BAD_REQUEST);
 
         Korisnik prijavljeniKorisnik = korisnikService.login(loginDto.getMejlAdresa(), loginDto.getLozinka());
@@ -37,7 +37,7 @@ public class KorisnikRestController {
 
 
         session.setAttribute("korisnik", prijavljeniKorisnik);
-        return ResponseEntity.ok("Uspesna prijava!");
+        return ResponseEntity.ok("{\"message\": \"Uspesna prijava!\"}");
     }
 
     @PostMapping("api/logout")
