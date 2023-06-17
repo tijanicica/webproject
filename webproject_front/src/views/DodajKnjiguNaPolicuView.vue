@@ -1,8 +1,17 @@
 <template>
     <div>
-      <h2>Pretraga knjige po naslovu</h2>
+      <h2>Dodaj knjigu na policu</h2>
       <div>
-        <input type="text" v-model="unosNaslova" placeholder="Unesite naslov knjige" />
+        <label for="nazivPrimarnePolice">Naziv primarne police:</label>
+        <input type="text" id="nazivPrimarnePolice" v-model="nazivPrimarnePolice" required />
+      </div>
+      <div>
+        <label for="nazivNeprimarnePolice">Naziv kreirane police:</label>
+        <input type="text" id="nazivKreiranePolice" v-model="nazivKreiranePolice" />
+      </div>
+      <div>
+        <label for="unosNaslova">Unesite naslov knjige:</label>
+        <input type="text" id="unosNaslova" v-model="unosNaslova" placeholder="Unesite naslov knjige" />
         <button @click="pretrazi">Pretraži</button>
       </div>
       <div v-if="knjige.length > 0">
@@ -16,19 +25,23 @@
               <th>Broj strana</th>
               <th>Opis</th>
               <th>Ocena</th>
-              <th>Zanr</th>
+              <th>Žanr</th>
+              <th>Akcije</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="knjiga in knjige" :key="knjiga.naslov">
               <td>{{ knjiga.naslov }}</td>
               <td>{{ knjiga.naslovnaFotografija }}</td>
-              <!-- <td><img :src="'src/assets/' + knjiga.naslovnaFotografija" alt="Naslovna fotografija" /></td> -->
+              <!-- <td><img :src="knjiga.naslovnaFotografija" alt="Naslovna fotografija" /></td> -->
               <td>{{ formatDate(knjiga.datumObjavljivanja) }}</td>
               <td>{{ knjiga.brojStrana }}</td>
               <td>{{ knjiga.opis }}</td>
               <td>{{ knjiga.ocena }}</td>
               <td>{{ knjiga.zanr.naziv }}</td>
+              <td>
+                <button @click="dodajKnjigu(knjiga)">Dodaj na policu</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -43,6 +56,8 @@
   export default {
     data() {
       return {
+        nazivPrimarnePolice: '',
+        nazivKreiranePolice: '',
         unosNaslova: '',
         knjige: [],
         pretragaIzvrsena: false,
@@ -66,6 +81,40 @@
         const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
         return new Date(date).toLocaleDateString('hr-HR', options);
       },
+      dodajKnjigu(knjiga) {
+  const { nazivPrimarnePolice, nazivKreiranePolice } = this;
+
+  fetch('http://localhost:9090/api/dodaj-knjigu-na-policu', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      nazivPrimarnePolice,
+      nazivKreiranePolice,
+      knjiga,
+    }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throw new Error('Greška prilikom dodavanja knjige na policu.');
+      }
+    })
+    .then((message) => {
+      // Prikazivanje poruke o uspešnom dodavanju knjige
+      console.log(message);
+      // Preusmeravanje na stranicu "police-prijavljenog-korisnika"
+      this.$router.push({ name: 'police-prijavljenog-korisnika' });
+    })
+    .catch((error) => {
+      // Prikazivanje greške
+      console.error(error);
+    });
+},
+
     },
   };
   </script>

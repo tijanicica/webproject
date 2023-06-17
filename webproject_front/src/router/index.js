@@ -8,6 +8,8 @@ import GetAllProfiliKorisnikaView from '../views/GetAllProfiliKorisnikaView.vue'
 import GetKnjigaByNaslovView from '../views/GetKnjigaByNaslovView.vue'
 import GetPolicePrijavljenogKorisnikaView from '../views/GetPolicePrijavljenogKorisnikaView.vue'
 import RegisterView from '../views/RegisterView.vue'
+import DodajNovuPolicuView from '../views/DodajNovuPolicuView.vue'
+import DodajKnjiguNaPolicuView from '../views/DodajKnjiguNaPolicuView.vue'
 
 
 const routes = [
@@ -56,8 +58,16 @@ const routes = [
     name: 'police-prijavljenog-korisnika',
     component: GetPolicePrijavljenogKorisnikaView,
   },
-  
-
+  {
+    path: '/api/dodaj-novu-policu',
+    name: 'dodaj-novu-policu',
+    component: DodajNovuPolicuView,
+  },
+  {
+    path: '/api/dodaj-knjigu-na-policu',
+    name: 'dodaj-knjigu-na-policu',
+    component: DodajKnjiguNaPolicuView,
+  }
   
 ]
 

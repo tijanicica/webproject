@@ -2,21 +2,41 @@
   <div>
     <h2>Moje Police</h2>
     <button @click="logout">Logout</button>
+   
+    <table class="button-table">
+      <tr>
+        <td>
+          <button class="btn" @click="dodajNovuPolicu">Dodaj novu policu</button>
+        </td>
+        <td>
+          <button class="btn" @click="dodajKnjiguNaPolicu">Dodaj knjigu na policu</button>
+        </td>
+        <td>
+          <button class="btn" @click="obrisiKnjiguSaPolice">Ukloni knjigu sa police</button>
+        </td>
+        <td>
+          <button class="btn" @click="azurirajProfil">Ažuriraj profil</button>
+        </td>
+      </tr>
+    </table>
+   
     <table>
       <thead>
         <tr>
           <th>Naziv</th>
           <th>Primarna</th>
           <th>Stavke Police</th>
+          <th></th> 
         </tr>
       </thead>
       <tbody>
-        <tr v-for="polica in police" :key="polica.naziv">
+        <tr v-for="polica in police" :key="polica.id">
           <td>{{ polica.naziv }}</td>
           <td>{{ polica.primarna }}</td>
           <td>
             <ul>
               <li v-for="stavka in polica.stavkaPolice" :key="stavka.recenzija.id">
+               
                 <div>
                   <strong>Recenzija:</strong>
                   <br />
@@ -41,10 +61,14 @@
                   <br />
                   Ocena: {{ stavka.knjiga.ocena }}
                   <br />
-                  Zanr: {{ stavka.knjiga.zanr.naziv }}
+                  Žanr: {{ stavka.knjiga.zanr.naziv }}
                 </div>
               </li>
             </ul>
+          </td>
+          <td>
+        
+            <button v-if="!polica.primarna" @click="obrisiPolicu(polica.id)">Obriši policu</button>
           </td>
         </tr>
       </tbody>
@@ -69,7 +93,7 @@ export default {
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'include' // Dodata opcija za slanje kredencijala
+        credentials: 'include'
       })
         .then(response => {
           if (response.ok) {
@@ -101,7 +125,45 @@ export default {
         .catch(error => {
           console.error(error);
         });
-    }
+    },
+
+    dodajNovuPolicu() {
+      window.location.href = "/api/dodaj-novu-policu";
+    },
+    dodajKnjiguNaPolicu() {
+      window.location.href = "/api/dodaj-knjigu-na-policu";
+    },
+    obrisiKnjiguSaPolice() {
+      window.location.href = "/api/obrisi-knjigu-sa-police/{knjigaId}/{policaId}";
+    },
+    azurirajProfil() {
+      window.location.href = "/api/azuriraj-profil/{korisnikId}";
+    },
+
+    obrisiPolicu(id) {
+  const numericId = Number(id); 
+  if (Number.isInteger(numericId) && numericId > 0) {
+    fetch(`http://localhost:9090/api/obrisi-policu/${numericId}`, {
+      method: 'DELETE',
+      credentials: 'include'
+    })
+      .then(response => {
+        if (response.ok) {
+          this.getPolicePrijavljenogKorisnika();
+          window.location.reload();
+        } else {
+          throw new Error('Failed to delete policu');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  } else {
+    console.error('Invalid id value. Expected a positive integer.');
+  }
+}
+
+
   }
 };
 </script>

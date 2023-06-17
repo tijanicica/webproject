@@ -54,15 +54,15 @@ public class PolicaRestController {
     }
 
     //
-    @PostMapping("api/dodaj-knjigu-na-policu")
+    @PostMapping("/api/dodaj-knjigu-na-policu")
     public ResponseEntity<String> dodajKnjiguNaPolicu(@RequestParam String nazivPrimarnePolice,
                                                       @RequestParam(required = false) String nazivKreiranePolice,
-                                                      @RequestBody Knjiga knjiga,
+                                                      @RequestBody KnjigaDto knjigaDto,
                                                       HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             try {
-                    policaService.dodajKnjiguNaPolicuBezRecenzije(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, knjiga);
+                    policaService.dodajKnjiguNaPolicuBezRecenzije(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, knjigaDto);
                     return ResponseEntity.ok("Knjiga uspešno dodata na policu (bez recenzije).");
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
