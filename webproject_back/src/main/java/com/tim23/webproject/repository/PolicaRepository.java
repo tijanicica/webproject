@@ -11,6 +11,7 @@ import java.util.List;
 public interface PolicaRepository extends JpaRepository<Polica, Long> {
 
     Polica findByStavkaPolice(StavkaPolice stavkaPolice);
+    Polica findByNaziv(String naziv);
 
 
 }

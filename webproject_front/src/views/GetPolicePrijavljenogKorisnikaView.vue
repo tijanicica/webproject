@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="polica in police" :key="polica.id">
+        <tr v-for="polica in police" :key="polica.naziv">
           <td>{{ polica.naziv }}</td>
           <td>{{ polica.primarna }}</td>
           <td>
@@ -68,7 +68,7 @@
           </td>
           <td>
         
-            <button v-if="!polica.primarna" @click="obrisiPolicu(polica.id)">Obriši policu</button>
+            <button v-if="!polica.primarna" @click="obrisiPolicu(polica.naziv)">Obriši policu</button>
           </td>
         </tr>
       </tbody>
@@ -140,30 +140,23 @@ export default {
       window.location.href = "/api/azuriraj-profil/{korisnikId}";
     },
 
-    obrisiPolicu(id) {
-  const numericId = Number(id); 
-  if (Number.isInteger(numericId) && numericId > 0) {
-    fetch(`http://localhost:9090/api/obrisi-policu/${numericId}`, {
-      method: 'DELETE',
-      credentials: 'include'
-    })
-      .then(response => {
-        if (response.ok) {
-          this.getPolicePrijavljenogKorisnika();
-          window.location.reload();
-        } else {
-          throw new Error('Failed to delete policu');
-        }
+    obrisiPolicu(naziv) {
+      fetch(`http://localhost:9090/api/obrisi-policu-naziv?nazivPolice=${naziv}`, {
+        method: 'DELETE',
+        credentials: 'include'
       })
-      .catch(error => {
-        console.error(error);
-      });
-  } else {
-    console.error('Invalid id value. Expected a positive integer.');
-  }
-}
-
-
+        .then(response => {
+          if (response.ok) {
+            this.getPolicePrijavljenogKorisnika();
+            //window.location.reload();
+          } else {
+            throw new Error('Failed to delete policu');
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }
 };
 </script>

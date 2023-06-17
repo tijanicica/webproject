@@ -2,9 +2,13 @@
     <div>
       <h2>Popis profila korisnika</h2>
       <div v-for="korisnik in korisnici" :key="korisnik.korisnickoIme" class="profil">
-        <div class="profilna-slika">
+        <!-- <div class="profilna-slika">
           <img :src="korisnik.profilnaSlika" alt="Profilna slika" />
-        </div>
+        </div>  -->
+        <div class="profilna-slika">
+          <p> {{korisnik.profilnaSlika}} </p>
+        </div>  
+
         <div class="informacije">
           <h3>{{ korisnik.ime }} {{ korisnik.prezime }}</h3>
           <p><strong>Korisničko ime:</strong> {{ korisnik.korisnickoIme }}</p>

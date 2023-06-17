@@ -2,6 +2,7 @@ package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
+import com.tim23.webproject.repository.PolicaRepository;
 import com.tim23.webproject.service.PolicaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 public class PolicaRestController {
 
     @Autowired
     private PolicaService policaService;
+    @Autowired
+    private PolicaRepository policaRepository;
 
     @GetMapping("api/police-prijavljenog-korisnika")
     public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
@@ -53,8 +57,26 @@ public class PolicaRestController {
         }
     }
 
+    @DeleteMapping("/api/obrisi-policu-naziv")
+    public ResponseEntity<String> obrisiPolicu(@RequestParam String nazivPolice, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            try {
+                Polica policaPoNazivu = policaRepository.findByNaziv(nazivPolice);
+                policaService.obrisiPolicu(prijavljeniKorisnik, policaPoNazivu.getId());
+                return ResponseEntity.ok("Polica uspešno obrisana.");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Korisnik nije prijavljen.", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
+
     //
-    @PostMapping("/api/dodaj-knjigu-na-policu")
+    /*@PostMapping("/api/dodaj-knjigu-na-policu")
     public ResponseEntity<String> dodajKnjiguNaPolicu(@RequestParam String nazivPrimarnePolice,
                                                       @RequestParam(required = false) String nazivKreiranePolice,
                                                       @RequestBody KnjigaDto knjigaDto,
@@ -64,6 +86,24 @@ public class PolicaRestController {
             try {
                     policaService.dodajKnjiguNaPolicuBezRecenzije(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, knjigaDto);
                     return ResponseEntity.ok("Knjiga uspešno dodata na policu (bez recenzije).");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Korisnik nije prijavljen.", HttpStatus.UNAUTHORIZED);
+        }
+    }*/
+
+    @PostMapping("/api/dodaj-knjigu-na-policu")
+    public ResponseEntity<String> dodajKnjiguNaPolicu(@RequestParam String nazivPrimarnePolice,
+                                                      @RequestParam(required = false) String nazivKreiranePolice,
+                                                      @RequestParam String nazivKnjige,
+                                                      HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            try {
+                policaService.dodajKnjiguNaPolicuBezRecenzije(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, nazivKnjige);
+                return ResponseEntity.ok("Knjiga uspešno dodata na policu (bez recenzije).");
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             }
