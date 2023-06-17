@@ -110,6 +110,7 @@ public class KorisnikRestController {
         }
     }
 
+    /*
     @PutMapping("api/azuriraj-profil/{korisnikId}")
     public ResponseEntity<String> azurirajProfil(
             @PathVariable("korisnikId") Long korisnikId,
@@ -126,6 +127,32 @@ public class KorisnikRestController {
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             try {
                 korisnikService.azurirajProfil(korisnikId, ime, prezime, datumRodjenja, profilnaSlika, opis, mejlAdresa, novaLozinka, trenutnaLozinka);
+                return ResponseEntity.ok("Uspesno ste azurirali vas profil.");
+            } catch (EntityNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Niste citalac!", HttpStatus.BAD_REQUEST);
+        }
+    }
+*/
+    @PutMapping("api/azuriraj-profil")
+    public ResponseEntity<String> azurirajProfil(
+            @RequestParam(required = false) String ime,
+            @RequestParam(required = false) String prezime,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate datumRodjenja,
+            @RequestParam(required = false) String profilnaSlika,
+            @RequestParam(required = false) String opis,
+            @RequestParam(required = false) String mejlAdresa,
+            @RequestParam(required = false) String novaLozinka,
+            @RequestParam(required = false) String trenutnaLozinka,
+            HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            try {
+                korisnikService.azurirajProfil(prijavljeniKorisnik, ime, prezime, datumRodjenja, profilnaSlika, opis, mejlAdresa, novaLozinka, trenutnaLozinka);
                 return ResponseEntity.ok("Uspesno ste azurirali vas profil.");
             } catch (EntityNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

@@ -360,7 +360,7 @@ public class KorisnikService {
 
 
 
-
+/*
     public void azurirajProfil(Long korisnikId, String ime, String prezime, LocalDate datumRodjenja, String profilnaSlika,
                                String opis, String mejlAdresa, String novaLozinka, String trenutnaLozinka) {
         Korisnik korisnik = korisnikRepository.findById(korisnikId)
@@ -382,5 +382,26 @@ public class KorisnikService {
 
         korisnikRepository.save(korisnik);
     }
+*/
+public void azurirajProfil(Korisnik korisnikB, String ime, String prezime, LocalDate datumRodjenja, String profilnaSlika,
+                           String opis, String mejlAdresa, String novaLozinka, String trenutnaLozinka) {
+    Korisnik korisnik = korisnikRepository.findById(korisnikB.getId())
+            .orElseThrow(() -> new EntityNotFoundException("Korisnik sa ID-jem " + korisnikB.getId() + " nije pronađen."));
 
+    if (trenutnaLozinka != null && novaLozinka != null) {
+        if (!trenutnaLozinka.equals(korisnik.getLozinka())) {
+            throw new IllegalArgumentException("Pogrešna stara lozinka");
+        }
+        korisnik.setLozinka(novaLozinka);
+    }
+
+    korisnik.setIme(ime != null ? ime : korisnik.getIme());
+    korisnik.setPrezime(prezime != null ? prezime : korisnik.getPrezime());
+    korisnik.setDatumRodjenja(datumRodjenja != null ? datumRodjenja : korisnik.getDatumRodjenja());
+    korisnik.setProfilnaSlika(profilnaSlika != null ? profilnaSlika : korisnik.getProfilnaSlika());
+    korisnik.setOpis(opis != null ? opis : korisnik.getOpis());
+    korisnik.setMejlAdresa(mejlAdresa != null ? mejlAdresa : korisnik.getMejlAdresa());
+
+    korisnikRepository.save(korisnik);
+}
 }

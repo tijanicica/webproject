@@ -134,10 +134,10 @@ export default {
       window.location.href = "/api/dodaj-knjigu-na-policu";
     },
     obrisiKnjiguSaPolice() {
-      window.location.href = "/api/obrisi-knjigu-sa-police/{knjigaId}/{policaId}";
+      this.$router.push({ name: 'obrisi-knjigu-sa-police' });
     },
     azurirajProfil() {
-      window.location.href = "/api/azuriraj-profil/{korisnikId}";
+      this.$router.push({ name: 'azuriraj-profil' });
     },
 
     obrisiPolicu(naziv) {

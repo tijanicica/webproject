@@ -10,6 +10,8 @@ import GetPolicePrijavljenogKorisnikaView from '../views/GetPolicePrijavljenogKo
 import RegisterView from '../views/RegisterView.vue'
 import DodajNovuPolicuView from '../views/DodajNovuPolicuView.vue'
 import DodajKnjiguNaPolicuView from '../views/DodajKnjiguNaPolicuView.vue'
+import ObrisiKnjiguSaPoliceView from '../views/ObrisiKnjiguSaPoliceView.vue'
+import AzurirajProfilView from '../views/AzurirajProfilView.vue'
 
 
 const routes = [
@@ -67,6 +69,16 @@ const routes = [
     path: '/api/dodaj-knjigu-na-policu',
     name: 'dodaj-knjigu-na-policu',
     component: DodajKnjiguNaPolicuView,
+  },
+  {
+    path: '/api/obrisi-knjigu-sa-police',
+    name: 'obrisi-knjigu-sa-police',
+    component: ObrisiKnjiguSaPoliceView,
+  },
+  {
+    path: '/api/azuriraj-profil',
+    name: 'azuriraj-profil',
+    component: AzurirajProfilView,
   }
   
 ]

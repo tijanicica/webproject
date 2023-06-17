@@ -2,7 +2,9 @@ package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
+import com.tim23.webproject.repository.KnjigaRepository;
 import com.tim23.webproject.repository.PolicaRepository;
+import com.tim23.webproject.service.KnjigaService;
 import com.tim23.webproject.service.PolicaService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ public class PolicaRestController {
     private PolicaService policaService;
     @Autowired
     private PolicaRepository policaRepository;
+    @Autowired
+    private KnjigaRepository knjigaRepository;
 
     @GetMapping("api/police-prijavljenog-korisnika")
     public ResponseEntity<List<PolicaDto>> getPolicePrijavljenogKorisnika(HttpSession session) {
@@ -111,12 +115,25 @@ public class PolicaRestController {
             return new ResponseEntity<>("Korisnik nije prijavljen.", HttpStatus.UNAUTHORIZED);
         }
     }
-
+    /*
     @DeleteMapping("api/obrisi-knjigu-sa-police/{knjigaId}/{policaId}")
     public ResponseEntity<String> ukloniKnjiguSaPolice(@PathVariable(name = "knjigaId") Long knjigaId, @PathVariable(name = "policaId") Long policaId,  HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             policaService.obrisiKnjiguSaPolice(knjigaId, policaId, prijavljeniKorisnik);
+            return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
+        } else {
+            return new ResponseEntity<>("Niste citalac ili autor!", HttpStatus.BAD_REQUEST);
+        }
+    }
+    */
+    @DeleteMapping("api/obrisi-knjigu-sa-police")
+    public ResponseEntity<String> ukloniKnjiguSaPolice(@RequestParam String nazivKnjige, @RequestParam String nazivPolice,  HttpSession session) throws Exception {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            Knjiga knjigaBaza = knjigaRepository.findByNaslovKnjige(nazivKnjige);
+            Polica policaBaza = policaRepository.findByNaziv(nazivPolice);
+            policaService.obrisiKnjiguSaPolice(knjigaBaza.getId(), policaBaza.getId(), prijavljeniKorisnik);
             return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
         } else {
             return new ResponseEntity<>("Niste citalac ili autor!", HttpStatus.BAD_REQUEST);
