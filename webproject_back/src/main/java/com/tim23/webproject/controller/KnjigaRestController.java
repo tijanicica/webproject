@@ -99,4 +99,14 @@ public class KnjigaRestController {
         }
 
     }
+    @GetMapping("/api/getUserRole")
+    public ResponseEntity<String> getUserRole(HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null){
+            Uloga userRole = prijavljeniKorisnik.getUloga();
+            return ResponseEntity.ok(userRole.toString());
+        } else {
+            return new ResponseEntity<>("Greska prilikom dobavljanja uloge!", HttpStatus.FORBIDDEN);
+        }
+    }
 }

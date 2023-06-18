@@ -49,6 +49,8 @@ public class RecenzijaRestController {
         }
     }
 
+
+
  /*   @PostMapping("/api/dodaj-recenziju/{knjigaId}")
     public ResponseEntity<String> dodajRecenziju(@PathVariable(name = "knjigaId") Long knjigaId,  @RequestBody RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -64,12 +66,12 @@ public class RecenzijaRestController {
     public ResponseEntity<String> dodajRecenziju(@RequestParam String nazivKnjige, @RequestBody RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
-            Knjiga knjigaBaza = knjigaRepository.findByNaslovKnjige(nazivKnjige);
+            List<Knjiga> knjigeBaza = knjigaRepository.findByNaslov(nazivKnjige);
 
-            if (knjigaBaza == null) {
+            if (knjigeBaza.isEmpty()) {
                 return new ResponseEntity<>("Knjiga nije pronađena!", HttpStatus.NOT_FOUND);
             }
-
+            Knjiga knjigaBaza = knjigeBaza.get(0);
             recenzijaService.dodajNovuRecenziju(knjigaBaza.getId(), recenzijaBezKorisnikaDto, prijavljeniKorisnik);
             return ResponseEntity.ok("Uspesno dodata recenzija.");
         } else {

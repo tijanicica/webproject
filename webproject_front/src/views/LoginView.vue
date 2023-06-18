@@ -6,10 +6,7 @@
       <input type="password" v-model="password" placeholder="Password" />
       <button @click="login">Login</button>
     </div>
-    <div v-if="isLoggedIn">
-      <router-link :to="{ name: 'police-prijavljenog-korisnika' }">Go to Profile</router-link>
-    </div>
-    <div v-else-if="loginError">
+    <div v-if="loginError">
       <p>{{ loginError }}</p>
     </div>
   </div>
@@ -21,7 +18,6 @@ export default {
     return {
       email: '',
       password: '',
-      isLoggedIn: false,
       loginError: ''
     };
   },
@@ -38,7 +34,7 @@ export default {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(loginDto),
-        credentials: 'include' // Dodata opcija za slanje kredencijala
+        credentials: 'include'
       })
         .then(response => {
           if (response.ok) {
@@ -48,14 +44,40 @@ export default {
           }
         })
         .then(data => {
-          // Save the session token in local storage
           localStorage.setItem('sessionToken', data.token);
-
-          this.isLoggedIn = true;
-          this.$router.push({ name: 'police-prijavljenog-korisnika' });
+          this.redirectToProfile();
         })
         .catch(error => {
           this.loginError = 'Failed to login. Please try again.';
+          console.error(error);
+        });
+    },
+    redirectToProfile() {
+      // Get the logged-in user's role from the server
+      fetch('http://localhost:9090/api/getUserRole', {
+        method: 'GET',
+        credentials: 'include'
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.text(); // Read the response as text
+          } else {
+            throw new Error('Failed to get user role');
+          }
+        })
+        .then(data => {
+          const role = data.trim(); // Remove leading/trailing whitespace from the response
+          if (role === 'CITALAC') {
+            this.$router.push({ name: 'police-prijavljenog-korisnika' });
+          } else if (role === 'AUTOR') {
+            this.$router.push({ name: 'autor-profil' });
+          } else if (role === 'ADMINISTRATOR') {
+            this.$router.push({ name: 'admin-profile' });
+          } else {
+            throw new Error('Unknown user role');
+          }
+        })
+        .catch(error => {
           console.error(error);
         });
     }

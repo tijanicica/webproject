@@ -13,7 +13,14 @@ import DodajKnjiguNaPolicuView from '../views/DodajKnjiguNaPolicuView.vue'
 import ObrisiKnjiguSaPoliceView from '../views/ObrisiKnjiguSaPoliceView.vue'
 import AzurirajProfilView from '../views/AzurirajProfilView.vue'
 import DodajRecenzijuView from '../views/DodajRecenzijuView.vue'
-
+import AutorView from '../views/AutorView.vue'
+import AutorDodajNovuPolicuView from '../views/AutorDodajNovuPolicuView.vue'
+import AutorDodajKnjiguNaPolicuView from '../views/AutorDodajKnjiguNaPolicuView.vue'
+import AutorObrisiKnjiguSaPoliceView from '../views/AutorObrisiKnjiguSaPoliceView.vue'
+import AutorAzurirajProfilView from '../views/AutorAzurirajProfilView.vue'
+import AutorDodajKnjiguUSpisakKnjigaView from '../views/AutorDodajKnjiguUSpisakKnjigaView.vue'
+import AutorAzurirajKnjiguView from '../views/AutorAzurirajKnjiguView.vue'
+import AzurirajRecenzijuView from '../views/AzurirajRecenzijuView.vue'
 
 
 const routes = [
@@ -86,6 +93,46 @@ const routes = [
     path: '/dodaj-recenziju',
     name: 'dodaj-recenziju',
     component: DodajRecenzijuView,
+  },
+  {
+    path: '/autor-profil',
+    name: 'autor-profil',
+    component: AutorView,
+  },
+  {
+    path: '/autor-dodaj-novu-policu',
+    name: 'autor-dodaj-novu-policu',
+    component: AutorDodajNovuPolicuView,
+  },
+  {
+    path: '/autor-dodaj-knjigu-na-policu',
+    name: 'autor-dodaj-knjigu-na-policu',
+    component: AutorDodajKnjiguNaPolicuView,
+  },
+  {
+    path: '/autor-obrisi-knjigu-sa-police',
+    name: 'autor-obrisi-knjigu-sa-police',
+    component: AutorObrisiKnjiguSaPoliceView,
+  },
+  {
+    path: '/autor-azuriraj-profil',
+    name: 'autor-azuriraj-profil',
+    component: AutorAzurirajProfilView,
+  },
+  {
+    path: '/autor-dodaj-knjigu-u-spisak-knjiga',
+    name: 'autor-dodaj-knjigu-u-spisak-knjiga',
+    component: AutorDodajKnjiguUSpisakKnjigaView,
+  },
+  {
+    path: '/autor-azuriraj-knjigu',
+    name: 'autor-azuriraj-knjigu',
+    component: AutorAzurirajKnjiguView,
+  },
+  {
+    path: '/azuriraj-recenziju/:id',
+    name: 'azuriraj-recenziju',
+    component: AzurirajRecenzijuView,
   }
   
 ]

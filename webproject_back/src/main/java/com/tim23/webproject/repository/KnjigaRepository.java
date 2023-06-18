@@ -21,7 +21,6 @@ public interface KnjigaRepository extends JpaRepository<Knjiga, Long> {
 
     List<Knjiga> findByOcena(int ocena);
 
-
     @Query("SELECT k FROM Knjiga k WHERE k.naslov = :nazivKnjige")
     Knjiga findByNaslovKnjige(@Param("nazivKnjige") String nazivKnjige);
 }

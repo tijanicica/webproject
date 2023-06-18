@@ -2,7 +2,7 @@
   <div>
     <h2>Moje Police</h2>
     <button @click="logout">Logout</button>
-   
+
     <table class="button-table">
       <tr>
         <td>
@@ -19,14 +19,14 @@
         </td>
       </tr>
     </table>
-   
+
     <table>
       <thead>
         <tr>
           <th>Naziv</th>
           <th>Primarna</th>
           <th>Stavke Police</th>
-          <th></th> 
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -44,6 +44,8 @@
                   Tekst: {{ stavka.recenzija.tekst }}
                   <br />
                   Datum recenzije: {{ stavka.recenzija.datumRecenzije }}
+                  <br />
+                  <button @click="azurirajRecenziju(stavka.recenzija.id)">Ažuriraj recenziju</button>
                 </div>
                 <div>
                   <strong>Knjiga:</strong>
@@ -137,6 +139,9 @@ export default {
     azurirajProfil() {
       this.$router.push({ name: 'azuriraj-profil' });
     },
+    azurirajRecenziju(recenzijaId) {
+      this.$router.push({ name: 'azuriraj-recenziju', params: { id: recenzijaId } });
+    },
 
     obrisiPolicu(naziv) {
       fetch(`http://localhost:9090/api/obrisi-policu-naziv?nazivPolice=${naziv}`, {
@@ -154,6 +159,10 @@ export default {
         .catch(error => {
           console.error(error);
         });
+    },
+
+    azurirajRecenziju(recenzijaId) {
+      this.$router.push({ name: 'azuriraj-recenziju', params: { recenzijaId } });
     }
   }
 };
