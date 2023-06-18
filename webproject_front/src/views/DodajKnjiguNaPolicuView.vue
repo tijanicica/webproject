@@ -31,39 +31,40 @@ export default {
     };
   },
   methods: {
-    dodajKnjigu(nazivPrimarnePolice, nazivKreiranePolice, nazivKnjige) {
-  this.obavestenje = ''; // Resetuj obaveštenje
-  const data = {
-    nazivPrimarnePolice: this.nazivPrimarnePolice,
-    nazivKreiranePolice: this.nazivKreiranePolice,
-    nazivKnjige: this.nazivKnjige
-  };
+    dodajKnjigu() {
+      this.obavestenje = ''; // Resetuj obaveštenje
+      const data = {
+        nazivPrimarnePolice: this.nazivPrimarnePolice,
+        nazivKreiranePolice: this.nazivKreiranePolice,
+        nazivKnjige: this.nazivKnjige
+      };
 
-
-  //`http://localhost:9090/api/obrisi-policu-naziv?nazivPolice=${naziv}`
-  //http://localhost:9090/api/dodaj-knjigu-na-policu?nazivPrimarnePolice=Read&nazivKreiranePolice=Tijanina%20polica&nazivKnjige=Mali%20Princ
-  fetch('http://localhost:9090/api/dodaj-knjigu-na-policu?nazivPrimarnePolice=${encodeURIComponent(nazivPrimarnePolice)}&nazivKreiranePolice=${encodeURIComponent(nazivKreiranePolice)}&nazivKnjige=${encodeURIComponent(nazivKnjige)}', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    //body: JSON.stringify(data),
-    credentials: 'include' // Uključuje slanje kredencijala (npr. kolačića) u zahtevu
-  })
-    .then(response => {
-      if (response.ok) {
-        // Uspešan odgovor od servera
-        this.$router.push({ name: 'police-prijavljenog-korisnika' });
-      } else {
-        // Neuspešan odgovor od servera
-        throw new Error('Neuspešno dodavanje knjige na policu.');
-      }
-    })
-    .catch(error => {
-      this.obavestenje = error.message;
-    });
-}
-
+      fetch(`http://localhost:9090/api/dodaj-knjigu-na-policu?nazivPrimarnePolice=${encodeURIComponent(this.nazivPrimarnePolice)}&nazivKreiranePolice=${encodeURIComponent(this.nazivKreiranePolice)}&nazivKnjige=${encodeURIComponent(this.nazivKnjige)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+        credentials: 'include' // Uključuje slanje kredencijala (npr. kolačića) u zahtevu
+      })
+        .then(response => {
+          if (response.ok) {
+            // Uspešan odgovor od servera
+            if (this.nazivPrimarnePolice === 'Read') {
+              this.$router.push({ name: 'dodaj-recenziju' });
+            } else {
+              this.$router.push({ name: 'police-prijavljenog-korisnika' });
+            }
+          } else {
+            // Neuspešan odgovor od servera
+            throw new Error('Neuspešno dodavanje knjige na policu.');
+          }
+        })
+        .catch(error => {
+          this.obavestenje = error.message;
+        });
+    }
   }
 };
 </script>
+

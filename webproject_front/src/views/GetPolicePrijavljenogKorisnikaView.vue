@@ -35,9 +35,8 @@
           <td>{{ polica.primarna }}</td>
           <td>
             <ul>
-              <li v-for="stavka in polica.stavkaPolice" :key="stavka.recenzija.id">
-               
-                <div>
+              <li v-for="stavka in polica.stavkaPolice" :key="stavka.recenzija ? stavka.recenzija.id : null">
+                <div v-if="stavka.recenzija">
                   <strong>Recenzija:</strong>
                   <br />
                   Ocena: {{ stavka.recenzija.ocena }}
@@ -67,7 +66,6 @@
             </ul>
           </td>
           <td>
-        
             <button v-if="!polica.primarna" @click="obrisiPolicu(polica.naziv)">Obriši policu</button>
           </td>
         </tr>
@@ -128,10 +126,10 @@ export default {
     },
 
     dodajNovuPolicu() {
-      window.location.href = "/api/dodaj-novu-policu";
+      window.location.href = "/dodaj-novu-policu";
     },
     dodajKnjiguNaPolicu() {
-      window.location.href = "/api/dodaj-knjigu-na-policu";
+      window.location.href = "/dodaj-knjigu-na-policu";
     },
     obrisiKnjiguSaPolice() {
       this.$router.push({ name: 'obrisi-knjigu-sa-police' });

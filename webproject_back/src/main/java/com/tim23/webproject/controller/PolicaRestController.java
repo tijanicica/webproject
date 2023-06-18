@@ -128,15 +128,29 @@ public class PolicaRestController {
     }
     */
     @DeleteMapping("api/obrisi-knjigu-sa-police")
-    public ResponseEntity<String> ukloniKnjiguSaPolice(@RequestParam String nazivKnjige, @RequestParam String nazivPolice,  HttpSession session) throws Exception {
+    public ResponseEntity<String> ukloniKnjiguSaPolice(@RequestParam String nazivKnjige, @RequestParam String nazivPolice, HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
-            Knjiga knjigaBaza = knjigaRepository.findByNaslovKnjige(nazivKnjige);
+            List<Knjiga> knjigeBaza = knjigaRepository.findByNaslov(nazivKnjige);
+            if (knjigeBaza.isEmpty()) {
+                // Handle the case when no book with the given title is found
+                return new ResponseEntity<>("Nema knjige sa datim naslovom.", HttpStatus.NOT_FOUND);
+            } else if (knjigeBaza.size() > 1) {
+                // Handle the case when multiple books with the given title are found
+                return new ResponseEntity<>("Pronađeno je više knjiga sa istim naslovom.", HttpStatus.CONFLICT);
+            }
+
+            Knjiga knjigaBaza = knjigeBaza.get(0);
             Polica policaBaza = policaRepository.findByNaziv(nazivPolice);
-            policaService.obrisiKnjiguSaPolice(knjigaBaza.getId(), policaBaza.getId(), prijavljeniKorisnik);
-            return ResponseEntity.ok("Knjiga je uspesno uklonjena sa police.");
+            if (policaBaza != null) {
+                policaService.obrisiKnjiguSaPolice(knjigaBaza.getId(), policaBaza.getId(), prijavljeniKorisnik);
+                return ResponseEntity.ok("Knjiga je uspešno uklonjena sa police.");
+            } else {
+                return new ResponseEntity<>("Policu sa datim nazivom nije moguće pronaći.", HttpStatus.NOT_FOUND);
+            }
         } else {
-            return new ResponseEntity<>("Niste citalac ili autor!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Niste čitalac ili autor!", HttpStatus.BAD_REQUEST);
         }
     }
+
 }

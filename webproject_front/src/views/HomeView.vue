@@ -22,8 +22,8 @@
         </tr>
       </table>
       <div class="login-register-container">
-        <a type="button" href="/api/login" class="btn">Login</a>
-        <a type="button" href="/api/register" class="btn">Register</a>
+        <a type="button" href="/login" class="btn">Login</a>
+        <a type="button" href="/register" class="btn">Register</a>
       
       </div>
     </div>
@@ -64,19 +64,19 @@ export default {
   name: 'HomeView',
   methods: {
     pregledajSveKnjige() {
-    window.location.href = "/api/knjige";
+    window.location.href = "/knjige";
   },
   pregledajSveZanrove() {
-    window.location.href = "/api/zanrovi";
+    window.location.href = "/zanrovi";
   },
   pregledajSveRecenzije() {
-    window.location.href = "/api/recenzije";
+    window.location.href = "/recenzije";
   },
   pregledajProfileKorisnika() {
-    window.location.href = "/api/profili-korisnika";
+    window.location.href = "/profili-korisnika";
   },
   pretraziKnjigu() {
-    window.location.href = "/api/pretraga/knjiga/naslov/{naslov}";
+    window.location.href = "/pretraga/knjiga/naslov/{naslov}";
   },
   }
 };

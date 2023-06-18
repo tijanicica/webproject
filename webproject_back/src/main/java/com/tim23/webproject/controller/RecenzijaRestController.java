@@ -2,8 +2,10 @@ package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
+import com.tim23.webproject.entity.Knjiga;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
+import com.tim23.webproject.repository.KnjigaRepository;
 import com.tim23.webproject.service.RecenzijaService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +21,9 @@ public class RecenzijaRestController {
 
     @Autowired
     private RecenzijaService recenzijaService;
+
+    @Autowired
+    private KnjigaRepository knjigaRepository;
 
     @GetMapping("api/recenzije")
     public ResponseEntity<List<RecenzijaBezKorisnikaDto>> getRecenzije() {
@@ -44,7 +49,7 @@ public class RecenzijaRestController {
         }
     }
 
-    @PostMapping("/api/dodaj-recenziju/{knjigaId}")
+ /*   @PostMapping("/api/dodaj-recenziju/{knjigaId}")
     public ResponseEntity<String> dodajRecenziju(@PathVariable(name = "knjigaId") Long knjigaId,  @RequestBody RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))){
@@ -53,7 +58,26 @@ public class RecenzijaRestController {
         } else {
             return new ResponseEntity<>("Niste citalac ili autor!", HttpStatus.FORBIDDEN);
         }
+    }*/
+
+    @PostMapping("/api/dodaj-recenziju")
+    public ResponseEntity<String> dodajRecenziju(@RequestParam String nazivKnjige, @RequestBody RecenzijaBezKorisnikaDto recenzijaBezKorisnikaDto, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            Knjiga knjigaBaza = knjigaRepository.findByNaslovKnjige(nazivKnjige);
+
+            if (knjigaBaza == null) {
+                return new ResponseEntity<>("Knjiga nije pronađena!", HttpStatus.NOT_FOUND);
+            }
+
+            recenzijaService.dodajNovuRecenziju(knjigaBaza.getId(), recenzijaBezKorisnikaDto, prijavljeniKorisnik);
+            return ResponseEntity.ok("Uspesno dodata recenzija.");
+        } else {
+            return new ResponseEntity<>("Niste citalac ili autor!", HttpStatus.FORBIDDEN);
+        }
     }
+
+
 
 
 }

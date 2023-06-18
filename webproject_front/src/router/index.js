@@ -12,6 +12,8 @@ import DodajNovuPolicuView from '../views/DodajNovuPolicuView.vue'
 import DodajKnjiguNaPolicuView from '../views/DodajKnjiguNaPolicuView.vue'
 import ObrisiKnjiguSaPoliceView from '../views/ObrisiKnjiguSaPoliceView.vue'
 import AzurirajProfilView from '../views/AzurirajProfilView.vue'
+import DodajRecenzijuView from '../views/DodajRecenzijuView.vue'
+
 
 
 const routes = [
@@ -21,64 +23,69 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/api/login',
+    path: '/login',
     name: 'login',
     component: LoginView
   },
   {
-    path: '/api/register',
+    path: '/register',
     name: 'register',
     component: RegisterView
   },
   {
-    path: '/api/knjige',
+    path: '/knjige',
     name: 'knjige',
     component: GetAllKnjigeView
   },
   {
-    path: '/api/zanrovi',
+    path: '/zanrovi',
     name: 'zanrovi',
     component: GetAllZanroviView
   },
   {
-    path: '/api/recenzije',
+    path: '/recenzije',
     name: 'recenzije',
     component: GetAllRecenzijeView
   },
   {
-    path: '/api/profili-korisnika',
+    path: '/profili-korisnika',
     name: 'profili-korisnika',
     component: GetAllProfiliKorisnikaView
   },
   {
-    path: '/api/pretraga/knjiga/naslov/:naslov',
+    path: '/pretraga/knjiga/naslov/:naslov',
     name: 'GetKnjigaByNaslov',
     component: GetKnjigaByNaslovView,
   },
   {
-    path: '/api/police-prijavljenog-korisnika',
+    path: '/police-prijavljenog-korisnika',
     name: 'police-prijavljenog-korisnika',
     component: GetPolicePrijavljenogKorisnikaView,
   },
   {
-    path: '/api/dodaj-novu-policu',
+    path: '/dodaj-novu-policu',
     name: 'dodaj-novu-policu',
     component: DodajNovuPolicuView,
   },
   {
-    path: '/api/dodaj-knjigu-na-policu',
+    path: '/dodaj-knjigu-na-policu',
     name: 'dodaj-knjigu-na-policu',
     component: DodajKnjiguNaPolicuView,
   },
   {
-    path: '/api/obrisi-knjigu-sa-police',
+    path: '/obrisi-knjigu-sa-police',
     name: 'obrisi-knjigu-sa-police',
     component: ObrisiKnjiguSaPoliceView,
   },
   {
-    path: '/api/azuriraj-profil',
+    path: '/azuriraj-profil',
     name: 'azuriraj-profil',
     component: AzurirajProfilView,
+  },
+  {
+    path: '/dodaj-recenziju',
+    name: 'dodaj-recenziju',
+    component: DodajRecenzijuView,
   }
   
 ]
