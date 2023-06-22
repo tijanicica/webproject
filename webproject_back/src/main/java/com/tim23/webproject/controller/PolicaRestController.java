@@ -153,4 +153,21 @@ public class PolicaRestController {
         }
     }
 
+ /*   @PostMapping("/api/dodaj-knjigu-na-policu")
+    public ResponseEntity<String> dodajKnjiguNaKreiranuPolicu(@RequestParam(required = false) String nazivKreiranePolice,
+                                                              @RequestParam String nazivKnjige,
+                                                      HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            try {
+                policaService.dodajKnjiguNaPolicuBezRecenzije(prijavljeniKorisnik, nazivPrimarnePolice, nazivKreiranePolice, nazivKnjige);
+                return ResponseEntity.ok("Knjiga uspešno dodata na policu (bez recenzije).");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Korisnik nije prijavljen.", HttpStatus.UNAUTHORIZED);
+        }
+    }*/
+
 }

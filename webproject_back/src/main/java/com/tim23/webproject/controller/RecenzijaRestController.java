@@ -4,8 +4,10 @@ import com.tim23.webproject.dto.RecenzijaBezKorisnikaDto;
 import com.tim23.webproject.dto.RecenzijaDto;
 import com.tim23.webproject.entity.Knjiga;
 import com.tim23.webproject.entity.Korisnik;
+import com.tim23.webproject.entity.Recenzija;
 import com.tim23.webproject.entity.Uloga;
 import com.tim23.webproject.repository.KnjigaRepository;
+import com.tim23.webproject.repository.RecenzijaRepository;
 import com.tim23.webproject.service.RecenzijaService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +27,9 @@ public class RecenzijaRestController {
     @Autowired
     private KnjigaRepository knjigaRepository;
 
+    @Autowired
+    private RecenzijaRepository recenzijaRepository;
+
     @GetMapping("api/recenzije")
     public ResponseEntity<List<RecenzijaBezKorisnikaDto>> getRecenzije() {
         List<RecenzijaBezKorisnikaDto> recenzije = recenzijaService.getAllRecenzije();
@@ -32,12 +37,31 @@ public class RecenzijaRestController {
     }
     //dodaj recenziju id knjige kojoj dodaje
 
-    @PutMapping("api/azuriraj-recenziju/{id}")
+   /* @PutMapping("api/azuriraj-recenziju/{id}")
     public ResponseEntity<String> azurirajRecenziju(@PathVariable Long id, @RequestBody RecenzijaDto recenzijaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
             try {
                 recenzijaService.azurirajRecenziju(id, recenzijaDto, prijavljeniKorisnik);
+                return ResponseEntity.ok("Uspesno ste azurirali recenziju.");
+            } catch (EntityNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            }
+        } else {
+            return new ResponseEntity<>("Niste citalac!", HttpStatus.BAD_REQUEST);
+        }
+    }*/
+
+    @PutMapping("api/azuriraj-recenziju")
+    public ResponseEntity<String> azurirajRecenziju(@RequestParam String tekst, @RequestBody RecenzijaBezKorisnikaDto recenzijaDto, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            try {
+                Recenzija recenzijaBaza = recenzijaRepository.findByTekst(tekst);
+                recenzijaService.azurirajRecenziju(recenzijaBaza.getId(), recenzijaDto, prijavljeniKorisnik);
                 return ResponseEntity.ok("Uspesno ste azurirali recenziju.");
             } catch (EntityNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

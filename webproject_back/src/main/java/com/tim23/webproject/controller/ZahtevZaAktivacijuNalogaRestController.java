@@ -3,9 +3,12 @@ package com.tim23.webproject.controller;
 import com.tim23.webproject.dto.AutorDto;
 import com.tim23.webproject.dto.KnjigaDto;
 import com.tim23.webproject.dto.ZahtevZaAktivacijuNalogaAutoraDto;
+import com.tim23.webproject.entity.Autor;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
 import com.tim23.webproject.entity.ZahtevZaAktivacijuNalogaAutora;
+import com.tim23.webproject.repository.AutorRepository;
+import com.tim23.webproject.repository.KorisnikRepository;
 import com.tim23.webproject.repository.ZahtevZaAktivacijuNalogaAutoraRepository;
 import com.tim23.webproject.service.EmailService;
 import com.tim23.webproject.service.KorisnikService;
@@ -29,7 +32,13 @@ public class ZahtevZaAktivacijuNalogaRestController {
     @Autowired
     private ZahtevZaAktivacijuNalogaAutoraRepository zahtevZaAktivacijuNalogaAutoraRepository;
 
-    @PostMapping("api/zahtev-za-autora/{id}")
+    @Autowired
+    private AutorRepository autorRepository;
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+
+   /* @PostMapping("api/zahtev-za-autora/{id}")
     public ResponseEntity<String> podnesiZahtevZaAktivacijuAutoraAutora(@PathVariable("id") Long autorId,@RequestBody ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {
         String mejlAdresa = zahtevZaAktivacijuNalogaAutoraDto.getEmail();
         if (!korisnikService.imaUloguAutora(mejlAdresa)) {
@@ -37,6 +46,21 @@ public class ZahtevZaAktivacijuNalogaRestController {
         }
         try {
             zahtevZaAktivacijuNalogaService.podnesiZahtevZaAktivacijuAutora(autorId,zahtevZaAktivacijuNalogaAutoraDto);
+            return ResponseEntity.ok("Uspesno ste podneli zahtev.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }*/
+
+    @PostMapping("api/zahtev-za-autora")
+    public ResponseEntity<String> podnesiZahtevZaAktivacijuAutoraAutora(@RequestBody ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {
+        String mejlAdresa = zahtevZaAktivacijuNalogaAutoraDto.getEmail();
+        Autor autor = autorRepository.findByMejlAdresa(mejlAdresa);
+        if (!korisnikService.imaUloguAutora(mejlAdresa)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Nemate pristup zahtevu za aktivaciju autora.");
+        }
+        try {
+            zahtevZaAktivacijuNalogaService.podnesiZahtevZaAktivacijuAutora(autor.getId(), zahtevZaAktivacijuNalogaAutoraDto);
             return ResponseEntity.ok("Uspesno ste podneli zahtev.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

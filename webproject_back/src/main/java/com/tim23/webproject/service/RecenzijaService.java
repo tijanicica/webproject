@@ -42,7 +42,26 @@ public class RecenzijaService {
 
     }
 
-    public void azurirajRecenziju(Long id, RecenzijaDto recenzijaDto, Korisnik korisnik) {
+    /*public void azurirajRecenziju(Long id, RecenzijaDto recenzijaDto, Korisnik korisnik) {
+        Recenzija recenzija = recenzijaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Recenzija sa datim ID-om nije pronađena."));
+
+        recenzija.setOcena(recenzijaDto.getOcena());
+        recenzija.setTekst(recenzijaDto.getTekst());
+        recenzija.setDatumRecenzije(recenzijaDto.getDatumRecenzije());
+
+        recenzijaRepository.save(recenzija);
+
+
+        StavkaPolice stavkaPolice = stavkaPoliceRepository.findByRecenzija(recenzija);
+        if (stavkaPolice != null) {
+
+            stavkaPolice.setRecenzija(recenzija);
+            stavkaPoliceRepository.save(stavkaPolice);
+        }
+    }*/
+
+    public void azurirajRecenziju(Long id, RecenzijaBezKorisnikaDto recenzijaDto, Korisnik korisnik) {
         Recenzija recenzija = recenzijaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Recenzija sa datim ID-om nije pronađena."));
 

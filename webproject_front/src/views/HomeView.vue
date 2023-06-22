@@ -24,7 +24,7 @@
       <div class="login-register-container">
         <a type="button" href="/login" class="btn">Login</a>
         <a type="button" href="/register" class="btn">Register</a>
-      
+        <a type="button" href="/podnesi-zahtev" class="btn">Podnesi zahtev</a>
       </div>
     </div>
   </div>

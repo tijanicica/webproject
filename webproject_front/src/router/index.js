@@ -28,6 +28,7 @@ import ObrisiKnjiguAdminView from '../views/ObrisiKnjiguAdminView.vue'
 import AzurirajKnjiguAdminView from '../views/AzurirajKnjiguAdminView.vue'
 import AzurirajAutoraAdminView from '../views/AzurirajAutoraAdminView.vue'
 import KreirajAutoraAdminView from '../views/KreirajAutoraAdminView.vue'
+import ZahtevZaAutoraView from '../views/ZahtevZaAutoraView.vue'
 
 
 const routes = [
@@ -175,6 +176,11 @@ const routes = [
     path: '/kreiraj-autora-admin',
     name: 'kreiraj-autora-admin',
     component: KreirajAutoraAdminView,
+  },
+  {
+    path: '/podnesi-zahtev',
+    name: 'podnesi-zahtev',
+    component: ZahtevZaAutoraView,
   }
   
 ]

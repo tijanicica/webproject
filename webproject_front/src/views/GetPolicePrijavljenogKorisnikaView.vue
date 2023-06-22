@@ -17,6 +17,9 @@
         <td>
           <button class="btn" @click="azurirajProfil">Ažuriraj profil</button>
         </td>
+        <td>
+          <button class="btn" @click="azurirajRecenziju">Ažuriraj recenziju</button>
+        </td>
       </tr>
     </table>
 
@@ -45,7 +48,6 @@
                   <br />
                   Datum recenzije: {{ stavka.recenzija.datumRecenzije }}
                   <br />
-                  <button @click="azurirajRecenziju(stavka.recenzija.id)">Ažuriraj recenziju</button>
                 </div>
                 <div>
                   <strong>Knjiga:</strong>
@@ -139,8 +141,8 @@ export default {
     azurirajProfil() {
       this.$router.push({ name: 'azuriraj-profil' });
     },
-    azurirajRecenziju(recenzijaId) {
-      this.$router.push({ name: 'azuriraj-recenziju', params: { id: recenzijaId } });
+    azurirajRecenziju() {
+      this.$router.push({ name: 'azuriraj-recenziju' });
     },
 
     obrisiPolicu(naziv) {
@@ -161,9 +163,7 @@ export default {
         });
     },
 
-    azurirajRecenziju(recenzijaId) {
-      this.$router.push({ name: 'azuriraj-recenziju', params: { recenzijaId } });
-    }
+  
   }
 };
 </script>

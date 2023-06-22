@@ -1,57 +1,72 @@
 <template>
-    <div>
-      <h2>Ažuriraj recenziju</h2>
-      <form @submit="azurirajRecenziju">
+  <div class="page-container">
+    <h1 class="site-title">GOODREADS</h1>
+    <form @submit.prevent="azurirajRecenziju">
+      <div class="form-group">
+        <label for="tekst">Tekst recenzije:</label>
+        <input type="text" id="tekst" v-model="recenzija.tekst" required />
+      </div>
+      <div class="form-group">
         <label for="ocena">Ocena:</label>
-        <input type="number" id="ocena" v-model="recenzija.ocena" required>
-        
-        <label for="tekst">Tekst:</label>
-        <textarea id="tekst" v-model="recenzija.tekst" required></textarea>
-        
-        <label for="datum">Datum recenzije:</label>
-        <input type="date" id="datum" v-model="recenzija.datumRecenzije" required>
-        
-        <button type="submit">Ažuriraj recenziju</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        recenzija: {
-          ocena: 0,
-          tekst: '',
-          datumRecenzije: ''
-        }
+        <input type="number" id="ocena" v-model="recenzija.ocena" required />
+      </div>
+      <div class="form-group">
+        <label for="datumRecenzije">Datum recenzije:</label>
+        <input type="date" id="datumRecenzije" v-model="recenzija.datumRecenzije" required />
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn">Azuriraj recenziju</button>
+      </div>
+      <div v-if="message" class="message">{{ message }}</div>
+    </form>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'AzurirajRecenzijuView',
+  data() {
+    return {
+      recenzija: {
+        ocena: null,
+        tekst: '',
+        datumRecenzije: ''
+      },
+      message: ''
+    };
+  },
+  methods: {
+    azurirajRecenziju() {
+      const recenzija = {
+        ocena: this.ocena,
+        tekst: this.tekst,
+        datumRecenzije: this.datumRecenzije
+
       };
-    },
-    methods: {
-      azurirajRecenziju() {
-        const recenzijaId = this.$route.params.id;
-        const url = `http://localhost:9090/api/azuriraj-recenziju/${recenzijaId}`;
-        
-        fetch(url, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-          body: JSON.stringify(this.recenzija)
+
+      fetch(`http://localhost:9090/api/azuriraj-recenziju?tekst=${encodeURIComponent(this.tekstRecenzije)}`, {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(recenzija)
+      })
+        .then(response => {
+          if (response.ok) {
+            this.message = 'Recenzija uspešno ažurirana.';
+            setTimeout(() => {
+              this.$router.push({ name: 'police-prijavljenog-korisnika' });
+            }, 3000);
+          } else {
+            this.message = 'Greška pri ažuriranju recenzije.';
+          }
         })
-          .then(response => {
-            if (response.ok) {
-                this.$router.push({ name: 'police-prijavljenog-korisnika' });
-            } else {
-              throw new Error('Failed to update recenzija');
-            }
-          })
-          .catch(error => {
-            console.error(error);
-          });
-      }
+        .catch(error => {
+          console.error(error);
+          this.message = 'Greška pri ažuriranju recenzije.';
+        });
     }
-  };
-  </script>
-  
+  }
+};
+</script>
