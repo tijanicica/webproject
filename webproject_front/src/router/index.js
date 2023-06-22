@@ -21,6 +21,10 @@ import AutorAzurirajProfilView from '../views/AutorAzurirajProfilView.vue'
 import AutorDodajKnjiguUSpisakKnjigaView from '../views/AutorDodajKnjiguUSpisakKnjigaView.vue'
 import AutorAzurirajKnjiguView from '../views/AutorAzurirajKnjiguView.vue'
 import AzurirajRecenzijuView from '../views/AzurirajRecenzijuView.vue'
+import AdminView from '../views/AdminView.vue'
+import DodajZanrAdminView from '../views/DodajZanrAdminView.vue'
+import DodajKnjiguAdminView from '../views/DodajKnjiguAdminView.vue'
+
 
 
 const routes = [
@@ -133,6 +137,21 @@ const routes = [
     path: '/azuriraj-recenziju/:id',
     name: 'azuriraj-recenziju',
     component: AzurirajRecenzijuView,
+  },
+  {
+    path: '/admin-profil',
+    name: 'admin-profil',
+    component: AdminView,
+  },
+  {
+    path: '/dodaj-zanr',
+    name: 'dodaj-zanr',
+    component: DodajZanrAdminView,
+  },
+  {
+    path: '/dodaj-knjigu-admin',
+    name: 'dodaj-knjigu-admin',
+    component: DodajKnjiguAdminView,
   }
   
 ]

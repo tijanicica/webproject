@@ -72,7 +72,7 @@ export default {
           } else if (role === 'AUTOR') {
             this.$router.push({ name: 'autor-profil' });
           } else if (role === 'ADMINISTRATOR') {
-            this.$router.push({ name: 'admin-profile' });
+            this.$router.push({ name: 'admin-profil' });
           } else {
             throw new Error('Unknown user role');
           }
