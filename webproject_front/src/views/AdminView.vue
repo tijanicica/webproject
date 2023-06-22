@@ -67,8 +67,6 @@ export default {
     this.fetchZahtevi();
   },
     methods: {
-      // Existing methods
-
       fetchZahtevi() {
       fetch('http://localhost:9090/api/zahtevi', {
         method: 'GET',
@@ -152,11 +150,23 @@ export default {
           });
       },
 
-      dodajZanr() {
+  dodajZanr() {
     window.location.href = "/dodaj-zanr";
   },
   dodajKnjigu() {
     window.location.href = "/dodaj-knjigu-admin";
+  },
+  obrisiKnjigu() {
+    window.location.href = "/obrisi-knjigu-admin";
+  },
+  azurirajKnjigu() {
+    window.location.href = "/azuriraj-knjigu-admin";
+  },
+  azurirajProfilAutora() {
+    window.location.href = "/azuriraj-autora-admin";
+  },
+  dodajAutora() {
+    window.location.href = "/kreiraj-autora-admin";
   },
     
 },

@@ -2,6 +2,7 @@ package com.tim23.webproject.controller;
 
 import com.tim23.webproject.dto.*;
 import com.tim23.webproject.entity.*;
+import com.tim23.webproject.repository.KorisnikRepository;
 import com.tim23.webproject.service.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,8 @@ public class KorisnikRestController {
 
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
     @GetMapping("/api/")
     public String welcome(){
@@ -164,7 +167,7 @@ public class KorisnikRestController {
         }
     }
 
-
+    /*
      @PutMapping("/api/azuriraj-nalog-autora/{id}")
     public ResponseEntity<String> azurirajNalogAutora(@PathVariable("id") Long autorId, @RequestBody AutorDto autorDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -181,6 +184,43 @@ public class KorisnikRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
         }
     }
+    */
+    @PutMapping("/api/azuriraj-nalog-autora-admin")
+    public ResponseEntity<String> azurirajNalogAutora(@RequestParam String mejlAdresa, @RequestBody AutorDto autorDto, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            try {
+                Korisnik autorBaza = korisnikRepository.findByMejlAdresa(mejlAdresa);
+                korisnikService.azurirajProfilAutora(autorBaza.getId(), autorDto);
+                return ResponseEntity.ok("Nalog autora je uspešno azuriran.");
+            } catch (EntityNotFoundException e) {
+                return new ResponseEntity<>("Nalog autora sa datim ID-om nije pronadjen.", HttpStatus.NOT_FOUND);
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>("Nalog autora je aktivan.Ne moze se azurirati.", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
+        }
+    }
+    //nova za front
+    @PutMapping("/api/dodaj-autora-admin")
+    public ResponseEntity<String> dodajAutora(@RequestBody AutorDto autorDto, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            try {
+                korisnikService.dodajAutora(autorDto);
+                return ResponseEntity.ok("Nalog autora je uspešno azuriran.");
+            } catch (EntityNotFoundException e) {
+                return new ResponseEntity<>("Nalog autora sa datim ID-om nije pronadjen.", HttpStatus.NOT_FOUND);
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>("Nalog autora je aktivan.Ne moze se azurirati.", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
+        }
+    }
+
+
 
 
 }

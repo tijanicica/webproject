@@ -359,7 +359,19 @@ public class KorisnikService {
     }
 
 
-
+    public void dodajAutora(AutorDto autorDto) {
+        Autor autor = new Autor();
+        autor.setIme(autorDto.getIme());
+        autor.setPrezime(autorDto.getPrezime());
+        autor.setDatumRodjenja(autorDto.getDatumRodjenja());
+        autor.setProfilnaSlika(autorDto.getProfilnaSlika());
+        autor.setOpis(autorDto.getOpis());
+        autor.setAktivan(false);
+        autor.setUloga(Uloga.AUTOR);
+        autor.setSpisakKnjiga(null);
+        autorRepository.save(autor);
+        korisnikRepository.save(autor);
+    }
 /*
     public void azurirajProfil(Long korisnikId, String ime, String prezime, LocalDate datumRodjenja, String profilnaSlika,
                                String opis, String mejlAdresa, String novaLozinka, String trenutnaLozinka) {

@@ -2,8 +2,10 @@ package com.tim23.webproject.controller;
 
 
 import com.tim23.webproject.dto.KnjigaDto;
+import com.tim23.webproject.entity.Knjiga;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
+import com.tim23.webproject.repository.KnjigaRepository;
 import com.tim23.webproject.service.KnjigaService;
 import jakarta.servlet.http.HttpSession;
 import com.tim23.webproject.service.PolicaService;
@@ -19,6 +21,8 @@ public class KnjigaRestController {
 
     @Autowired
     private KnjigaService knjigaService;
+    @Autowired
+    private KnjigaRepository knjigaRepository;
 
 
     @GetMapping("api/knjige")
@@ -65,6 +69,7 @@ public class KnjigaRestController {
         }
     }
 
+    /*
     @PutMapping("/api/azuriraj-knjigu/{id}")
     public ResponseEntity<String> azurirajKnjigu(@PathVariable("id") Long knjigaId, @RequestBody KnjigaDto knjigaDto, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -75,7 +80,20 @@ public class KnjigaRestController {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
         }
     }
+    */
+    @PutMapping("/api/azuriraj-knjigu-admin")
+    public ResponseEntity<String> azurirajKnjigu(@RequestParam(name = "naslovKnjige") String naslovKnjige, @RequestBody KnjigaDto knjigaDto, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            Knjiga knjiga = knjigaRepository.findByNaslovKnjige(naslovKnjige);
+            knjigaService.azurirajKnjigu(knjiga.getId(), knjigaDto);
+            return ResponseEntity.ok("Uspesno azurirana knjiga.");
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
+        }
+    }
 
+    /*
     @DeleteMapping("/api/obrisi-knjigu/{id}")
     public ResponseEntity<String> obrisiKnjigu(@PathVariable("id") Long knjigaId, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
@@ -85,8 +103,20 @@ public class KnjigaRestController {
         } else {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
         }
-
     }
+    */
+    @DeleteMapping("/api/obrisi-knjigu-admin")
+    public ResponseEntity<String> obrisiKnjigu(@RequestParam(name = "naslovKnjige") String naslovKnjige, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            Knjiga knjiga = knjigaRepository.findByNaslovKnjige(naslovKnjige);
+            knjigaService.obrisiKnjigu(knjiga.getId());
+            return ResponseEntity.ok("Knjiga je uspesno obrisana.");
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.FORBIDDEN);
+        }
+    }
+
 
     @DeleteMapping("/api/obrisi-recenziju-knjige/{id}")
     public ResponseEntity<String> obrisiRecenzijuKnjige(@PathVariable("id") Long knjigaId, HttpSession session) {

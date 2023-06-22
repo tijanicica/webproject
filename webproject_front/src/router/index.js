@@ -24,7 +24,10 @@ import AzurirajRecenzijuView from '../views/AzurirajRecenzijuView.vue'
 import AdminView from '../views/AdminView.vue'
 import DodajZanrAdminView from '../views/DodajZanrAdminView.vue'
 import DodajKnjiguAdminView from '../views/DodajKnjiguAdminView.vue'
-
+import ObrisiKnjiguAdminView from '../views/ObrisiKnjiguAdminView.vue'
+import AzurirajKnjiguAdminView from '../views/AzurirajKnjiguAdminView.vue'
+import AzurirajAutoraAdminView from '../views/AzurirajAutoraAdminView.vue'
+import KreirajAutoraAdminView from '../views/KreirajAutoraAdminView.vue'
 
 
 const routes = [
@@ -152,6 +155,26 @@ const routes = [
     path: '/dodaj-knjigu-admin',
     name: 'dodaj-knjigu-admin',
     component: DodajKnjiguAdminView,
+  },
+  {
+    path: '/obrisi-knjigu-admin',
+    name: 'obrisi-knjigu-admin',
+    component: ObrisiKnjiguAdminView,
+  },
+  {
+    path: '/azuriraj-knjigu-admin',
+    name: 'azuriraj-knjigu-admin',
+    component: AzurirajKnjiguAdminView,
+  },
+  {
+    path: '/azuriraj-autora-admin',
+    name: 'azuriraj-autora-admin',
+    component: AzurirajAutoraAdminView,
+  },
+  {
+    path: '/kreiraj-autora-admin',
+    name: 'kreiraj-autora-admin',
+    component: KreirajAutoraAdminView,
   }
   
 ]

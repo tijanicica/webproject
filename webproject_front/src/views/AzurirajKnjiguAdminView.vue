@@ -75,10 +75,7 @@
           }
         };
   
-        const enkodiranNaslovKnjige = encodeURIComponent(this.naslovKnjige);
-
-fetch(`http://localhost:9090/api/azuriraj-knjigu?naslovKnjige=${enkodiranNaslovKnjige}`, {
-  
+        fetch(`http://localhost:9090/api/azuriraj-knjigu-admin?naslovKnjige=${this.nazivKnjige}`, {
           method: 'PUT',
           credentials: 'include',
           headers: {
@@ -89,8 +86,8 @@ fetch(`http://localhost:9090/api/azuriraj-knjigu?naslovKnjige=${enkodiranNaslovK
           .then(response => {
             if (response.ok) {
               return response.text();
-            } else if (response.status === 400) {
-              throw new Error('Greška prilikom ažuriranja knjige.');
+            } else if (response.status === 403) {
+              throw new Error('Niste administrator!');
             } else if (response.status === 404) {
               throw new Error('Knjiga nije pronađena.');
             } else {
@@ -99,7 +96,7 @@ fetch(`http://localhost:9090/api/azuriraj-knjigu?naslovKnjige=${enkodiranNaslovK
           })
           .then(data => {
             console.log(data); // Handle successful response
-            this.$router.push({ name: 'autor-profil' });
+            this.$router.push({ name: 'admin-profil' });
           })
           .catch(error => {
             console.error(error);

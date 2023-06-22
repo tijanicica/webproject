@@ -20,7 +20,7 @@ INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljiva
 INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljivanja, broj_strana, opis, ocena, zanr_id) VALUES ('Gradinar', 'naslovnafoto3', 'isbn3', '1850-01-01', 100, 'Ptica u kavezu', 10, 1);
 INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljivanja, broj_strana, opis, ocena, zanr_id) VALUES ('Nova knjiga', 'novaknjigafoto', 'isbn4', '1950-01-01', 100, 'Nova knjiga', 10, 1);
 
-INSERT INTO AUTOR (aktivan, autor_id) VALUES (true, 3);
+INSERT INTO AUTOR (aktivan, autor_id) VALUES (false, 3);
 
 INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_id) VALUES (3, 1);
 INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_id) VALUES (3, 2);
