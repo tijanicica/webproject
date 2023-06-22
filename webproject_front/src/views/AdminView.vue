@@ -108,29 +108,26 @@ export default {
     },
   
   
-      prihvatiZahtev(zahtev) {
-        fetch('/api/zahtevi/prihvati', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(zahtev)
+    prihvatiZahtev(zahtev) {
+      fetch(`http://localhost:9090/api/prihvati-zahtev?email=${zahtev.email}`, {
+        method: 'POST',
+        credentials: 'include'
+      })
+        .then(response => {
+          if (response.ok) {
+            console.log('Zahtev prihvaćen');
+            this.fetchZahtevi(); // Reload the requests after accepting one
+          } else {
+            throw new Error('Greška pri prihvatanju zahteva:', response.statusText);
+          }
         })
-          .then(response => {
-            if (response.ok) {
-              console.log('Zahtev prihvaćen');
-            } else {
-              console.error('Greška pri prihvatanju zahteva:', response.statusText);
-            }
-          })
-          .catch(error => {
-            console.error('Greška pri prihvatanju zahteva:', error);
-          });
-      },
+        .catch(error => {
+          console.error('Greška pri prihvatanju zahteva:', error);
+        });
+    },
   
       odbijZahtev(zahtev) {
-        fetch('/api/zahtevi/odbij', {
+        fetch(`http://localhost:9090/api/odbij-zahtev?email=${zahtev.email}`, {
           method: 'POST',
           credentials: 'include',
           headers: {
@@ -141,6 +138,7 @@ export default {
           .then(response => {
             if (response.ok) {
               console.log('Zahtev odbijen');
+              this.fetchZahtevi();
             } else {
               console.error('Greška pri odbijanju zahteva:', response.statusText);
             }

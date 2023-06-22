@@ -6,6 +6,7 @@ import com.tim23.webproject.dto.ZahtevZaAktivacijuNalogaAutoraDto;
 import com.tim23.webproject.entity.Korisnik;
 import com.tim23.webproject.entity.Uloga;
 import com.tim23.webproject.entity.ZahtevZaAktivacijuNalogaAutora;
+import com.tim23.webproject.repository.ZahtevZaAktivacijuNalogaAutoraRepository;
 import com.tim23.webproject.service.EmailService;
 import com.tim23.webproject.service.KorisnikService;
 import com.tim23.webproject.service.ZahtevZaAktivacijuNalogaService;
@@ -24,6 +25,9 @@ public class ZahtevZaAktivacijuNalogaRestController {
     private ZahtevZaAktivacijuNalogaService zahtevZaAktivacijuNalogaService;
     @Autowired
     private KorisnikService korisnikService;
+
+    @Autowired
+    private ZahtevZaAktivacijuNalogaAutoraRepository zahtevZaAktivacijuNalogaAutoraRepository;
 
     @PostMapping("api/zahtev-za-autora/{id}")
     public ResponseEntity<String> podnesiZahtevZaAktivacijuAutoraAutora(@PathVariable("id") Long autorId,@RequestBody ZahtevZaAktivacijuNalogaAutoraDto zahtevZaAktivacijuNalogaAutoraDto) {
@@ -50,7 +54,7 @@ public class ZahtevZaAktivacijuNalogaRestController {
         }
     }
 
-    @PostMapping("api/odbij-zahtev/{id}")
+  /*  @PostMapping("api/odbij-zahtev/{id}")
     public ResponseEntity<String> odbijZahtev(@PathVariable("id") Long zahtevId, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
@@ -59,13 +63,37 @@ public class ZahtevZaAktivacijuNalogaRestController {
         } else {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
         }
+    }*/
+
+    @PostMapping("api/odbij-zahtev")
+    public ResponseEntity<String> odbijZahtev(@RequestParam String email, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            ZahtevZaAktivacijuNalogaAutora zahtev = zahtevZaAktivacijuNalogaAutoraRepository.findByEmail(email);
+            zahtevZaAktivacijuNalogaService.odbijZahtev(zahtev.getId());
+            return ResponseEntity.ok("Zahtev je uspesno odbijen.");
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @PostMapping("api/prihvati-zahtev/{id}")
+    /*@PostMapping("api/prihvati-zahtev/{id}")
     public ResponseEntity<String> prihvatiZahtev(@PathVariable("id") Long zahtevId, HttpSession session) {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
             zahtevZaAktivacijuNalogaService.prihvatiZahtev(zahtevId);
+            return ResponseEntity.ok("Zahtev je uspesno prihvacen.");
+        } else {
+            return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
+        }
+    }*/
+
+    @PostMapping("api/prihvati-zahtev")
+    public ResponseEntity<String> prihvatiZahtev(@RequestParam String email, HttpSession session) {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && prijavljeniKorisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            ZahtevZaAktivacijuNalogaAutora zahtev = zahtevZaAktivacijuNalogaAutoraRepository.findByEmail(email);
+            zahtevZaAktivacijuNalogaService.prihvatiZahtev(zahtev.getId());
             return ResponseEntity.ok("Zahtev je uspesno prihvacen.");
         } else {
             return new ResponseEntity<>("Niste administrator!", HttpStatus.BAD_REQUEST);
