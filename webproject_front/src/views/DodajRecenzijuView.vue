@@ -34,10 +34,8 @@ export default {
   },
   methods: {
     dodajRecenziju() {
-      const recenzijaData = {
-        recenzijaBezKorisnikaDto: this.recenzija,
-      };
-
+      const recenzijaData = this.recenzija;
+      console.log(recenzijaData);
       const url = `http://localhost:9090/api/dodaj-recenziju?nazivKnjige=${encodeURIComponent(this.nazivKnjige)}`;
 
       fetch(url, {
