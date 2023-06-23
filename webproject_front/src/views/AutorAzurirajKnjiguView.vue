@@ -75,10 +75,10 @@
           }
         };
   
-        const enkodiranNaslovKnjige = encodeURIComponent(this.naslovKnjige);
+        const encodedNazivKnjige = encodeURIComponent(this.nazivKnjige);
+  const url = `http://localhost:9090/api/azuriraj-knjigu?nazivKnjige=${encodedNazivKnjige}`;
 
-fetch(`http://localhost:9090/api/azuriraj-knjigu?naslovKnjige=${enkodiranNaslovKnjige}`, {
-  
+  fetch(url, {
           method: 'PUT',
           credentials: 'include',
           headers: {

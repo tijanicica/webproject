@@ -3,11 +3,12 @@ INSERT INTO POLICA (naziv, primarna) VALUES ('Tijanina polica', false);
 INSERT INTO POLICA (naziv, primarna) VALUES ('Read', true);
 INSERT INTO POLICA (naziv, primarna) VALUES ('Currently Reading', true);
 
-INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Nikola', 'Stojicic', 'nikolas', 'nikolas@gmail.com', 'nikola123', '2002-03-27','profilnaSlika2', 'student', 'CITALAC');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Nikola', 'Stojicic', 'nikolas', 'stojicic.nikola02@gmail.com', 'nikola123', '2002-03-27','profilnaSlika2', 'student', 'AUTOR');
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Tijana', 'Petrovic', 'tictic', 'tijanap@gmail.com', 'tic123', '2003-01-27', 'profilnaSlika', 'student', 'CITALAC' );
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Antoan', 'Egziperi', 'antoane', 'danilo.cvijetic10@gmail.com', 'maliprinc123', '1930-01-01', 'profilnaSlika2', 'pisac', 'AUTOR');
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Iva', 'Jovanovic', 'ivaj', 'ivaj@gmail.com', 'ivica123', '2002-12-28', 'profilnaSlika3', 'student', 'ADMINISTRATOR');
-INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Tamara', 'Stankovic', 'tamaras', 'tamaras@gmail.com', 'taca123', '2002-02-02', 'profilnaSlikaTaca', 'pisac', 'AUTOR');
+INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Tamara', 'Stankovic', 'tamaras', 'bubanoblica@gmail.com', 'taca123', '2002-02-02', 'profilnaSlikaTaca', 'pisac', 'AUTOR');
+
 
 INSERT INTO KORISNIK_POLICE (korisnik_korisnik_id, police_polica_id) VALUES (1, 1);
 INSERT INTO KORISNIK_POLICE (korisnik_korisnik_id, police_polica_id) VALUES (1, 3);
@@ -21,8 +22,10 @@ INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljiva
 INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljivanja, broj_strana, opis, ocena, zanr_id) VALUES ('Gradinar', 'naslovnafoto3', 'isbn3', '1850-01-01', 100, 'Ptica u kavezu', 10, 1);
 INSERT INTO KNJIGA (naslov, naslovna_fotografija, knjiga_isbn,  datum_objavljivanja, broj_strana, opis, ocena, zanr_id) VALUES ('Nova knjiga', 'novaknjigafoto', 'isbn4', '1950-01-01', 100, 'Nova knjiga', 10, 1);
 
-INSERT INTO AUTOR (aktivan, autor_id) VALUES (false, 3);
+INSERT INTO AUTOR (aktivan, autor_id) VALUES (true, 3);
 INSERT INTO AUTOR (aktivan, autor_id) VALUES (false, 5);
+INSERT INTO AUTOR (aktivan, autor_id) VALUES (false, 1);
+
 
 INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_id) VALUES (3, 1);
 INSERT INTO AUTOR_SPISAK_KNJIGA(autor_autor_id, spisak_knjiga_knjiga_id) VALUES (3, 2);
