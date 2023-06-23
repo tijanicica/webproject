@@ -27,8 +27,9 @@
           <td>
             <ul class="stavke-list">
               <li v-for="stavka in polica.stavkaPolice" :key="stavka.recenzija ? stavka.recenzija.id : null">
-                <div class="recenzija-container" v-if="stavka.recenzija">
-                  <strong>Recenzija:</strong>
+                <div class="recenzija-container" v-if="stavka.recenzija" >
+                  <div>
+                    <strong>Recenzija:</strong>
                   <br />
                   Ocena: {{ stavka.recenzija.ocena }}
                   <br />
@@ -36,6 +37,11 @@
                   <br />
                   Datum recenzije: {{ stavka.recenzija.datumRecenzije }}
                   <br />
+                  </div>
+                  <div>
+                    <button class="btn" @click="azurirajRecenziju(stavka.recenzija.tekst)">Ažuriraj recenziju</button>
+                  </div>
+                  
                 </div>
                 <div class="knjiga-container">
                   <strong>Knjiga:</strong>
@@ -129,6 +135,8 @@
 
 .recenzija-container {
   margin-bottom: 10px;
+  display: flex;
+
 }
 
 .knjiga-container {
@@ -213,8 +221,8 @@ export default {
     azurirajProfil() {
       this.$router.push({ name: 'azuriraj-profil' });
     },
-    azurirajRecenziju() {
-      this.$router.push({ name: 'azuriraj-recenziju' });
+    azurirajRecenziju(tekst) {
+      this.$router.push("/azuriraj-recenziju?tekst=" + tekst);
     },
 
     obrisiPolicu(naziv) {

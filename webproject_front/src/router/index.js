@@ -138,7 +138,7 @@ const routes = [
     component: AutorAzurirajKnjiguView,
   },
   {
-    path: '/azuriraj-recenziju/:id',
+    path: '/azuriraj-recenziju',
     name: 'azuriraj-recenziju',
     component: AzurirajRecenzijuView,
   },

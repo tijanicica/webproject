@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       recenzija: {
-        ocena: null,
+        ocena: 0,
         tekst: '',
         datumRecenzije: ''
       },
@@ -37,20 +37,15 @@ export default {
   },
   methods: {
     azurirajRecenziju() {
-      const recenzija = {
-        ocena: this.ocena,
-        tekst: this.tekst,
-        datumRecenzije: this.datumRecenzije
 
-      };
 
-      fetch(`http://localhost:9090/api/azuriraj-recenziju?tekst=${encodeURIComponent(this.tekstRecenzije)}`, {
+      fetch(`http://localhost:9090/api/azuriraj-recenziju?tekst=${encodeURIComponent(this.$route.query.tekst)}`, {
         method: 'PUT',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(recenzija)
+        body: JSON.stringify(this.recenzija)
       })
         .then(response => {
           if (response.ok) {
