@@ -1,7 +1,6 @@
 INSERT INTO POLICA (naziv, primarna) VALUES ('Want to Read', true);
 INSERT INTO POLICA (naziv, primarna) VALUES ('Tijanina polica', false);
-INSERT INTO POLICA (naziv, primarna) VALUES ('Read', true);
-INSERT INTO POLICA (naziv, primarna) VALUES ('Currently Reading', true);
+
 
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Nikola', 'Stojicic', 'nikolas', 'stojicic.nikola02@gmail.com', 'nikola123', '2002-03-27','profilnaSlika2', 'student', 'AUTOR');
 INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_rodjenja, profilna_slika, opis, uloga) VALUES ('Tijana', 'Petrovic', 'tictic', 'tijanap@gmail.com', 'tic123', '2003-01-27', 'profilnaSlika', 'student', 'CITALAC' );
@@ -11,8 +10,7 @@ INSERT INTO KORISNIK (ime, prezime, korisnicko_ime, mejl_adresa, lozinka, datum_
 
 
 INSERT INTO KORISNIK_POLICE (korisnik_korisnik_id, police_polica_id) VALUES (1, 1);
-INSERT INTO KORISNIK_POLICE (korisnik_korisnik_id, police_polica_id) VALUES (1, 3);
-INSERT INTO KORISNIK_POLICE (korisnik_korisnik_id, police_polica_id) VALUES (1, 4);
+
 INSERT INTO KORISNIK_POLICE (korisnik_korisnik_id, police_polica_id) VALUES (2, 2);
 
 INSERT INTO ZANR (naziv) VALUES ('poezija');

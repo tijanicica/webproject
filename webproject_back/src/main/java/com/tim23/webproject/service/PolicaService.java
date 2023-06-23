@@ -254,16 +254,26 @@ public class PolicaService {
 
           if (stavkaPolice != null) {
               if (polica.isPrimarna()) {
+                  System.out.println("brisanje sa primarne police");
                   List<Polica> korisnikovePolice = korisnik.getPolice();
                   for (Polica korisnikovaPolica : korisnikovePolice) {
                       if (!korisnikovaPolica.isPrimarna()) {
                           List<StavkaPolice> korisnikoveStavke = korisnikovaPolica.getStavkaPolice();
+                          List<StavkaPolice> stavkeZaBrisanje = new ArrayList<>();
                           for (StavkaPolice korisnikovaStavka : korisnikoveStavke) {
-                              if (korisnikovaStavka.getKnjiga().equals(knjiga)) {
-                                  korisnikoveStavke.remove(korisnikovaStavka);
-                                  stavkaPoliceRepository.delete(korisnikovaStavka);
+                              if (korisnikovaStavka.getKnjiga().getNaslov().equals(knjiga.getNaslov())) {
+                                  System.out.println("nadjena");
+                                  //korisnikoveStavke.remove(korisnikovaStavka);
+                                  //stavkaPoliceRepository.delete(korisnikovaStavka);
+                                  stavkeZaBrisanje.add(korisnikovaStavka);
                                   break;
                               }
+                          }
+                          for (StavkaPolice stavkaZaBrisanje : stavkeZaBrisanje) {
+                              System.out.println("obrisana");
+                              korisnikovaPolica.removeStavka(stavkaZaBrisanje);
+                              stavkaPoliceRepository.delete(stavkaZaBrisanje);
+                              korisnikRepository.save(korisnik);
                           }
                       }
                   }

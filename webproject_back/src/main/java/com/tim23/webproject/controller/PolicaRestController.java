@@ -127,7 +127,7 @@ public class PolicaRestController {
         }
     }
     */
-    @DeleteMapping("api/obrisi-knjigu-sa-police")
+   /* @DeleteMapping("api/obrisi-knjigu-sa-police")
     public ResponseEntity<String> ukloniKnjiguSaPolice(@RequestParam String nazivKnjige, @RequestParam String nazivPolice, HttpSession session) throws Exception {
         Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
         if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
@@ -151,7 +151,38 @@ public class PolicaRestController {
         } else {
             return new ResponseEntity<>("Niste čitalac ili autor!", HttpStatus.BAD_REQUEST);
         }
+    }*/
+
+
+
+    @DeleteMapping("api/obrisi-knjigu-sa-police")
+    public ResponseEntity<String> ukloniKnjiguSaPolice(@RequestParam String nazivKnjige, @RequestParam String nazivPolice, HttpSession session) throws Exception {
+        Korisnik prijavljeniKorisnik = (Korisnik) session.getAttribute("korisnik");
+        if (prijavljeniKorisnik != null && (prijavljeniKorisnik.getUloga().equals(Uloga.CITALAC) || prijavljeniKorisnik.getUloga().equals(Uloga.AUTOR))) {
+            Knjiga knjigaBaza = knjigaRepository.findKnjigaByNaslov(nazivKnjige);
+            if (knjigaBaza == null) {
+                // Handle the case when no book with the given title is found
+                return new ResponseEntity<>("Nema knjige sa datim naslovom.", HttpStatus.NOT_FOUND);
+            }
+
+            Polica policaBaza = policaRepository.findByNaziv(nazivPolice);
+            if (policaBaza != null) {
+                policaService.obrisiKnjiguSaPolice(knjigaBaza.getId(), policaBaza.getId(), prijavljeniKorisnik);
+                return ResponseEntity.ok("Knjiga je uspešno uklonjena sa police.");
+            } else {
+                return new ResponseEntity<>("Policu sa datim nazivom nije moguće pronaći.", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>("Niste čitalac ili autor!", HttpStatus.BAD_REQUEST);
+        }
     }
+
+
+
+
+}
+
+
 
  /*   @PostMapping("/api/dodaj-knjigu-na-policu")
     public ResponseEntity<String> dodajKnjiguNaKreiranuPolicu(@RequestParam(required = false) String nazivKreiranePolice,
@@ -170,4 +201,4 @@ public class PolicaRestController {
         }
     }*/
 
-}
+

@@ -43,6 +43,7 @@ public class Knjiga implements Serializable {
         this.zanr = zanr;
     }
 
+
     public Knjiga(){}
 
     public Knjiga(KnjigaDto knjigaDto) {

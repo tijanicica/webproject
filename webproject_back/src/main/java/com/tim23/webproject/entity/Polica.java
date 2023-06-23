@@ -30,6 +30,10 @@ public class Polica implements Serializable {
         this.naziv = policaDto.getNaziv();
         this.primarna = policaDto.isPrimarna();
     }
+    public void removeStavka(StavkaPolice stavka){
+        if (stavkaPolice.contains(stavka))
+            stavkaPolice.remove(stavka);
+    }
 
     public Polica() {}
 
