@@ -119,6 +119,7 @@ public class KnjigaService {
         knjigaRepository.save(knjiga);
     }
 
+    /*
     public void obrisiKnjigu(Long knjigaId) {
         Knjiga knjiga = knjigaRepository.findById(knjigaId).orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-om nije pronadjena."));
 
@@ -130,7 +131,20 @@ public class KnjigaService {
         } else {
             throw new RuntimeException("Knjiga ima recenziju i ne može biti obrisana.");
         }
+    }*/
+    public void obrisiKnjigu(Long knjigaId) {
+        Knjiga knjiga = knjigaRepository.findById(knjigaId)
+                .orElseThrow(() -> new EntityNotFoundException("Knjiga sa datim ID-om nije pronadjena."));
+
+        StavkaPolice stavkePolice = stavkaPoliceRepository.findByKnjiga(knjiga);
+
+        if (stavkePolice != null) {
+            throw new RuntimeException("Knjiga ima recenziju i ne može biti obrisana.");
+        }
+        knjiga.setZanr(null);
+        knjigaRepository.delete(knjiga);
     }
+
 
     @Transactional
     public void obrisiRecenzijuKnjige(Long knjigaId) {
