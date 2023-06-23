@@ -176,7 +176,7 @@ public class PolicaService {
 
         korisnikRepository.save(korisnik);
         policaRepository.save(primarnaPolica);
-        stavkaPoliceRepository.save(novaStavka);
+       // stavkaPoliceRepository.save(novaStavka);
 
         if (nazivKreiranePolice != null && !nazivKreiranePolice.isEmpty()) {
             boolean dodatoNaKreiranuPolicu = false;

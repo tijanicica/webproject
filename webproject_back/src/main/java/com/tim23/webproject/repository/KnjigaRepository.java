@@ -16,6 +16,9 @@ public interface KnjigaRepository extends JpaRepository<Knjiga, Long> {
 
     List<Knjiga> findByNaslov(String naslov);
 
+    Knjiga findKnjigaByNaslov(String naslov);
+
+
     @Query("SELECT k FROM Knjiga k INNER JOIN k.zanr z WHERE z.naziv = :nazivZanra")
     List<Knjiga> findByZanr(@Param("nazivZanra") String nazivZanra);
 

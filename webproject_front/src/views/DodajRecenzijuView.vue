@@ -17,7 +17,6 @@
       <button type="submit">Dodaj recenziju</button>
     </form>
     <br>
-    <button @click="preusmeriNaDruguStranicu">Dodaj knjigu na jos neku policu</button>
   </div>
 </template>
 
@@ -62,11 +61,6 @@ export default {
           // Handle error
         });
     },
-    preusmeriNaDruguStranicu() {
-      // Perform redirection to another URL
-      // Example: Redirect to '/druga-stranica'
-      this.$router.push({ name: 'dodaj-knjigu-na-policu' });
-    }
   }
 };
 </script>
