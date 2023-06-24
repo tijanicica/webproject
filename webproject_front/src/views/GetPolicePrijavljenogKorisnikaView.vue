@@ -8,7 +8,6 @@
       <button class="btn" @click="dodajKnjiguNaPolicu">Dodaj knjigu na policu</button>
       <button class="btn" @click="obrisiKnjiguSaPolice">Ukloni knjigu sa police</button>
       <button class="btn" @click="azurirajProfil">Ažuriraj profil</button>
-      <button class="btn" @click="azurirajRecenziju">Ažuriraj recenziju</button>
     </div>
 
     <table class="police-table">

@@ -116,7 +116,8 @@ export default {
         .then(response => {
           if (response.ok) {
             console.log('Zahtev prihvaćen');
-            this.fetchZahtevi(); // Reload the requests after accepting one
+            //this.fetchZahtevi(); // Reload the requests after accepting one
+            this.$router.push({ name: 'admin-profil' });
           } else {
             throw new Error('Greška pri prihvatanju zahteva:', response.statusText);
           }
@@ -138,7 +139,8 @@ export default {
           .then(response => {
             if (response.ok) {
               console.log('Zahtev odbijen');
-              this.fetchZahtevi();
+              //this.fetchZahtevi();
+              this.$router.push({ name: 'admin-profil' });
             } else {
               console.error('Greška pri odbijanju zahteva:', response.statusText);
             }
